@@ -12,7 +12,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class DashboardTest extends PropertiesApplicationTestCase {
+public class RootResourceTest extends PropertiesApplicationTestCase {
     @Test
     public void shouldRedirectToFilenamesRoot() throws Exception {
         when(weMakeRequest(get("/")));

@@ -2,7 +2,7 @@ package com.googlecode.propidle.server.authentication;
 
 import com.googlecode.propidle.authentication.*;
 import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.propidle.server.dashboard.DashboardResource;
+import com.googlecode.propidle.server.root.RootResource;
 import com.googlecode.propidle.server.sessions.Session;
 import com.googlecode.propidle.server.sessions.SessionStarter;
 import com.googlecode.propidle.util.HumanReadable;
@@ -53,7 +53,7 @@ public class AuthenticationResource {
             cookies.set(SESSION_TOKEN, session.id().value());
             cookies.commit();
 
-            return redirect(resource(DashboardResource.class).get());
+            return redirect(resource(RootResource.class).get());
         }
     }
 

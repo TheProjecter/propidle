@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 @RunWith(SpecRunner.class)
 public class AuthenticationTest extends PropertiesApplicationTestCase {
     @Test
-    public void shouldRedirectToDashboardOnSuccessfulLogin() throws Exception {
+    public void onSuccessfulLoginClientIsRedirectedToRootUrl() throws Exception {
         given(userExists(with(username("bob")).and(password("bob's password"))));
 
         when(weMakeRequest(post("/authentication").
@@ -33,7 +33,7 @@ public class AuthenticationTest extends PropertiesApplicationTestCase {
     }
 
     @Test
-    public void shouldDisplayErrorMessageOnUnsuccessfulLogin() throws Exception {
+    public void onUnsuccessfulLoginAnErrorMessageIsDisplayed() throws Exception {
         given(userDoesNotExist(with(username("captain kirk"))));
 
         when(weMakeRequest(post("/authentication").

@@ -31,7 +31,7 @@ import com.googlecode.propidle.server.sessions.SessionsFromRecords;
 import com.googlecode.propidle.server.sessions.Sessions;
 import com.googlecode.propidle.server.sessions.SessionStarter;
 import com.googlecode.propidle.server.authentication.AuthenticationResource;
-import com.googlecode.propidle.server.dashboard.DashboardResource;
+import com.googlecode.propidle.server.root.RootResource;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
@@ -130,7 +130,7 @@ public class PropertiesModule extends AbstractModule {
 
     public Module addResources(Resources resources) {
         resources.add(AuthenticationResource.class);
-        resources.add(DashboardResource.class);
+        resources.add(RootResource.class);
         resources.add(PropertiesResource.class);
         resources.add(FileNamesResource.class);
         resources.add(CompositePropertiesResource.class);

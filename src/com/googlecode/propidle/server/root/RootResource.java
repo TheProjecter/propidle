@@ -1,4 +1,4 @@
-package com.googlecode.propidle.server.dashboard;
+package com.googlecode.propidle.server.root;
 
 import com.googlecode.utterlyidle.Redirect;
 import static com.googlecode.utterlyidle.proxy.Resource.redirect;
@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 
 @Path("/")
-public class DashboardResource {
+public class RootResource {
     @GET
     public Redirect get(){
         return redirect(resource(FileNamesResource.class).getChildrenOf(propertiesPath("/")));
