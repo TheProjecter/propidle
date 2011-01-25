@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>$title$</title>
+</head>
+<body>
+<div class="section">
+    <form method="post" style="height:100%">
+        <h2>Edit properties</h2>
+        <p>Previous edits can be seen at <a href="$changesUrl$">$changesUrl$</a></p>
+        <input type="submit" value="save"/>
+
+        <div height="100%">
+            <textarea id="properties" name="properties" placeholder="Enter properties here"
+                      style="width:100%;height:300px;max-height:100%;border:1px solid black;overflow:auto;">$properties:htmlproperty()$</textarea>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
