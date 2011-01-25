@@ -5,9 +5,7 @@ import com.googlecode.utterlyidle.httpserver.RestServer;
 import java.io.IOException;
 
 import com.googlecode.propidle.TestPropertiesApplication;
-import com.googlecode.propidle.authorisation.users.User;
-import com.googlecode.propidle.authorisation.users.Users;
-import com.googlecode.propidle.authorisation.users.PasswordHasher;
+import com.googlecode.propidle.authorisation.users.*;
 import static com.googlecode.propidle.authorisation.users.Username.username;
 import static com.googlecode.propidle.authorisation.users.Password.password;
 import static com.googlecode.propidle.authorisation.users.User.user;
@@ -19,18 +17,19 @@ public class Server {
     public static void main(String[] args) throws IOException {
         TestPropertiesApplication application = new TestPropertiesApplication();
         application.defineRecords();
-        application.inTransaction(createTestUser());
+        application.inTransaction(createTestUser(username("admin"), password("hogtied")));
 
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
         new RestServer(port, basePath("/"), application);
     }
 
-    private static Callable1<Container, User> createTestUser() {
+    private static Callable1<Container, User> createTestUser(final Username username, final Password password) {
         return new Callable1<Container, User>() {
             public User call(Container container) throws Exception {
                 PasswordHasher passwordHasher = container.get(PasswordHasher.class);
-                User user = user(username("admin"), passwordHasher.hash(password("hogtied")));
+                User user = user(username, passwordHasher.hash(password));
                 container.get(Users.class).put(user);
+                System.out.println(String.format("Created user %s with password %s", username, password));
                 return user;
             }
         };
