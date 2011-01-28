@@ -76,7 +76,6 @@ public class ChangesFromRecordsTest {
         assertThat(changes.get(propertiesPath), hasExactly(firstSetOfExpectedChanges[0], firstSetOfExpectedChanges[1], secondSetOfExpectedChanges[0], secondSetOfExpectedChanges[1]));
     }
 
-
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPathAndRevisionNumber() {
         PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");

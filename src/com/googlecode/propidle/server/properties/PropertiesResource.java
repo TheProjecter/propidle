@@ -7,28 +7,19 @@ import com.googlecode.propidle.server.changes.ChangesResource;
 import com.googlecode.propidle.server.filenames.FileNamesResource;
 import com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumber;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.None;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.Redirect;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
-import java.util.Map;
-import java.util.Properties;
 
-import static com.googlecode.propidle.Properties.*;
+import static com.googlecode.propidle.Properties.properties;
 import static com.googlecode.propidle.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.server.PropertiesModule.TITLE;
-import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.utterlyidle.proxy.Resource.redirect;
-import static com.googlecode.utterlyidle.proxy.Resource.resource;
-import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
-import static com.googlecode.utterlyidle.rendering.Model.model;
+import static com.googlecode.utterlyidle.proxy.Resource.*;
 
 @Path(PropertiesResource.NAME)
 @Produces("text/html")
@@ -59,8 +50,8 @@ public class PropertiesResource {
     @GET
     @Path("{path:.+$}")
     @Produces("text/html")
-    public Model getHtml(@PathParam("path") PropertiesPath path, @QueryParam("revision")Option<RevisionNumber> revisionNumber) {
-        return modelOfProperties(path).
+    public Model getHtml(@PathParam("path") PropertiesPath path, @QueryParam("revision") Option<RevisionNumber> revisionNumber) {
+        return modelOf(path, revisionNumber).
                 add(PropertiesModule.MODEL_NAME, HTML_NAME).
                 add("changesUrl", basePath + urlOf(resource(ChangesResource.class).get(path, none(RevisionNumber.class))));
     }
@@ -71,11 +62,12 @@ public class PropertiesResource {
     public Model getProperties(@PathParam("path") PropertiesPath path) {
         return getProperties(path, none(RevisionNumber.class));
     }
+
     @GET
     @Path("{path:.+$}")
     @Produces("text/plain")
-    public Model getProperties(@PathParam("path") PropertiesPath path, @QueryParam("revision")Option<RevisionNumber> revisionNumber) {
-        return modelOfProperties(path).add(PropertiesModule.MODEL_NAME, PLAIN_NAME);
+    public Model getProperties(@PathParam("path") PropertiesPath path, @QueryParam("revision") Option<RevisionNumber> revisionNumber) {
+        return modelOf(path, revisionNumber).add(PropertiesModule.MODEL_NAME, PLAIN_NAME);
     }
 
     @POST
@@ -85,28 +77,11 @@ public class PropertiesResource {
         return redirect(resource(ChangesResource.class).get(path, some(currentRevisionNumber.current())));
     }
 
-    private Model modelOfProperties(PropertiesPath path) {
-        Properties properties = repository.get(path);
-        return modelOfProperties(properties).
-                add("propertiesPath", path).
-                add(TITLE, "Properties \"" + path + "\"");
-    }
-
-    public static Model modelOfProperties(Properties properties) {
-        return sequence(properties.entrySet()).
-                sortBy(key()).
-                foldLeft(model(), propertyToModel());
-    }
-
-    private static Callable2<? super Model, ? super Map.Entry<Object, Object>, Model> propertyToModel() {
-        return new Callable2<Model, Map.Entry<Object, Object>, Model>() {
-            public Model call(Model model, Map.Entry<Object, Object> entry) throws Exception {
-                return model.
-                        add("properties",
-                            model().
-                                    add("name", entry.getKey()).
-                                    add("value", entry.getValue()));
-            }
-        };
+    private Model modelOf(PropertiesPath path, Option<RevisionNumber> revisionNumber) {
+        if (revisionNumber.isEmpty()) {
+            return ModelOfProperties.modelOfProperties(path, repository.get(path));
+        } else {
+            return ModelOfProperties.modelOfProperties(path, repository.getAtRevision(path, revisionNumber.get()));
+        }
     }
 }

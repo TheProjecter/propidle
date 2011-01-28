@@ -1,20 +1,20 @@
 package com.googlecode.propidle;
 
-import static com.googlecode.propidle.AllPropertiesFromRecords.definePropertiesRecord;
-import static com.googlecode.propidle.aliases.AliasesFromRecords.defineAliasRecord;
-import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defineUsersRecord;
 import com.googlecode.propidle.persistence.Transaction;
-import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
 import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
 import com.googlecode.propidle.server.PropertiesApplication;
-import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
 import com.googlecode.propidle.util.TemporaryIndex;
-import static com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords.defineChangesRecord;
-import static com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumberFromRecords.defineHighestRevisionRecord;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.records.Records;
 import com.googlecode.yadic.Container;
 import org.apache.lucene.index.IndexWriter;
+
+import static com.googlecode.propidle.aliases.AliasesFromRecords.defineAliasRecord;
+import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defineUsersRecord;
+import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
+import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
+import static com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords.defineChangesRecord;
+import static com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumberFromRecords.defineHighestRevisionRecord;
 
 public class TestPropertiesApplication extends PropertiesApplication {
     private static boolean recordsDefined;
@@ -38,7 +38,6 @@ public class TestPropertiesApplication extends PropertiesApplication {
                         defineHighestRevisionRecord(records);
                         defineChangesRecord(records);
                         defineAliasRecord(records);
-                        definePropertiesRecord(records);
 
                         recordsDefined = true;
                         return null;

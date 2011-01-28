@@ -34,7 +34,7 @@ public class CurrentRevisionNumberFromRecords implements CurrentRevisionNumber {
     }
 
 
-    private Record serialiseRevisionNumber(RevisionNumber revisionNumber) {
+    public static Record serialiseRevisionNumber(RevisionNumber revisionNumber) {
         return record().set(REVISION_NUMBER, revisionNumber.value());
     }
 

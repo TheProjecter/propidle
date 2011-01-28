@@ -1,20 +1,19 @@
 package acceptance;
 
-import static com.googlecode.propidle.Properties.properties;
-import acceptance.PropertiesApplicationTestCase;
+import org.junit.Test;
+
 import static acceptance.Values.with;
-import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
-import static acceptance.steps.thens.Responses.response;
-import static acceptance.steps.thens.Responses.html;
 import static acceptance.steps.givens.PropertiesExist.propertiesExist;
+import static acceptance.steps.thens.Responses.html;
+import static acceptance.steps.thens.Responses.response;
+import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
+import static com.googlecode.propidle.Properties.properties;
+import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.HtmlRegexes.*;
 import static com.googlecode.propidle.util.RegexMatcher.matches;
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.not;
-import org.junit.Test;
 
 public class SearchTest extends PropertiesApplicationTestCase {
     @Test

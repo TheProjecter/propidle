@@ -7,26 +7,29 @@ import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Left;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.utterlyidle.Redirect;
-import static com.googlecode.utterlyidle.proxy.Resource.redirect;
-import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import java.util.Properties;
 
 import static com.googlecode.propidle.Properties.properties;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.utterlyidle.proxy.Resource.redirect;
+import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(DiffResource.NAME)
+@Produces(MediaType.TEXT_HTML)
 public class DiffResource {
     public static final String NAME = "diff";
     private final PropertyDiffTool propertyDiffTool;

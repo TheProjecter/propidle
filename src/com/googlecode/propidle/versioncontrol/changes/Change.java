@@ -6,7 +6,10 @@ import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.PropertyName;
 import com.googlecode.propidle.PropertyValue;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
+
+import java.util.Properties;
 
 public class Change {
     private final RevisionNumber revisionNumber;
@@ -50,8 +53,19 @@ public class Change {
     public Option<PropertyValue> updated() {
         return comparison.updated();
     }
+
     public PropertyComparison.Status status(){
         return comparison.status();
+    }
+
+    public Properties applyTo(Properties properties) {
+        final Option<PropertyValue> updatedValue = comparison.updated();
+        if(updatedValue.isEmpty()){
+            properties.remove(propertyName().value());
+        }else{
+            properties.put(propertyName().value(), updatedValue.get().value());
+        }
+        return properties;
     }
 
     @Override
@@ -79,5 +93,13 @@ public class Change {
         result = 31 * result + revisionNumber.hashCode();
         result = 31 * result + propertiesPath.hashCode();
         return result;
+    }
+
+    public static Callable2<? super Properties, ? super Change, Properties> applyChange() {
+        return new Callable2<Properties, Change, Properties>() {
+            public Properties call(Properties properties, Change change) throws Exception {
+                return change.applyTo(properties);
+            }
+        };
     }
 }

@@ -22,4 +22,8 @@ public class RevisionNumber extends IntegerTinyType<RevisionNumber> {
     public RevisionNumber plus(int value) {
         return revisionNumber(this.value() + value);
     }
+
+    public RevisionNumber minus(int value) {
+        return plus(-value);
+    }
 }

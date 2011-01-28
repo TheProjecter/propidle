@@ -11,9 +11,9 @@ import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
+import static com.googlecode.propidle.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.PropertyName.propertyName;
 import static com.googlecode.propidle.PropertyValue.propertyValue;
-import static com.googlecode.propidle.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;

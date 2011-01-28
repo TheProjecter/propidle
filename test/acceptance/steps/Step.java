@@ -1,12 +1,13 @@
 package acceptance.steps;
 
+import acceptance.Values;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
-import com.googlecode.totallylazy.Callable1;
-import acceptance.Values;
-import static acceptance.Values.noValues;
 
 import java.util.concurrent.Callable;
+
+import static acceptance.Values.noValues;
 
 public class Step<T> implements Callable1<Container,T> {
     protected final Class<? extends Callable<T>> aClass;

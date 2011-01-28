@@ -3,6 +3,7 @@ package com.googlecode.propidle.indexing;
 import com.googlecode.propidle.AllProperties;
 import com.googlecode.propidle.PropertiesPath;
 import com.googlecode.propidle.urls.UrlResolver;
+import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 
 import java.util.Properties;
 
@@ -21,6 +22,10 @@ public class PropertiesIndexingDecorator implements AllProperties {
 
     public Properties get(PropertiesPath path) {
         return decorated.get(path);
+    }
+
+    public Properties getAtRevision(PropertiesPath path, RevisionNumber revision) {
+        return decorated.getAtRevision(path, revision);
     }
 
     public AllProperties put(PropertiesPath path, Properties properties) {

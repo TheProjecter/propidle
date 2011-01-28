@@ -1,12 +1,13 @@
 package acceptance.steps.whens;
 
-import com.googlecode.utterlyidle.RequestBuilder;
-import com.googlecode.utterlyidle.Response;
 import acceptance.steps.WebClient;
 import acceptance.steps.When;
-import static acceptance.Values.with;
+import com.googlecode.utterlyidle.RequestBuilder;
+import com.googlecode.utterlyidle.Response;
 
 import java.util.concurrent.Callable;
+
+import static acceptance.Values.with;
 
 public class RequestIsMade implements Callable<Response> {
     private final RequestBuilder request;

@@ -20,7 +20,7 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.Properties.*;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
-import static com.googlecode.propidle.server.properties.PropertiesResource.modelOfProperties;
+import static com.googlecode.propidle.server.properties.ModelOfProperties.modelOfProperties;
 import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.isLeft;
