@@ -29,7 +29,8 @@ public class PropertiesResource {
     private final CurrentRevisionNumber currentRevisionNumber;
     public static final String NAME = "properties";
     public static final String PLAIN_NAME = NAME + ".properties";
-    public static final String HTML_NAME = NAME + ".html";
+    public static final String HTML_EDITABLE = NAME + ".html";
+    public static final String HTML_READ_ONLY = NAME + ".readonly.html";
 
     public PropertiesResource(AllProperties repository, BasePath basePath, CurrentRevisionNumber currentRevisionNumber) {
         this.repository = repository;
@@ -52,7 +53,7 @@ public class PropertiesResource {
     @Produces("text/html")
     public Model getHtml(@PathParam("path") PropertiesPath path, @QueryParam("revision") Option<RevisionNumber> revisionNumber) {
         return modelOf(path, revisionNumber).
-                add(PropertiesModule.MODEL_NAME, HTML_NAME).
+                add(PropertiesModule.MODEL_NAME, modelName(revisionNumber)).
                 add("changesUrl", basePath + urlOf(resource(ChangesResource.class).get(path, none(RevisionNumber.class))));
     }
 
@@ -78,10 +79,23 @@ public class PropertiesResource {
     }
 
     private Model modelOf(PropertiesPath path, Option<RevisionNumber> revisionNumber) {
+        final Model model = basicModelOf(path, revisionNumber);
+        model.
+                add("revisionNumber", revisionNumber.getOrNull()).
+                add("latestRevisionUrl", basePath + urlOf(resource(PropertiesResource.class).getProperties(path)));
+        return model;
+    }
+
+    private Model basicModelOf(PropertiesPath path, Option<RevisionNumber> revisionNumber) {
         if (revisionNumber.isEmpty()) {
             return ModelOfProperties.modelOfProperties(path, repository.get(path));
         } else {
             return ModelOfProperties.modelOfProperties(path, repository.getAtRevision(path, revisionNumber.get()));
         }
     }
+
+    private String modelName(Option<RevisionNumber> revisionNumber) {
+        return revisionNumber.isEmpty() ? HTML_EDITABLE : HTML_READ_ONLY;
+    }
+
 }

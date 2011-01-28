@@ -6,16 +6,13 @@
 </head>
 <body>
 <div class="section">
-    <form method="post" style="height:100%">
-        <h2>Edit properties</h2>
-        <p>Previous edits can be seen at <a href="$changesUrl$">$changesUrl$</a></p>
-        <input type="submit" value="save"/>
+    <h2>Revision $revisionNumber$ (read only)</h2>
 
-        <div height="100%">
-            <textarea id="properties" name="properties" placeholder="Enter properties here"
-                      style="width:100%;height:300px;max-height:100%;border:1px solid black;overflow:auto;">$properties:htmlproperty()$</textarea>
-        </div>
-    </form>
+    <p>The latest revision can be seen at <a href="$latestRevisionUrl$">$latestRevisionUrl$</a></p>
+
+    <div height="100%">
+        <textarea readonly="true" style="width:100%;height:300px;max-height:100%;border:1px solid black;overflow:auto;">$properties:htmlproperty()$</textarea>
+    </div>
 </div>
 
 </body>

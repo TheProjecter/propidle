@@ -146,7 +146,8 @@ public class PropertiesModule extends AbstractModule {
     @Override
     public Module addResponseHandlers(ResponseHandlers handlers) {
         handlers.add(where(entity(Model.class), nameIs(AuthenticationResource.NAME)), renderer(new ModelTemplateRenderer("AuthenticationResource_html", AuthenticationResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_NAME)), renderer(new ModelTemplateRenderer("PropertiesResource_html", PropertiesResource.class)));
+        handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_EDITABLE)), renderer(new ModelTemplateRenderer("EditablePropertiesResource_html", PropertiesResource.class)));
+        handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_READ_ONLY)), renderer(new ModelTemplateRenderer("PropertiesResource_html", PropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.PLAIN_NAME)), renderer(new ModelTemplateRenderer("PropertiesResource_properties", PropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(FileNamesResource.NAME)), renderer(new ModelTemplateRenderer("FileNamesResource_search_html", FileNamesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(FileNamesResource.DIRECTORY_VIEW_NAME)), renderer(new ModelTemplateRenderer("FileNamesResource_directories_html", FileNamesResource.class)));
@@ -155,7 +156,6 @@ public class PropertiesModule extends AbstractModule {
         handlers.add(where(entity(Model.class), nameIs(ChangesResource.NAME)), renderer(new ModelTemplateRenderer("ChangesResource_html", ChangesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(DiffResource.NAME)), renderer(new ModelTemplateRenderer("DiffResource_html", DiffResource.class)));
         handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(CompositePropertiesResource.NAME)), renderer(new ModelTemplateRenderer("CompositePropertiesResource_html", CompositePropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(CompositePropertiesResource.NAME)), renderer(new ModelTemplateRenderer("CompositePropertiesResource_html", CompositePropertiesResource.class)));
         return this;
     }

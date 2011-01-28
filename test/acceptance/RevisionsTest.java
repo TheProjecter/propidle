@@ -5,14 +5,15 @@ import org.junit.Test;
 import static acceptance.Values.with;
 import static acceptance.steps.givens.CurrentRevision.revisionNumbersStartAt;
 import static acceptance.steps.givens.PropertiesExist.propertiesExist;
-import static acceptance.steps.thens.Responses.content;
-import static acceptance.steps.thens.Responses.response;
+import static acceptance.steps.thens.Responses.*;
 import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
 import static com.googlecode.propidle.Properties.properties;
 import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.util.RegexMatcher.matches;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class RevisionsTest extends PropertiesApplicationTestCase {
     @Test
@@ -24,5 +25,15 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
         when(weMakeRequest(get("/properties/properties.one.properties").withQuery("revision", "0")));
 
         then(response(content()), is("a=some value\n"));
+    }
+
+    @Test
+    public void previousRevisionsOfPropertiesFilesAreNotEditable() throws Exception {
+        given(revisionNumbersStartAt(revisionNumber(0)));
+        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("a=some value"))));
+
+        when(weMakeRequest(get("/properties/properties.one").withQuery("revision", "0")));
+
+        then(response(html()), not(matches("<form")));
     }
 }
