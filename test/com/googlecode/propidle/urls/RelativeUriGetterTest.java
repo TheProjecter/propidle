@@ -9,12 +9,21 @@ import com.googlecode.yadic.Container;
 import org.junit.Test;
 
 import java.net.URI;
+import java.io.InputStream;
 
 import static com.googlecode.propidle.requesthandlers.RememberRequest.rememberRequest;
 import static com.googlecode.propidle.requesthandlers.RequestHandlerChain.chain;
 import static com.googlecode.propidle.requesthandlers.SetResponse.setResponse;
 import static com.googlecode.propidle.requesthandlers.SetStatusCode.setStatusCode;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader;
+import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
+import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
+import com.googlecode.totallylazy.None;
+import com.googlecode.totallylazy.Option;
 import static com.googlecode.utterlyidle.BasePath.basePath;
 import static com.googlecode.utterlyidle.io.Converter.asString;
 import static com.googlecode.utterlyidle.io.Url.url;
@@ -32,7 +41,7 @@ public class RelativeUriGetterTest {
         RememberRequest lastRequest = rememberRequest();
         SetResponse setResponse = setResponse("WIN!");
 
-        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(chain(lastRequest, setResponse)), BASE_PATH);
+        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(chain(lastRequest, setResponse)), BASE_PATH, none(RequestedRevisionNumber.class));
 
         assertThat(asString(resolver.get(new URI("/someResource"), MimeType.TEXT_HTML)), is("WIN!"));
         assertThat(lastRequest.url(), is(url("/someResource")));
@@ -45,7 +54,7 @@ public class RelativeUriGetterTest {
         RememberRequest lastRequest = new RememberRequest();
         SetResponse setResponse = setResponse("WIN!");
 
-        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(chain(lastRequest, setResponse)), BASE_PATH);
+        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(chain(lastRequest, setResponse)), BASE_PATH, none(RequestedRevisionNumber.class));
 
         assertThat(asString(resolver.get(new URI(BASE_PATH.toString() + "someResource"), MimeType.TEXT_HTML)), is("WIN!"));
         assertThat(lastRequest.url(), is(url("someResource")));
@@ -55,7 +64,7 @@ public class RelativeUriGetterTest {
 
     @Test
     public void shouldThrowAnExceptionFor4xxAnd5xxStatusCodes() throws Throwable {
-        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(setStatusCode(Status.BAD_REQUEST)), BASE_PATH);
+        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(setStatusCode(Status.BAD_REQUEST)), BASE_PATH, none(RequestedRevisionNumber.class));
 
         try {
             resolver.get(new URI(BASE_PATH.toString() + "someResource"), MimeType.TEXT_HTML);
@@ -63,6 +72,18 @@ public class RelativeUriGetterTest {
         } catch (HttpStatusCodeException e) {
             assertThat(e.statusCode(), is(Status.BAD_REQUEST));
         }
+    }
+
+    @Test
+    public void shouldPassDownRequestedRevisionNumber() throws Exception {
+        RememberRequest lastRequest = rememberRequest();
+        SetResponse setResponse = setResponse("WIN!");
+
+        Option<RequestedRevisionNumber> requestedRevision = some(requestedRevisionNumber("12"));
+        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(chain(lastRequest, setResponse)), BASE_PATH, requestedRevision);
+
+        resolver.get(new URI("/someResource"), MimeType.TEXT_HTML);
+        assertThat(lastRequest.headers().getValue(REVISION_PARAM), is(requestedRevision.get().toString()));
     }
 
     private static Application usingRequestHandler(final HttpHandler httpHandler) {

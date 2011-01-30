@@ -16,8 +16,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import static com.googlecode.propidle.util.Exceptions.toException;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader;
+import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import com.googlecode.totallylazy.Option;
+
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
 
@@ -25,11 +30,13 @@ public class RelativeUriGetter implements UriGetter {
     private final UriGetter decorated;
     private final Application application;
     private final BasePath basePath;
+    private final Option<RequestedRevisionNumber> requestedRevisionNumber;
 
-    public RelativeUriGetter(UriGetter decorated, Application application, BasePath basePath) {
+    public RelativeUriGetter(UriGetter decorated, Application application, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber) {
         this.decorated = decorated;
         this.application = application;
         this.basePath = basePath;
+        this.requestedRevisionNumber = requestedRevisionNumber;
     }
 
     public InputStream get(URI uri, MimeType mimeType) throws Exception {
@@ -62,7 +69,11 @@ public class RelativeUriGetter implements UriGetter {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         Response response = MemoryResponse.response(output);
 
-        application.handle(RequestBuilder.get(uri.toString()).withHeader(HttpHeaders.ACCEPT, mimeType.value()).build(), response);
+        RequestBuilder request = RequestBuilder.get(uri.toString()).withHeader(HttpHeaders.ACCEPT, mimeType.value());
+        if(!requestedRevisionNumber.isEmpty()){
+            request.withHeader(REVISION_PARAM, requestedRevisionNumber.get().toString());
+        }
+        application.handle(request.build(), response);
 
         validateResponseCode(response, uri, output);
 

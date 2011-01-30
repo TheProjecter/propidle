@@ -3,6 +3,7 @@ package com.googlecode.propidle.requesthandlers;
 import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.HeaderParameters;
 import com.googlecode.utterlyidle.io.Url;
 
 public class RememberRequest implements HttpHandler{
@@ -18,6 +19,10 @@ public class RememberRequest implements HttpHandler{
 
     public Url url() {
         return ensureLastRequest().url();
+    }
+
+    public HeaderParameters headers() {
+        return ensureLastRequest().headers();
     }
 
     private Request ensureLastRequest() {

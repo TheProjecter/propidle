@@ -19,12 +19,12 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
     @Test
     public void itIsPossibleToSeeAPropertiesFileAsItWasAtAParticularRevision() throws Exception {
         given(revisionNumbersStartAt(revisionNumber(0)));
-        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("a=some value"))));
-        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("b=some other value"))));
+        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("revision=0"))));
+        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("revision=1"))));
 
         when(browserRequests(get("/properties/properties.one.properties").withQuery("revision", "0")));
 
-        then(response(content()), is("a=some value\n"));
+        then(response(content()), is("revision=0\n"));
     }
 
     @Test
@@ -36,5 +36,16 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
 
         then(response(html()), not(matches("<form")));
         then(response(html()), matches("Revision 0"));
+    }
+
+    @Test
+    public void propertiesInACompositeWillBeRestrictedToTheRevisionSpecified() throws Exception {
+        given(revisionNumbersStartAt(revisionNumber(0)));
+        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("revision=0"))));
+        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("revision=1"))));
+
+        when(browserRequests(get("/composite.properties?url=/properties/properties.one&revision=0")));
+
+        then(response(content()), is("revision=0\n"));
     }
 }
