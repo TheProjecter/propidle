@@ -2,7 +2,8 @@ package com.googlecode.propidle;
 
 import com.googlecode.propidle.versioncontrol.changes.Changes;
 import com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
+import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import com.googlecode.totallylazy.records.Records;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,14 +25,14 @@ public class AllPropertiesFromChangesTest {
     private AllPropertiesFromChanges repository;
     private static final PropertiesPath PATH = propertiesPath(UUID.randomUUID().toString());
     private Changes changes;
-    private CurrentRevisionNumber currentRevisionNumber;
+    private HighestRevisionNumbers highestRevisionNumbers;
     private Records records;
 
     @Before
     public void createRepository() throws Exception {
-        currentRevisionNumber = mock(CurrentRevisionNumber.class);
+        highestRevisionNumbers = mock(HighestRevisionNumbers.class);
         records = defineChangesRecord(temporaryRecords());
-        changes = new ChangesFromRecords(records, currentRevisionNumber);
+        changes = new ChangesFromRecords(records, highestRevisionNumbers);
         repository = new AllPropertiesFromChanges(changes, new PropertyDiffTool());
         givenRevisionIs(0);
     }
@@ -125,6 +126,6 @@ public class AllPropertiesFromChangesTest {
 //        return (Iterable<PropertyComparison>) argThat(hasExactly(changes));
 //    }
     private void givenRevisionIs(int revision) {
-        when(currentRevisionNumber.current()).thenReturn(revisionNumber(revision));
+        when(highestRevisionNumbers.newRevisionNumber()).thenReturn(newRevisionNumber(revision));
     }
 }

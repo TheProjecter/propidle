@@ -15,6 +15,9 @@ import com.googlecode.utterlyidle.ResourcePath;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.aliases.Alias.alias;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
@@ -28,6 +31,7 @@ import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(AliasesResource.ALL_ALIASES)
+@Produces(TEXT_HTML)
 public class AliasesResource {
     public static final String ALL_ALIASES = "aliases";
     public static final String ALIAS = "alias";
@@ -42,7 +46,6 @@ public class AliasesResource {
     }
 
     @GET
-    @Produces("text/html")
     public Model listAllAliases() {
         Iterable<Alias> alias = aliases.getAll();
 
@@ -54,13 +57,11 @@ public class AliasesResource {
     }
 
     @GET
-    @Produces("text/html")
     public Redirect edit(@QueryParam("from") AliasPath from, @QueryParam("to") AliasDestination overrideDestination) {
         return redirect(resource(AliasesResource.class).edit("", from, some(overrideDestination)));
     }
 
     @GET
-    @Produces("text/html")
     @Path("{from:.+}")
     public Model edit(@QueryParam("edit") String edit, @PathParam("from") AliasPath from, @QueryParam("to") Option<AliasDestination> overrideDestination) {
         Alias alias = aliases.get(from);
@@ -82,7 +83,6 @@ public class AliasesResource {
     }
 
     @POST
-    @Produces("text/html")
     @Path("{from:.+}")
     public Redirect update(@PathParam("from") AliasPath from, @FormParam("to") AliasDestination to) {
         aliases.put(alias(from, to));
@@ -91,14 +91,13 @@ public class AliasesResource {
 
     @GET
     @Path("{from:.+}")
-    @Produces("text/html")
     public Redirect followRedirectHtml(@PathParam("from") AliasPath from) {
         return redirectFrom(from);
     }
 
     @GET
     @Path("{from:.+}")
-    @Produces("text/plain")
+    @Produces(TEXT_PLAIN)
     public Redirect followRedirectPlain(@PathParam("from") AliasPath from) {
         return redirectFrom(from);
     }

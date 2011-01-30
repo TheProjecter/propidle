@@ -1,7 +1,7 @@
 package acceptance;
 
 import acceptance.PropertiesApplicationTestCase;
-import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
+import static acceptance.steps.whens.RequestIsMade.browserRequests;
 import static acceptance.steps.thens.Responses.response;
 import static acceptance.steps.thens.Responses.status;
 import static acceptance.steps.thens.Responses.header;
@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 public class RootResourceTest extends PropertiesApplicationTestCase {
     @Test
     public void shouldRedirectToFilenamesRoot() throws Exception {
-        when(weMakeRequest(get("/")));
+        when(browserRequests(get("/")));
 
         then(response(status()), is(SEE_OTHER));
         then(response(header("location")), is("/filenames/"));

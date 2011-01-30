@@ -14,7 +14,7 @@ import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defin
 import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
 import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
 import static com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords.defineChangesRecord;
-import static com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumberFromRecords.defineHighestRevisionRecord;
+import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.defineHighestRevisionRecord;
 
 public class TestPropertiesApplication extends PropertiesApplication {
     private static boolean recordsDefined;

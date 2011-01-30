@@ -2,25 +2,25 @@ package com.googlecode.propidle.versioncontrol.changes;
 
 import com.googlecode.propidle.PropertiesPath;
 import com.googlecode.propidle.PropertyComparison;
-import com.googlecode.propidle.PropertyValue;
-import com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumber;
-import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
-
 import static com.googlecode.propidle.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.PropertyName.propertyName;
+import com.googlecode.propidle.PropertyValue;
 import static com.googlecode.propidle.PropertyValue.propertyValue;
+import com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
+import com.googlecode.totallylazy.records.Keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
+import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.Records;
 
 public class ChangesFromRecords implements Changes {
     public static final Keyword<String> CHANGES = Keyword.keyword("changes", String.class);
@@ -31,11 +31,11 @@ public class ChangesFromRecords implements Changes {
     public static final Keyword<String> UPDATED_VALUE = Keyword.keyword("updated_value", String.class);
 
     public final Records records;
-    private final CurrentRevisionNumber currentRevisionNumber;
+    private final HighestRevisionNumbers highestRevisionNumbers;
 
-    public ChangesFromRecords(Records records, CurrentRevisionNumber currentRevisionNumber) {
+    public ChangesFromRecords(Records records, HighestRevisionNumbers highestRevisionNumbers) {
         this.records = records;
-        this.currentRevisionNumber = currentRevisionNumber;
+        this.highestRevisionNumbers = highestRevisionNumbers;
     }
 
     public Iterable<Change> get(PropertiesPath propertiesPath) {
@@ -54,10 +54,10 @@ public class ChangesFromRecords implements Changes {
                 map(deserialise());
     }
 
-    public Changes put(PropertiesPath path, Iterable<PropertyComparison> changes) {
-        RevisionNumber updatedRevisionNumber = currentRevisionNumber.current();
+    public RevisionNumber put(PropertiesPath path, Iterable<PropertyComparison> changes) {
+        RevisionNumber updatedRevisionNumber = highestRevisionNumbers.newRevisionNumber();
         sequence(changes).map(serialise(path, updatedRevisionNumber)).fold(records, addChange());
-        return this;
+        return updatedRevisionNumber;
     }
 
     private Callable2<? super Records, ? super Record, Records> addChange() {

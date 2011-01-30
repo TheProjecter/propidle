@@ -13,6 +13,7 @@ import com.googlecode.utterlyidle.ResourcePath;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -23,7 +24,7 @@ import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(ChangesResource.NAME)
-@Produces("text/html")
+@Produces(TEXT_HTML)
 public class ChangesResource {
     public static final String NAME = "changes";
     private final Changes changes;
@@ -38,7 +39,7 @@ public class ChangesResource {
 
     @GET
     @Path("{path:.+$}")
-    public Model get(@PathParam("path") PropertiesPath path, @QueryParam("revision") Option<RevisionNumber> revisionNumber) {
+    public Model get(@PathParam("path") PropertiesPath path, @QueryParam("forRevision") Option<RevisionNumber> revisionNumber) {
         Iterable<Change> changesForProperties = revisionNumber.isEmpty() ? changes.get(path) : changes.get(path,revisionNumber.get());
 
         String propertiesUrl = basePath + urlOf(resource(PropertiesResource.class).getProperties(path));

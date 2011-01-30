@@ -7,5 +7,5 @@ import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 public interface Changes {
     Iterable<Change> get(PropertiesPath propertiesPath);
     Iterable<Change> get(PropertiesPath propertiesPath, RevisionNumber revisionNumber);
-    Changes put(PropertiesPath path, Iterable<PropertyComparison> changes);
+    RevisionNumber put(PropertiesPath path, Iterable<PropertyComparison> changes);
 }

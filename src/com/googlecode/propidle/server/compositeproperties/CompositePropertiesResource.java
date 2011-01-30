@@ -16,6 +16,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import javax.ws.rs.core.MediaType;
 import java.util.Properties;
 
 import static com.googlecode.propidle.Properties.*;
@@ -30,6 +33,7 @@ import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(CompositePropertiesResource.NAME)
+@Produces(TEXT_HTML)
 public class CompositePropertiesResource {
     public static final String NAME = "composite";
     private final UriGetter uriGetter;
@@ -41,7 +45,6 @@ public class CompositePropertiesResource {
     }
 
     @GET
-    @Produces("text/html")
     public Model getHtml(@QueryParam("url") String url, QueryParameters parameters) {
         Sequence<Url> urls = sequence(parameters.getValues("url")).filter(Predicates.nonEmpty()).map(com.googlecode.propidle.util.Callables.toUrl()).memorise();
 
@@ -75,7 +78,7 @@ public class CompositePropertiesResource {
     }
 
     @GET
-    @Produces("text/plain")
+    @Produces(TEXT_PLAIN)
     public Model getPlain(@QueryParam("url") String url, QueryParameters parameters) {
         Properties compositeProperties = sequence(parameters.getValues("url")).
                 filter(Predicates.nonEmpty()).

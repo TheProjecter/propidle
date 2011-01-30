@@ -28,9 +28,8 @@ public class PropertiesIndexingDecorator implements AllProperties {
         return decorated.getAtRevision(path, revision);
     }
 
-    public AllProperties put(PropertiesPath path, Properties properties) {
+    public RevisionNumber put(PropertiesPath path, Properties properties) {
         indexer.index(pair(urlResolver.resolvePropertiesUrl(path), properties));
-        decorated.put(path, properties);
-        return this;
+        return decorated.put(path, properties);
     }
 }

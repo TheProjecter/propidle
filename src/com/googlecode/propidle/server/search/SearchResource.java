@@ -12,13 +12,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(SearchResource.NAME)
-@Produces("text/html")
+@Produces(TEXT_HTML)
 public class SearchResource {
     public static final String NAME = "search";
     private final PropertiesSearcher searcher;

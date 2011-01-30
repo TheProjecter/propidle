@@ -2,7 +2,7 @@ package acceptance;
 
 import acceptance.PropertiesApplicationTestCase;
 import static acceptance.Values.with;
-import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
+import static acceptance.steps.whens.RequestIsMade.browserRequests;
 import static acceptance.steps.thens.Responses.response;
 import static acceptance.steps.thens.Responses.html;
 import static acceptance.steps.givens.PropertiesExist.propertiesExist;
@@ -23,12 +23,12 @@ public class FileNamesTest extends PropertiesApplicationTestCase {
         given(propertiesExist(with(propertiesPath("pilot/ONE")).and(properties("a=1"))));
         given(propertiesExist(with(propertiesPath("pilot/TWO")).and(properties("a=1"))));
 
-        when(weMakeRequest(get("/filenames").withQuery("q", "+ONE +pilot")));
+        when(browserRequests(get("/filenames").withQuery("q", "+ONE +pilot")));
 
         then(response(html()), matches(li(a("/properties/pilot/ONE", img(".*file.png") + "/pilot/ONE"))));
         then(response(html()), not(matches(a("/properties/pilot/TWO", img(".*file.png") + "/pilot/TWO"))));
 
-        when(weMakeRequest(get("/filenames?q=pilot")));
+        when(browserRequests(get("/filenames?q=pilot")));
 
         then(response(html()), matches(li((a("/properties/pilot/ONE", "/pilot/ONE")))));
         then(response(html()), matches(li((a("/properties/pilot/TWO", "/pilot/TWO")))));

@@ -7,7 +7,7 @@ import static acceptance.Values.with;
 import static acceptance.steps.givens.UserDoesNotExist.userDoesNotExist;
 import static acceptance.steps.givens.UserExists.userExists;
 import static acceptance.steps.thens.Responses.*;
-import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
+import static acceptance.steps.whens.RequestIsMade.browserRequests;
 import static com.googlecode.propidle.util.HtmlRegexes.div;
 import static com.googlecode.propidle.util.HtmlRegexes.input;
 import static com.googlecode.propidle.util.RegexMatcher.matches;
@@ -24,7 +24,7 @@ public class AuthenticationTest extends PropertiesApplicationTestCase {
     public void onSuccessfulLoginClientIsRedirectedToRootUrl() throws Exception {
         given(userExists(with(username("bob")).and(password("bob's password"))));
 
-        when(weMakeRequest(post("/authentication").
+        when(browserRequests(post("/authentication").
                 withForm("username", "bob").
                 withForm("password", "bob's password")));
 
@@ -36,7 +36,7 @@ public class AuthenticationTest extends PropertiesApplicationTestCase {
     public void onUnsuccessfulLoginAnErrorMessageIsDisplayed() throws Exception {
         given(userDoesNotExist(with(username("captain kirk"))));
 
-        when(weMakeRequest(post("/authentication").
+        when(browserRequests(post("/authentication").
                 withForm("username", "captain kirk").
                 withForm("password", "khaaaaaaaan!")));
 

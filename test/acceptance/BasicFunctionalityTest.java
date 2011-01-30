@@ -2,7 +2,7 @@ package acceptance;
 
 import acceptance.PropertiesApplicationTestCase;
 import static acceptance.Values.with;
-import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
+import static acceptance.steps.whens.RequestIsMade.browserRequests;
 import static acceptance.steps.thens.Responses.response;
 import static acceptance.steps.thens.Responses.content;
 import static acceptance.steps.thens.Responses.html;
@@ -25,9 +25,9 @@ import static org.mockito.Mockito.mock;
 public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
     @Test
     public void allowsChangesToPropertyFilesByPostingFileContents() throws Exception {
-        when(weMakeRequest(post("/properties/pilot/myapp/v1.5").withForm("properties", "a=1")));
+        when(browserRequests(post("/properties/pilot/myapp/v1.5").withForm("properties", "a=1")));
 
-        when(weMakeRequest(get("/properties/pilot/myapp/v1.5.properties")));
+        when(browserRequests(get("/properties/pilot/myapp/v1.5.properties")));
 
         then(response(content()), is("a=1\n"));
     }
@@ -36,8 +36,8 @@ public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
     public void recordsChangesWhenModifyingProperties() throws Exception {
         given(propertiesExist(with(propertiesPath("pilot/myapp")).and(properties("a=1"))));
 
-        when(weMakeRequest(post("/properties/pilot/myapp").withForm("properties", "a=2")));
-        when(weMakeRequest(get("/changes/pilot/myapp")));
+        when(browserRequests(post("/properties/pilot/myapp").withForm("properties", "a=2")));
+        when(browserRequests(get("/changes/pilot/myapp")));
 
         then(response(html()), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td(""), td("1"))));
         then(response(html()), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td("1"), td("2"))));

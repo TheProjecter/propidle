@@ -1,6 +1,8 @@
 package com.googlecode.propidle.server.staticcontent;
 
 import javax.ws.rs.*;
+import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +10,7 @@ import java.io.OutputStream;
 
 
 @Path(StaticContentResource.NAME)
-@Produces({"text/css", "text/javascript", "text/html", "application/octet-stream", "image/x-icon"})
+@Produces({"text/css", "text/javascript", TEXT_HTML, APPLICATION_OCTET_STREAM, "image/x-icon"})
 public class StaticContentResource {
     public static final String NAME = "static";
 
@@ -23,7 +25,7 @@ public class StaticContentResource {
                     byte[] bytes = new byte[length];
                     in.read(bytes);
                     out.write(bytes);
-                } 
+                }
                 finally {
                     if (in != null) {
                         in.close();

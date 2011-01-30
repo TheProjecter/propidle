@@ -7,7 +7,7 @@ import static acceptance.Values.with;
 import static acceptance.steps.givens.PropertiesExist.propertiesExist;
 import static acceptance.steps.thens.Responses.html;
 import static acceptance.steps.thens.Responses.response;
-import static acceptance.steps.whens.RequestIsMade.weMakeRequest;
+import static acceptance.steps.whens.RequestIsMade.browserRequests;
 import static com.googlecode.propidle.util.HtmlRegexes.td;
 import static com.googlecode.propidle.util.HtmlRegexes.tr;
 import static com.googlecode.propidle.util.RegexMatcher.matches;
@@ -20,8 +20,8 @@ public class DiffTest extends PropertiesApplicationTestCase {
         given(propertiesExist(with(propertiesPath("base")).and(properties("changed=changed value 1\nunchanged=unchanged value\nremoved=removed value"))));
         given(propertiesExist(with(propertiesPath("other")).and(properties("changed=changed value 2\nunchanged=unchanged value\nnew=new value"))));
 
-        System.out.println(when(weMakeRequest(get("/properties/base"))));
-        when(weMakeRequest(
+        System.out.println(when(browserRequests(get("/properties/base"))));
+        when(browserRequests(
                 get("/diff").
                         withQuery("left", "/properties/base").
                         withQuery("right", "/properties/other")));

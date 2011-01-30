@@ -32,12 +32,11 @@ public class AllPropertiesFromChanges implements AllProperties {
         return createPropertiesFileFromChanges(path, where(revisionNumber(), lessThanOrEqualTo(revision)));
     }
 
-    public AllProperties put(PropertiesPath path, Properties properties) {
+    public RevisionNumber put(PropertiesPath path, Properties properties) {
         Properties previous = get(path);
         Sequence<PropertyComparison> diffs = sequence(propertyDiffTool.diffs(previous, properties));
 
-        changes.put(path, diffs.filter(propertyValueChanged()));
-        return this;
+        return changes.put(path, diffs.filter(propertyValueChanged()));
     }
 
     private Properties createPropertiesFileFromChanges(PropertiesPath path) {

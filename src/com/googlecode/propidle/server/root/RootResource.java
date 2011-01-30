@@ -8,8 +8,12 @@ import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 @Path("/")
+@Produces(TEXT_HTML)
 public class RootResource {
     @GET
     public Redirect get(){

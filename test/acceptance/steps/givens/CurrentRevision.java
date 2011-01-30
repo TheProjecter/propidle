@@ -7,8 +7,8 @@ import com.googlecode.totallylazy.records.Records;
 import java.util.concurrent.Callable;
 
 import static acceptance.Values.with;
-import static com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumberFromRecords.HIGHEST_REVISION;
-import static com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumberFromRecords.serialiseRevisionNumber;
+import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.HIGHEST_REVISION;
+import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.serialiseRevisionNumber;
 
 public class CurrentRevision implements Callable<RevisionNumber> {
     private final Records records;

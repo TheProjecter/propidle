@@ -39,10 +39,9 @@ import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.util.SystemClock;
 import com.googlecode.propidle.versioncontrol.changes.Changes;
 import com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumber;
-import com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumberFromRecords;
-import com.googlecode.propidle.versioncontrol.revisions.LockCurrentRevisionNumberDecorator;
+import com.googlecode.propidle.versioncontrol.revisions.*;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Resources;
@@ -54,6 +53,9 @@ import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.utterlyidle.sitemesh.Decorators;
 import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
 import com.googlecode.yadic.Container;
+import com.googlecode.yadic.resolvers.OptionResolver;
+import static com.googlecode.yadic.generics.Types.parameterizedType;
+import com.googlecode.yadic.generics.TypeFor;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
@@ -66,6 +68,10 @@ import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
+
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import javax.ws.rs.core.MediaType;
 
 @SuppressWarnings("unchecked")
 public class PropertiesModule extends AbstractModule {
@@ -89,8 +95,9 @@ public class PropertiesModule extends AbstractModule {
 
     public Module addPerRequestObjects(Container container) {
         container.addInstance(ConvertExtensionToAcceptHeader.Replacements.class,
-                              replacements(pair("properties", "text/plain"), pair("html", "text/html")));
+                              replacements(pair("properties", TEXT_PLAIN), pair("html", TEXT_HTML)));
         container.decorate(HttpHandler.class, ConvertExtensionToAcceptHeader.class);
+        container.decorate(HttpHandler.class, ConvertRevisionNumberQueryParameterToHeader.class);
         container.decorate(HttpHandler.class, TransactionDecorator.class);
         container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
         container.decorate(HttpHandler.class, SiteMeshHandler.class);
@@ -104,6 +111,9 @@ public class PropertiesModule extends AbstractModule {
         container.add(PasswordHasher.class, Sha1PasswordHasher.class);
         container.add(SessionStarter.class);
         container.add(Authenticator.class, AuthenticateAgainstUsers.class);
+        container.addActivator(HighestExistingRevisionNumber.class, HighestExistingRevisionNumberActivator.class);
+        container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
+        container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
 
         container.add(PropertiesIndexer.class, LucenePropertiesIndexer.class);
         container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
@@ -115,8 +125,8 @@ public class PropertiesModule extends AbstractModule {
         container.decorate(AllProperties.class, FileNameIndexingDecorator.class);
 
         container.add(Aliases.class, AliasesFromRecords.class);
-        container.add(CurrentRevisionNumber.class, CurrentRevisionNumberFromRecords.class);
-        container.decorate(CurrentRevisionNumber.class, LockCurrentRevisionNumberDecorator.class);
+        container.add(HighestRevisionNumbers.class, HighestRevisionNumbersFromRecords.class);
+        container.decorate(HighestRevisionNumbers.class, LockHighestRevisionNumbersDecorator.class);
         container.add(Changes.class, ChangesFromRecords.class);
         container.add(Users.class, UsersFromRecords.class);
         container.add(Sessions.class, SessionsFromRecords.class);

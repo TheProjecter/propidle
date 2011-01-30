@@ -4,7 +4,8 @@ import com.googlecode.propidle.PropertiesPath;
 import com.googlecode.propidle.PropertyComparison;
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.revisions.CurrentRevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
+import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import org.junit.Test;
 
 import static com.googlecode.propidle.PropertyName.propertyName;
@@ -25,15 +26,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ChangesFromRecordsTest {
-    private final CurrentRevisionNumber currentRevisionNumber = mock(CurrentRevisionNumber.class);
-    private final ChangesFromRecords changes = new ChangesFromRecords(defineChangesRecord(temporaryRecords()), currentRevisionNumber);
+    private final HighestRevisionNumbers highestRevisionNumbers = mock(HighestRevisionNumbers.class);
+    private final ChangesFromRecords changes = new ChangesFromRecords(defineChangesRecord(temporaryRecords()), highestRevisionNumbers);
 
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPath() {
         PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");
-        when(currentRevisionNumber.current()).thenReturn(
-                revisionNumber(0),
-                revisionNumber(1));
+        when(highestRevisionNumbers.newRevisionNumber()).thenReturn(
+                newRevisionNumber(0),
+                newRevisionNumber(1));
 
         Change[] firstSetOfExpectedChanges = new Change[]{
                 change(
@@ -79,9 +80,9 @@ public class ChangesFromRecordsTest {
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPathAndRevisionNumber() {
         PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");
-        when(currentRevisionNumber.current()).thenReturn(
-                revisionNumber(0),
-                revisionNumber(1));
+        when(highestRevisionNumbers.newRevisionNumber()).thenReturn(
+                newRevisionNumber(0),
+                newRevisionNumber(1));
 
         Change[] revision0 = new Change[]{
                 change(

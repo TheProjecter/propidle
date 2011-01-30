@@ -15,13 +15,14 @@ import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(FileNamesResource.NAME)
-@Produces("text/html")
+@Produces(TEXT_HTML)
 public class FileNamesResource {
     public static final String NAME = "filenames";
     public static final String DIRECTORY_VIEW_NAME = "directory_view";
