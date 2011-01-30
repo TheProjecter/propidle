@@ -11,7 +11,7 @@ public class PropertyComparison {
     private final Option<PropertyValue> previous;
     private final Option<PropertyValue> updated;
 
-    public static PropertyComparison newProperty(PropertyName propertyName, PropertyValue value) {
+    public static PropertyComparison createdProperty(PropertyName propertyName, PropertyValue value) {
         return changedProperty(propertyName, null, value);
     }
 

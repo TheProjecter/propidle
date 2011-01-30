@@ -9,6 +9,8 @@ import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.server.changes.ChangesResource;
 import com.googlecode.propidle.server.filenames.FileNamesResource;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.totallylazy.Option;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -20,7 +22,6 @@ import com.googlecode.utterlyidle.rendering.Model;
 import javax.ws.rs.*;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import javax.ws.rs.core.MediaType;
 
 @Path(PropertiesResource.NAME)
 @Produces(TEXT_HTML)
@@ -28,15 +29,17 @@ public class PropertiesResource {
     private final AllProperties repository;
     private final BasePath basePath;
     private final Option<RequestedRevisionNumber> requestedRevisionNumber;
+    private final HighestRevisionNumbers highestRevisionNumbers;
     public static final String NAME = "properties";
     public static final String PLAIN_NAME = NAME + ".properties";
     public static final String HTML_EDITABLE = NAME + ".html";
     public static final String HTML_READ_ONLY = NAME + ".readonly.html";
 
-    public PropertiesResource(AllProperties repository, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber) {
+    public PropertiesResource(AllProperties repository, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, HighestRevisionNumbers highestRevisionNumbers) {
         this.repository = repository;
         this.basePath = basePath;
         this.requestedRevisionNumber = requestedRevisionNumber;
+        this.highestRevisionNumbers = highestRevisionNumbers;
     }
 
     @GET
@@ -81,9 +84,9 @@ public class PropertiesResource {
 
     private Model basicModelOf(PropertiesPath path) {
         if (requestedRevisionNumber.isEmpty()) {
-            return ModelOfProperties.modelOfProperties(path, repository.get(path));
+            return ModelOfProperties.modelOfProperties(path, repository.get(path, highestRevisionNumbers.highestExistingRevision()));
         } else {
-            return ModelOfProperties.modelOfProperties(path, repository.getAtRevision(path, requestedRevisionNumber.get()));
+            return ModelOfProperties.modelOfProperties(path, repository.get(path, requestedRevisionNumber.get()));
         }
     }
 

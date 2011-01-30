@@ -15,12 +15,8 @@ public class FileNameIndexingDecorator implements AllProperties {
         this.indexer = indexer;
     }
 
-    public Properties get(PropertiesPath path) {
-        return decorated.get(path);
-    }
-
-    public Properties getAtRevision(PropertiesPath path, RevisionNumber revision) {
-        return decorated.getAtRevision(path, revision);
+    public Properties get(PropertiesPath path, RevisionNumber revision) {
+        return decorated.get(path, revision);
     }
 
     public RevisionNumber put(PropertiesPath path, Properties properties) {

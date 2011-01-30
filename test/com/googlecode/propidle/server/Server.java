@@ -16,7 +16,6 @@ import com.googlecode.totallylazy.Callable1;
 public class Server {
     public static void main(String[] args) throws IOException {
         TestPropertiesApplication application = new TestPropertiesApplication();
-        application.defineRecords();
         application.inTransaction(createTestUser(username("admin"), password("hogtied")));
 
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;

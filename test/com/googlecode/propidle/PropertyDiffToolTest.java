@@ -47,6 +47,6 @@ public class PropertyDiffToolTest {
                 diff.diffs(
                         properties(),
                         properties(pair("some.property", "new value"))),
-                hasExactly(newProperty(propertyName("some.property"), propertyValue("new value"))));
+                hasExactly(createdProperty(propertyName("some.property"), propertyValue("new value"))));
     }
 }

@@ -1,14 +1,11 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
 import com.googlecode.propidle.PropertiesPath;
-import com.googlecode.propidle.PropertyComparison;
 import static com.googlecode.propidle.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.PropertyName.propertyName;
 import com.googlecode.propidle.PropertyValue;
 import static com.googlecode.propidle.PropertyValue.propertyValue;
-import com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
@@ -22,7 +19,7 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
-public class ChangesFromRecords implements Changes {
+public class AllChangesFromRecords implements AllChanges {
     public static final Keyword<String> CHANGES = Keyword.keyword("changes", String.class);
     public static final Keyword<String> PROPERTIES_PATH = Keyword.keyword("properties_path", String.class);
     public static final Keyword<Integer> REVISION_NUMBER = Keyword.keyword("revision_number", Integer.class);
@@ -31,11 +28,9 @@ public class ChangesFromRecords implements Changes {
     public static final Keyword<String> UPDATED_VALUE = Keyword.keyword("updated_value", String.class);
 
     public final Records records;
-    private final HighestRevisionNumbers highestRevisionNumbers;
 
-    public ChangesFromRecords(Records records, HighestRevisionNumbers highestRevisionNumbers) {
+    public AllChangesFromRecords(Records records) {
         this.records = records;
-        this.highestRevisionNumbers = highestRevisionNumbers;
     }
 
     public Iterable<Change> get(PropertiesPath propertiesPath) {
@@ -54,10 +49,9 @@ public class ChangesFromRecords implements Changes {
                 map(deserialise());
     }
 
-    public RevisionNumber put(PropertiesPath path, Iterable<PropertyComparison> changes) {
-        RevisionNumber updatedRevisionNumber = highestRevisionNumbers.newRevisionNumber();
-        sequence(changes).map(serialise(path, updatedRevisionNumber)).fold(records, addChange());
-        return updatedRevisionNumber;
+    public AllChangesFromRecords put(Iterable<Change> changes) {
+        sequence(changes).map(serialise()).fold(records, addChange());
+        return this;
     }
 
     private Callable2<? super Records, ? super Record, Records> addChange() {
@@ -69,15 +63,15 @@ public class ChangesFromRecords implements Changes {
         };
     }
 
-    private Callable1<? super PropertyComparison, Record> serialise(final PropertiesPath path, final RevisionNumber updatedRevisionNumber) {
-        return new Callable1<PropertyComparison, Record>() {
-            public Record call(PropertyComparison propertyComparison) throws Exception {
+    private Callable1<? super Change, Record> serialise() {
+        return new Callable1<Change, Record>() {
+            public Record call(Change change) throws Exception {
                 return record().
-                        set(PROPERTIES_PATH, path.toString()).
-                        set(REVISION_NUMBER, updatedRevisionNumber.value()).
-                        set(PROPERTY_NAME, propertyComparison.propertyName().value()).
-                        set(PREVIOUS_VALUE, propertyComparison.previous().map(method(on(PropertyValue.class).value())).getOrNull()).
-                        set(UPDATED_VALUE, propertyComparison.updated().map(method(on(PropertyValue.class).value())).getOrNull());
+                        set(PROPERTIES_PATH, change.propertiesPath().toString()).
+                        set(REVISION_NUMBER, change.revisionNumber().value()).
+                        set(PROPERTY_NAME, change.propertyName().value()).
+                        set(PREVIOUS_VALUE, change.previous().map(method(on(PropertyValue.class).value())).getOrNull()).
+                        set(UPDATED_VALUE, change.updated().map(method(on(PropertyValue.class).value())).getOrNull());
             }
         };
     }

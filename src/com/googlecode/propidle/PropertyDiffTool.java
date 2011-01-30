@@ -11,7 +11,7 @@ import java.util.Properties;
 import static com.googlecode.propidle.Properties.toPair;
 import static com.googlecode.propidle.PropertyName.propertyName;
 import static com.googlecode.propidle.PropertyValue.propertyValue;
-import static com.googlecode.propidle.PropertyComparison.newProperty;
+import static com.googlecode.propidle.PropertyComparison.createdProperty;
 import static com.googlecode.propidle.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.PropertyComparison.removedProperty;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -41,7 +41,7 @@ public class PropertyDiffTool {
     private Callable2<? super List<PropertyComparison>, ? super Pair<String, String>, List<PropertyComparison>> newProperties() {
         return new Callable2<List<PropertyComparison>, Pair<String, String>, List<PropertyComparison>>() {
             public List<PropertyComparison> call(List<PropertyComparison> propertyComparisons, Pair<String, String> property) throws Exception {
-                propertyComparisons.add(newProperty(PropertyName.propertyName(property.first()), PropertyValue.propertyValue(property.second())));
+                propertyComparisons.add(createdProperty(PropertyName.propertyName(property.first()), PropertyValue.propertyValue(property.second())));
                 return propertyComparisons;
             }
         };

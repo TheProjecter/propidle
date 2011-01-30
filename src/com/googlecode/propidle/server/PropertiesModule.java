@@ -37,8 +37,8 @@ import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.propidle.util.Clock;
 import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.util.SystemClock;
-import com.googlecode.propidle.versioncontrol.changes.Changes;
-import com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords;
+import com.googlecode.propidle.versioncontrol.changes.AllChanges;
+import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.revisions.*;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Option;
@@ -54,7 +54,6 @@ import com.googlecode.utterlyidle.sitemesh.Decorators;
 import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.resolvers.OptionResolver;
-import static com.googlecode.yadic.generics.Types.parameterizedType;
 import com.googlecode.yadic.generics.TypeFor;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -71,7 +70,6 @@ import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.rende
 
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import javax.ws.rs.core.MediaType;
 
 @SuppressWarnings("unchecked")
 public class PropertiesModule extends AbstractModule {
@@ -127,7 +125,7 @@ public class PropertiesModule extends AbstractModule {
         container.add(Aliases.class, AliasesFromRecords.class);
         container.add(HighestRevisionNumbers.class, HighestRevisionNumbersFromRecords.class);
         container.decorate(HighestRevisionNumbers.class, LockHighestRevisionNumbersDecorator.class);
-        container.add(Changes.class, ChangesFromRecords.class);
+        container.add(AllChanges.class, AllChangesFromRecords.class);
         container.add(Users.class, UsersFromRecords.class);
         container.add(Sessions.class, SessionsFromRecords.class);
 

@@ -2,58 +2,49 @@ package com.googlecode.propidle.versioncontrol;
 
 import com.googlecode.propidle.PropertiesPath;
 import com.googlecode.propidle.PropertyComparison;
-import com.googlecode.propidle.versioncontrol.changes.Change;
-import com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
-import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
-import org.junit.Test;
-
+import static com.googlecode.propidle.PropertyComparison.*;
 import static com.googlecode.propidle.PropertyName.propertyName;
 import static com.googlecode.propidle.PropertyValue.propertyValue;
 import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
-import static com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords.defineChangesRecord;
-import static com.googlecode.propidle.PropertyComparison.newProperty;
-import static com.googlecode.propidle.PropertyComparison.changedProperty;
-import static com.googlecode.propidle.PropertyComparison.removedProperty;
+import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
+import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
+import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
 
-public class ChangesFromRecordsTest {
-    private final HighestRevisionNumbers highestRevisionNumbers = mock(HighestRevisionNumbers.class);
-    private final ChangesFromRecords changes = new ChangesFromRecords(defineChangesRecord(temporaryRecords()), highestRevisionNumbers);
+public class AllChangesFromRecordsTest {
+    private final AllChangesFromRecords changes = new AllChangesFromRecords(defineChangesRecord(temporaryRecords()));
 
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPath() {
         PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");
-        when(highestRevisionNumbers.newRevisionNumber()).thenReturn(
-                newRevisionNumber(0),
-                newRevisionNumber(1));
 
-        Change[] firstSetOfExpectedChanges = new Change[]{
+        Sequence<Change> firstSetOfExpectedChanges = sequence(
                 change(
                         revisionNumber(0),
                         propertiesPath,
-                        newProperty(
+                        createdProperty(
                                 propertyName("number.of.pigs"),
                                 propertyValue("42")
                         )),
                 change(
                         revisionNumber(0),
                         propertiesPath,
-                        newProperty(
+                        createdProperty(
                                 propertyName("bird.anger.level"),
                                 propertyValue("mild")
-                        ))                };
+                        )));
 
         // Expect an update to version ids after the second set of changes for the same property id
-        Change[] secondSetOfExpectedChanges = new Change[]{
+        Sequence<Change> secondSetOfExpectedChanges = sequence(
                 change(
                         revisionNumber(1),
                         propertiesPath,
@@ -68,33 +59,29 @@ public class ChangesFromRecordsTest {
                         removedProperty(
                                 propertyName("bird.anger.level"),
                                 propertyValue("enormous")
-                        ))
-                };
+                        )));
 
-        changes.put(propertiesPath, changesFrom(firstSetOfExpectedChanges));
-        changes.put(propertiesPath, changesFrom(secondSetOfExpectedChanges));
+        changes.put(firstSetOfExpectedChanges);
+        changes.put(secondSetOfExpectedChanges);
 
-        assertThat(changes.get(propertiesPath), hasExactly(firstSetOfExpectedChanges[0], firstSetOfExpectedChanges[1], secondSetOfExpectedChanges[0], secondSetOfExpectedChanges[1]));
+        assertThat(changes.get(propertiesPath), hasExactly(firstSetOfExpectedChanges.join(secondSetOfExpectedChanges)));
     }
 
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPathAndRevisionNumber() {
         PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");
-        when(highestRevisionNumbers.newRevisionNumber()).thenReturn(
-                newRevisionNumber(0),
-                newRevisionNumber(1));
 
-        Change[] revision0 = new Change[]{
+        Sequence<Change> revision0 = sequence(
                 change(
                         revisionNumber(0),
                         propertiesPath,
-                        newProperty(
+                        createdProperty(
                                 propertyName("number.of.pigs"),
                                 propertyValue("42")
-                        ))};
+                        )));
 
         // Expect an update to version ids after the second set of changes for the same property id
-        Change[] revision1 = new Change[]{
+        Sequence<Change> revision1 = sequence(
                 change(
                         revisionNumber(1),
                         propertiesPath,
@@ -102,12 +89,12 @@ public class ChangesFromRecordsTest {
                                 propertyName("number.of.pigs"),
                                 propertyValue("42"),
                                 propertyValue("999")
-                        ))};
+                        )));
 
-        changes.put(propertiesPath, changesFrom(revision0));
-        changes.put(propertiesPath, changesFrom(revision1));
+        changes.put(revision0);
+        changes.put(revision1);
 
-        assertThat(changes.get(propertiesPath, revisionNumber(0)), hasExactly(revision0[0]));
+        assertThat(changes.get(propertiesPath, revisionNumber(0)), hasExactly(revision0));
     }
 
     private Iterable<PropertyComparison> changesFrom(Change... changes) {

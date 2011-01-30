@@ -2,7 +2,7 @@ package com.googlecode.propidle.server.changes;
 
 import com.googlecode.propidle.PropertiesPath;
 import com.googlecode.propidle.server.properties.PropertiesResource;
-import com.googlecode.propidle.versioncontrol.changes.Changes;
+import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.propidle.server.PropertiesModule;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
@@ -27,11 +27,11 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 @Produces(TEXT_HTML)
 public class ChangesResource {
     public static final String NAME = "changes";
-    private final Changes changes;
+    private final AllChanges changes;
     private final ResourcePath resourcePath;
     private final BasePath basePath;
 
-    public ChangesResource(Changes changes, ResourcePath resourcePath, BasePath basePath) {
+    public ChangesResource(AllChanges changes, ResourcePath resourcePath, BasePath basePath) {
         this.changes = changes;
         this.resourcePath = resourcePath;
         this.basePath = basePath;

@@ -26,7 +26,7 @@ public class ChangeTest {
 
     @Test
     public void canBeAppliedToAPropertiesFile() throws Exception{
-        Change newProperty = change(newProperty(propertyName("a"), propertyValue("some value")));
+        Change newProperty = change(createdProperty(propertyName("a"), propertyValue("some value")));
         assertThat(newProperty.applyTo(properties()), hasProperty("a", "some value"));
 
         Change changedProperty = change(changedProperty(propertyName("a"), propertyValue("old value doesn't have to match"), propertyValue("new value")));

@@ -12,7 +12,7 @@ public class LockHighestRevisionNumbersDecorator implements HighestRevisionNumbe
     }
 
     public HighestExistingRevisionNumber highestExistingRevision() {
-        return null;
+        return decorated.highestExistingRevision();
     }
 
     public NewRevisionNumber newRevisionNumber() {

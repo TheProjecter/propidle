@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.PropertyComparison.newProperty;
+import static com.googlecode.propidle.PropertyComparison.createdProperty;
 import static com.googlecode.propidle.PropertyName.propertyName;
 import static com.googlecode.propidle.PropertyName.propertyNames;
 import static com.googlecode.propidle.PropertyValue.propertyValue;
@@ -24,8 +24,8 @@ public class PropertyChangeFilterTest {
     public void filtersPropertyChangesByPredicate() {
         PropertyChangeFilter filter = PropertyChangeFilter.filterPropertyChanges(decorated, propertyNames("shambles"));
 
-        PropertyComparison matchingChange = newProperty(propertyName("shambles"), propertyValue("moo"));
-        PropertyComparison nonMatchingChange = newProperty(propertyName("not.shambles"), propertyValue("moo"));
+        PropertyComparison matchingChange = createdProperty(propertyName("shambles"), propertyValue("moo"));
+        PropertyComparison nonMatchingChange = createdProperty(propertyName("not.shambles"), propertyValue("moo"));
 
         filter.propertiesHaveChanged(propertyChangeEvent(properties, matchingChange));
         verify(decorated).propertiesHaveChanged(propertyChangeEvent(properties, matchingChange));

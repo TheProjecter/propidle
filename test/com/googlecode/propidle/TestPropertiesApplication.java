@@ -8,38 +8,36 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.records.Records;
 import com.googlecode.yadic.Container;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.RAMDirectory;
 
 import static com.googlecode.propidle.aliases.AliasesFromRecords.defineAliasRecord;
 import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defineUsersRecord;
 import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
 import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
-import static com.googlecode.propidle.versioncontrol.changes.ChangesFromRecords.defineChangesRecord;
+import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
 import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.defineHighestRevisionRecord;
 
-public class TestPropertiesApplication extends PropertiesApplication {
-    private static boolean recordsDefined;
+import java.util.UUID;
 
+public class TestPropertiesApplication extends PropertiesApplication {
     public TestPropertiesApplication() {
         super(
                 //                TemporaryIndex.directory(new File("/Users/mattsavage/Desktop/lucene")),
-                TemporaryIndex.emptyFileSystemDirectory(),
-                new SqlPersistenceModule(connectionDetails("jdbc:hsqldb:mem:totallylazy", "SA", "")));
+                new RAMDirectory(),
+                new SqlPersistenceModule(connectionDetails("jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", "")));
+        defineRecords();
     }
 
-    public void defineRecords() {
+    private void defineRecords() {
         inTransaction(
                 new Callable1<Container, Void>() {
                     public Void call(Container container) throws Exception {
-                        if (recordsDefined) return null;
-
                         Records records = container.get(Records.class);
                         defineUsersRecord(records);
                         defineSessionsRecord(records);
                         defineHighestRevisionRecord(records);
                         defineChangesRecord(records);
                         defineAliasRecord(records);
-
-                        recordsDefined = true;
                         return null;
                     }
                 });

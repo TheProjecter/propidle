@@ -23,11 +23,6 @@ public class PropertiesApplicationTestCase extends TestState {
     protected WebClient webClient = new WebClient(application);
 
     @Before
-    public void defineRecords() {
-        application.defineRecords();
-    }
-
-    @Before
     public void addModules() {
         application.add(new WebClientModule());
     }

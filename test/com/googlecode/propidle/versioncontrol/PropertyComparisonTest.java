@@ -15,7 +15,7 @@ public class PropertyComparisonTest {
     @Test
     public void shouldGiveStatus() {
         assertThat(changedProperty(SOME_NAME, propertyValue("old"), propertyValue("new")).status(), is(PropertyComparison.Status.UPDATED));
-        assertThat(newProperty(SOME_NAME, propertyValue("new")).status(), is(PropertyComparison.Status.NEW));
+        assertThat(createdProperty(SOME_NAME, propertyValue("new")).status(), is(PropertyComparison.Status.NEW));
         assertThat(removedProperty(SOME_NAME, propertyValue("old")).status(), is(PropertyComparison.Status.REMOVED));
         assertThat(unchangedProperty(SOME_NAME, propertyValue("value")).status(), is(PropertyComparison.Status.UNCHANGED));
     }
