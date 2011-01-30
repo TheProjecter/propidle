@@ -3,10 +3,8 @@ package acceptance;
 import acceptance.PropertiesApplicationTestCase;
 import static acceptance.Values.with;
 import static acceptance.steps.whens.RequestIsMade.browserRequests;
-import static acceptance.steps.thens.Responses.response;
-import static acceptance.steps.thens.Responses.content;
-import static acceptance.steps.thens.Responses.html;
 import static acceptance.steps.givens.PropertiesExist.propertiesExist;
+import static acceptance.steps.thens.Responses.*;
 import org.junit.Test;
 
 import static com.googlecode.propidle.util.RegexMatcher.matches;
@@ -29,7 +27,7 @@ public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
 
         when(browserRequests(get("/properties/pilot/myapp/v1.5.properties")));
 
-        then(response(content()), is("a=1\n"));
+        then(response(asProperties()), is(properties("a=1\n")));
     }
 
     @Test

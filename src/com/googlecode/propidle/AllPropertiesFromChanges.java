@@ -32,7 +32,8 @@ public class AllPropertiesFromChanges implements AllProperties {
 
     public Properties get(PropertiesPath path, RevisionNumber revision) {
         if(revision==null)throw new NullArgumentException("revision");
-        return properties(getChanges(path, where(revisionNumberOfChange(), lessThanOrEqualTo(revision))));
+        Properties properties = properties(getChanges(path, where(revisionNumberOfChange(), lessThanOrEqualTo(revision))));
+        return properties;
     }
 
     public RevisionNumber put(PropertiesPath path, Properties updated) {

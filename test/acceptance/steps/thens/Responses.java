@@ -2,16 +2,17 @@ package acceptance.steps.thens;
 
 import acceptance.steps.Then;
 import acceptance.steps.WebClient;
+import static com.googlecode.propidle.Properties.properties;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.Status;
-
-import java.util.concurrent.Callable;
-
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
+import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.Status;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+
+import java.util.Properties;
+import java.util.concurrent.Callable;
 
 public class Responses implements Callable<Response> {
     private final WebClient webClient;
@@ -44,7 +45,16 @@ public class Responses implements Callable<Response> {
             }
         };
     }
+
     public static Callable1<Response, String> html() {
         return content();
+    }
+
+    public static Callable1<Response, Properties> asProperties() {
+        return new Callable1<Response, Properties>() {
+            public Properties call(Response response) throws Exception {
+                return properties(response.output().toString());
+            }
+        };
     }
 }

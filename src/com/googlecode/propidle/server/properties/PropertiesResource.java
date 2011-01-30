@@ -6,11 +6,12 @@ import com.googlecode.propidle.PropertiesPath;
 import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 import com.googlecode.propidle.server.PropertiesModule;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
+import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
 import com.googlecode.propidle.server.changes.ChangesResource;
 import com.googlecode.propidle.server.filenames.FileNamesResource;
-import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber;
+import static com.googlecode.propidle.server.properties.ModelOfProperties.modelOfProperties;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
+import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Option;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
@@ -22,6 +23,7 @@ import com.googlecode.utterlyidle.rendering.Model;
 import javax.ws.rs.*;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import java.util.concurrent.Callable;
 
 @Path(PropertiesResource.NAME)
 @Produces(TEXT_HTML)
@@ -77,18 +79,24 @@ public class PropertiesResource {
     private Model modelOf(PropertiesPath path) {
         final Model model = basicModelOf(path);
         model.
-                add("revisionNumber", requestedRevisionNumber.getOrNull()).
                 add("latestRevisionUrl", basePath + urlOf(resource(PropertiesResource.class).getProperties(path)));
         return model;
     }
 
     private Model basicModelOf(PropertiesPath path) {
-        if (requestedRevisionNumber.isEmpty()) {
-            return ModelOfProperties.modelOfProperties(path, repository.get(path, highestRevisionNumbers.highestExistingRevision()));
-        } else {
-            return ModelOfProperties.modelOfProperties(path, repository.get(path, requestedRevisionNumber.get()));
-        }
+        RevisionNumber revisionNumber = requestedRevisionNumber.getOrElse(highestExistingRevision());
+        return modelOfProperties(path, repository.get(path, revisionNumber)).
+                add("revisionNumber", revisionNumber);
     }
+
+    private Callable<RequestedRevisionNumber> highestExistingRevision() {
+        return new Callable<RequestedRevisionNumber>() {
+            public RequestedRevisionNumber call() throws Exception {
+                return requestedRevisionNumber(highestRevisionNumbers.highestExistingRevision());
+            }
+        };
+    }
+
 
     private String modelName() {
         return requestedRevisionNumber.isEmpty() ? HTML_EDITABLE : HTML_READ_ONLY;

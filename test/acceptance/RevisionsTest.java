@@ -24,7 +24,7 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
 
         when(browserRequests(get("/properties/properties.one.properties").withQuery("revision", "0")));
 
-        then(response(content()), is("revision=0\n"));
+        then(response(content()), is("# /properties/properties.one?revision=0\nrevision=0\n"));
     }
 
     @Test
@@ -46,6 +46,6 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
 
         when(browserRequests(get("/composite.properties?url=/properties/properties.one&revision=0")));
 
-        then(response(content()), is("revision=0\n"));
+        then(response(asProperties()), is(properties("revision=0\n")));
     }
 }

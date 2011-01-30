@@ -5,6 +5,7 @@ import static acceptance.Values.with;
 import static acceptance.steps.whens.RequestIsMade.browserRequests;
 import static acceptance.steps.thens.Responses.content;
 import static acceptance.steps.thens.Responses.response;
+import static acceptance.steps.thens.Responses.asProperties;
 import static acceptance.steps.givens.PropertiesExist.propertiesExist;
 import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.Properties.properties;
@@ -21,6 +22,6 @@ public class CompositePropertiesTest extends PropertiesApplicationTestCase {
 
         when(browserRequests(get("/composite.properties?url=/properties/common/myApp&url=/properties/pilot/myApp/v123&url=")));
 
-        then(response(content()), is("from.base=1\nfrom.override=overriddenvalue\n"));
+        then(response(asProperties()), is(properties("from.base=1\nfrom.override=overriddenvalue\n")));
     }
 }
