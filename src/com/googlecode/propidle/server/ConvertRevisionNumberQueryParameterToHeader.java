@@ -13,12 +13,12 @@ public class ConvertRevisionNumberQueryParameterToHeader implements HttpHandler 
         this.decorated = decorated;
     }
 
-    public void handle(Request request, Response response) throws Exception {
+    public Response handle(Request request) throws Exception {
         String revision = request.query().getValue(REVISION_PARAM);
         if(revision != null){
             request.query().remove(REVISION_PARAM);
             request.headers().add(REVISION_PARAM, revision);
         }
-        decorated.handle(request, response);
+        return decorated.handle(request);
     }
 }

@@ -15,9 +15,9 @@ public class CloseConnectionDecorator implements HttpHandler {
         this.connection = connection;
     }
 
-    public void handle(Request request, Response response) throws Exception {
+    public Response handle(Request request) throws Exception {
         try {
-            decorated.handle(request, response);
+            return decorated.handle(request);
         } finally {
             connection.close();
         }

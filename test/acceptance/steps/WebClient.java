@@ -19,8 +19,7 @@ public class WebClient {
         if (currentSession != null) {
             request.withHeader("cookies", "session=" + currentSession.value());
         }
-        Response response = new MemoryResponse();
-        application.handle(request.build(), response);
+        Response response = application.handle(request.build());
         lastResponse = response;
         return response;
     }

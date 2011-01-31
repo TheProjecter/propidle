@@ -14,8 +14,9 @@ public class LuceneIndexWriterTransaction implements HttpHandler {
         this.indexWriter = indexWriter;
     }
 
-    public void handle(Request request, Response response) throws Exception {
-        decorated.handle(request, response);
+    public Response handle(Request request) throws Exception {
+        Response response = decorated.handle(request);
         indexWriter.commit();
+        return response;
     }
 }

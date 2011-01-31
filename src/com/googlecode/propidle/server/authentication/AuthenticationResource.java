@@ -51,7 +51,6 @@ public class AuthenticationResource {
             Session session = authenticationResult.left();
 
             cookies.set(SESSION_TOKEN, session.id().value());
-            cookies.commit();
 
             return redirect(resource(RootResource.class).get());
         }

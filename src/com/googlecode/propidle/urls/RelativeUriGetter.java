@@ -1,10 +1,7 @@
 package com.googlecode.propidle.urls;
 
-import com.googlecode.utterlyidle.Application;
-import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.MemoryResponse;
-import com.googlecode.utterlyidle.RequestBuilder;
-import com.googlecode.utterlyidle.Response;
+import com.googlecode.totallylazy.Strings;
+import com.googlecode.utterlyidle.*;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.io.ByteArrayInputStream;
@@ -66,23 +63,20 @@ public class RelativeUriGetter implements UriGetter {
 
     private InputStream getRelativeUri(URI uri, MimeType mimeType) throws Exception {
         uri = stripBasePath(uri);
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        Response response = MemoryResponse.response(output);
-
         RequestBuilder request = RequestBuilder.get(uri.toString()).withHeader(HttpHeaders.ACCEPT, mimeType.value());
         if(!requestedRevisionNumber.isEmpty()){
             request.withHeader(REVISION_PARAM, requestedRevisionNumber.get().toString());
         }
-        application.handle(request.build(), response);
+        Response response = application.handle(request.build());
 
-        validateResponseCode(response, uri, output);
+        validateResponseCode(response, uri);
 
-        return new ByteArrayInputStream(output.toByteArray());
+        return new ByteArrayInputStream(response.bytes());
     }
 
-    private void validateResponseCode(Response response, URI uri, ByteArrayOutputStream output) {
+    private void validateResponseCode(Response response, URI uri) {
         if (response.status().code() >= 400) {
-            throw new HttpStatusCodeException(uri, response.status(), new String(output.toByteArray()));
+            throw new HttpStatusCodeException(uri, response.status(), Strings.toString(response.bytes()));
         }
     }
 

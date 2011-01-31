@@ -14,10 +14,11 @@ public class TransactionDecorator implements HttpHandler {
         this.transaction = transaction;
     }
 
-    public void handle(Request request, Response response) throws Exception {
+    public Response handle(Request request) throws Exception {
         try {
-            decorated.handle(request, response);
+            Response response = decorated.handle(request);
             transaction.commit();
+            return response;
         } catch (Exception e) {
             transaction.rollback();
             throw e;
