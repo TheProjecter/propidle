@@ -1,0 +1,1 @@
+<tr><td><b>$it.name$</b></td><td>$it.value$</td><td><table class="invisible">$it.overrides : propertyOverride()$</table></td></tr>
