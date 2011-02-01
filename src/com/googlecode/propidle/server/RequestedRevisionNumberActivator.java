@@ -17,7 +17,7 @@ public class RequestedRevisionNumberActivator implements Callable<RequestedRevis
 
     public RequestedRevisionNumber call() throws Exception {
         String header = request.headers().getValue(REVISION_PARAM);
-        if (header == null) {
+        if (header == null || "".equals(header.trim())) {
             throw new ContainerException(format("%s parameter not found in request headers", REVISION_PARAM));
         }
         return requestedRevisionNumber(header);
