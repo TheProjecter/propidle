@@ -1,6 +1,7 @@
 package com.googlecode.propidle.server.compositeproperties;
 
 import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.server.aliases.AliasesResource;
 import com.googlecode.propidle.server.properties.PropertiesResource;
 import com.googlecode.propidle.urls.UriGetter;
@@ -38,10 +39,12 @@ public class CompositePropertiesResource {
     public static final String NAME = "composite";
     private final UriGetter uriGetter;
     private final BasePath basePath;
+    private final Option<RequestedRevisionNumber> requestedRevisionNumber;
 
-    public CompositePropertiesResource(UriGetter uriGetter, BasePath basePath) {
+    public CompositePropertiesResource(UriGetter uriGetter, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber) {
         this.uriGetter = uriGetter;
         this.basePath = basePath;
+        this.requestedRevisionNumber = requestedRevisionNumber;
     }
 
     @GET
@@ -69,6 +72,7 @@ public class CompositePropertiesResource {
                 sortBy(key()).
                 map(toPair()).
                 fold(model(), modelOfPropertiesAndOverrides(overrides)).
+                add("revision", requestedRevisionNumber.getOrNull()).
                 add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
                 add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, parameters))).
                 add(PropertiesModule.MODEL_NAME, NAME).
