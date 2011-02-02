@@ -16,8 +16,9 @@ import com.googlecode.totallylazy.Option;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.Redirect;
 import static com.googlecode.utterlyidle.proxy.Resource.*;
+
+import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
@@ -45,12 +46,12 @@ public class PropertiesResource {
     }
 
     @GET
-    public Redirect getAll() {
+    public Response getAll() {
         return redirect(resource(FileNamesResource.class).getChildrenOf(propertiesPath("/")));
     }
 
     @GET
-    public Redirect create(@QueryParam("path") PropertiesPath path) {
+    public Response create(@QueryParam("path") PropertiesPath path) {
         return redirect(resource(PropertiesResource.class).getHtml(path));
     }
 
@@ -71,7 +72,7 @@ public class PropertiesResource {
 
     @POST
     @Path("{path:.+$}")
-    public Redirect post(@PathParam("path") PropertiesPath path, @FormParam("properties") PropertiesInput propertiesInput) {
+    public Response post(@PathParam("path") PropertiesPath path, @FormParam("properties") PropertiesInput propertiesInput) {
         RevisionNumber revisionNumber = repository.put(path, properties(propertiesInput));
         return redirect(resource(ChangesResource.class).get(path, some(revisionNumber)));
     }

@@ -9,9 +9,8 @@ import com.googlecode.propidle.util.HumanReadable;
 import com.googlecode.propidle.authorisation.users.Username;
 import com.googlecode.propidle.authorisation.users.Password;
 import com.googlecode.totallylazy.Either;
-import com.googlecode.utterlyidle.cookies.CookieName;
-import static com.googlecode.utterlyidle.cookies.CookieName.cookieName;
-import com.googlecode.utterlyidle.cookies.Cookies;
+
+import static com.googlecode.utterlyidle.cookies.Cookie.cookie;
 import static com.googlecode.utterlyidle.proxy.Resource.redirect;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -23,14 +22,12 @@ import javax.ws.rs.core.MediaType;
 @Path(AuthenticationResource.NAME)
 public class AuthenticationResource {
     public static final String NAME = "authentication";
-    private static final CookieName SESSION_TOKEN = cookieName("session");
+    private static final String SESSION_TOKEN = "session";
 
     private final SessionStarter sessionStarter;
-    private final Cookies cookies;
 
-    public AuthenticationResource(SessionStarter sessionStarter, Cookies cookies) {
+    public AuthenticationResource(SessionStarter sessionStarter) {
         this.sessionStarter = sessionStarter;
-        this.cookies = cookies;
     }
 
     @GET
@@ -50,9 +47,8 @@ public class AuthenticationResource {
         } else {
             Session session = authenticationResult.left();
 
-            cookies.set(SESSION_TOKEN, session.id().value());
-
-            return redirect(resource(RootResource.class).get());
+            return redirect(resource(RootResource.class).get()).
+                    cookie(SESSION_TOKEN, cookie(session.id().value()));
         }
     }
 

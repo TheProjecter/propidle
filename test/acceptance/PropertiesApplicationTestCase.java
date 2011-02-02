@@ -18,7 +18,7 @@ import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpecRunner.class)
-public class PropertiesApplicationTestCase extends TestState {
+public abstract class PropertiesApplicationTestCase extends TestState {
     protected TestPropertiesApplication application = new TestPropertiesApplication();
     protected WebClient webClient = new WebClient(application);
 

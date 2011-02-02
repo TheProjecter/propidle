@@ -9,7 +9,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Left;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.utterlyidle.Redirect;
+import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
@@ -41,7 +41,7 @@ public class DiffResource {
     }
 
     @GET
-    public Redirect get() throws Throwable {
+    public Response get() throws Throwable {
         return redirect(resource(DiffResource.class).get(Left.<String,Url>left(""), Left.<String,Url>left("")));
     }
 

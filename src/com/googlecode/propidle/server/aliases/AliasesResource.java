@@ -1,34 +1,32 @@
 package com.googlecode.propidle.server.aliases;
 
 import com.googlecode.propidle.aliases.Alias;
-import com.googlecode.propidle.aliases.Aliases;
-import com.googlecode.propidle.aliases.AliasPath;
 import com.googlecode.propidle.aliases.AliasDestination;
-import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
-import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
+import com.googlecode.propidle.aliases.AliasPath;
+import com.googlecode.propidle.aliases.Aliases;
 import com.googlecode.propidle.server.PropertiesModule;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.Redirect;
 import com.googlecode.utterlyidle.ResourcePath;
+import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.aliases.Alias.alias;
+import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
+import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.utterlyidle.SeeOther.seeOther;
-import static com.googlecode.utterlyidle.io.Url.url;
+import static com.googlecode.utterlyidle.Responses.seeOther;
 import static com.googlecode.utterlyidle.proxy.Resource.redirect;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.rendering.Model.model;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @Path(AliasesResource.ALL_ALIASES)
 @Produces(TEXT_HTML)
@@ -57,7 +55,7 @@ public class AliasesResource {
     }
 
     @GET
-    public Redirect edit(@QueryParam("from") AliasPath from, @QueryParam("to") AliasDestination overrideDestination) {
+    public Response edit(@QueryParam("from") AliasPath from, @QueryParam("to") AliasDestination overrideDestination) {
         return redirect(resource(AliasesResource.class).edit("", from, some(overrideDestination)));
     }
 
@@ -84,25 +82,25 @@ public class AliasesResource {
 
     @POST
     @Path("{from:.+}")
-    public Redirect update(@PathParam("from") AliasPath from, @FormParam("to") AliasDestination to) {
+    public Response update(@PathParam("from") AliasPath from, @FormParam("to") AliasDestination to) {
         aliases.put(alias(from, to));
         return redirect(resource(AliasesResource.class).edit("", from, none(AliasDestination.class)));
     }
 
     @GET
     @Path("{from:.+}")
-    public Redirect followRedirectHtml(@PathParam("from") AliasPath from) {
+    public Response followRedirectHtml(@PathParam("from") AliasPath from) {
         return redirectFrom(from);
     }
 
     @GET
     @Path("{from:.+}")
     @Produces(TEXT_PLAIN)
-    public Redirect followRedirectPlain(@PathParam("from") AliasPath from) {
+    public Response followRedirectPlain(@PathParam("from") AliasPath from) {
         return redirectFrom(from);
     }
 
-    private Redirect redirectFrom(AliasPath from) {
+    private Response redirectFrom(AliasPath from) {
         Alias alias = aliases.get(from);
         if (alias == null) {
             return redirect(resource(AliasesResource.class).edit("", from, none(AliasDestination.class)));
