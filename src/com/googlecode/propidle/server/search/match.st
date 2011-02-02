@@ -1,0 +1,1 @@
+<tr><td><a href="$it.url$">$it.url$</a></td><td>$it.propertyName$</td><td>$it.propertyValue$</td></tr>
