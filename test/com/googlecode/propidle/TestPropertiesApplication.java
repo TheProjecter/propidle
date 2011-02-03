@@ -1,69 +1,59 @@
 package com.googlecode.propidle;
 
-import com.googlecode.propidle.persistence.Transaction;
-import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
-import com.googlecode.propidle.server.PropertiesApplication;
-import com.googlecode.propidle.util.TemporaryIndex;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.records.Records;
-import com.googlecode.yadic.Container;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.RAMDirectory;
-
+import acceptance.PropertiesApplicationTestCase;
 import static com.googlecode.propidle.aliases.AliasesFromRecords.defineAliasRecord;
 import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defineUsersRecord;
 import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
+import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
+import com.googlecode.propidle.persistence.memory.InMemoryPersistenceModule;
+import com.googlecode.propidle.server.PropertiesApplication;
 import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
 import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.defineHighestRevisionRecord;
+import com.googlecode.totallylazy.records.Records;
+import com.googlecode.yadic.Container;
+import com.googlecode.yadic.SimpleContainer;
+import org.apache.lucene.store.RAMDirectory;
 
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 public class TestPropertiesApplication extends PropertiesApplication {
-    public TestPropertiesApplication() {
+    public TestPropertiesApplication() throws Exception {
         super(
                 //                TemporaryIndex.directory(new File("/Users/mattsavage/Desktop/lucene")),
                 new RAMDirectory(),
-                new SqlPersistenceModule(connectionDetails("jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", "")));
+                new InMemoryPersistenceModule());
+//                new SqlPersistenceModule(connectionDetails("jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", "")));
         defineRecords();
     }
 
-    private void defineRecords() {
-        inTransaction(
-                new Callable1<Container, Void>() {
-                    public Void call(Container container) throws Exception {
-                        Records records = container.get(Records.class);
-                        defineUsersRecord(records);
-                        defineSessionsRecord(records);
-                        defineHighestRevisionRecord(records);
-                        defineChangesRecord(records);
-                        defineAliasRecord(records);
-                        return null;
-                    }
-                });
+    private void defineRecords() throws Exception {
+        inTransaction(DefineRecords.class);
     }
 
-    public <T> T inTransaction(Callable1<Container, T> action) {
-        Container requestScope = createRequestScope();
-        return inTransaction(requestScope, action);
+    @SuppressWarnings("unchecked")
+    public <T> T inTransaction(Class<? extends Callable<T>> step) throws Exception {
+        Container request = new SimpleContainer(createRequestScope());
+        request.add(Callable.class, step);
+        request.add(PropertiesApplicationTestCase.CloseTransactionAfter.class);
+        return (T) request.get(PropertiesApplicationTestCase.CloseTransactionAfter.class).call();
     }
 
-    public static <T> T inTransaction(Container container, Callable1<Container, T> action) {
-        Transaction transaction = startTransaction(container);
+    public static class DefineRecords implements Callable<Void> {
+        private final Records records;
 
-        T result;
-        try {
-            result = action.call(container);
-            container.get(IndexWriter.class).commit();
-        } catch (Exception e) {
-            transaction.rollback();
-            throw new RuntimeException("Could not commit transaction", e);
+        public DefineRecords(Records records) {
+            this.records = records;
         }
-        transaction.commit();
-        return result;
-    }
 
-    private static Transaction startTransaction(Container request) {
-        return request.get(Transaction.class);
+        public Void call() throws Exception {
+            defineUsersRecord(records);
+            defineSessionsRecord(records);
+            defineHighestRevisionRecord(records);
+            defineChangesRecord(records);
+            defineAliasRecord(records);
+            return null;
+        }
     }
 }

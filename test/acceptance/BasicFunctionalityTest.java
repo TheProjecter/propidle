@@ -1,43 +1,38 @@
 package acceptance;
 
-import acceptance.PropertiesApplicationTestCase;
-import static acceptance.Values.with;
-import static acceptance.steps.whens.RequestIsMade.browserRequests;
-import static acceptance.steps.givens.PropertiesExist.propertiesExist;
-import static acceptance.steps.thens.Responses.*;
-import org.junit.Test;
-
-import static com.googlecode.propidle.util.RegexMatcher.matches;
-import static com.googlecode.propidle.util.HtmlRegexes.tr;
-import static com.googlecode.propidle.util.HtmlRegexes.td;
-import static com.googlecode.utterlyidle.RequestBuilder.post;
-import static com.googlecode.utterlyidle.RequestBuilder.get;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
+import static acceptance.steps.thens.LastResponse.theHtmlOf;
+import acceptance.steps.thens.LastResponse;
+import acceptance.steps.givens.PropertiesExist;
+import acceptance.steps.whens.RequestIsMade;
 import static com.googlecode.propidle.Properties.properties;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.mock;
+import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.util.HtmlRegexes.td;
+import static com.googlecode.propidle.util.HtmlRegexes.tr;
+import static com.googlecode.propidle.util.RegexMatcher.matches;
+import static com.googlecode.utterlyidle.RequestBuilder.get;
+import static com.googlecode.utterlyidle.RequestBuilder.post;
+import static org.hamcrest.Matchers.is;
+import org.junit.Test;
 
 public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
     @Test
     public void allowsChangesToPropertyFilesByPostingFileContents() throws Exception {
-        when(browserRequests(post("/properties/pilot/myapp/v1.5").withForm("properties", "a=1")));
+        when(a(RequestIsMade.class).to(post("/properties/pilot/myapp/v1.5").withForm("properties", "a=1")));
 
-        when(browserRequests(get("/properties/pilot/myapp/v1.5.properties")));
+        when(a(RequestIsMade.class).to(get("/properties/pilot/myapp/v1.5.properties")));
 
-        then(response(asProperties()), is(properties("a=1\n")));
+        then(thePropertiesFileFrom(), the(LastResponse.class), is(properties("a=1\n")));
     }
 
     @Test
     public void recordsChangesWhenModifyingProperties() throws Exception {
-        given(propertiesExist(with(propertiesPath("pilot/myapp")).and(properties("a=1"))));
+        given(that(PropertiesExist.class).with(propertiesPath("pilot/myapp")).and(properties("a=1")));
 
-        when(browserRequests(post("/properties/pilot/myapp").withForm("properties", "a=2")));
-        when(browserRequests(get("/changes/pilot/myapp")));
+        when(a(RequestIsMade.class).to(post("/properties/pilot/myapp").withForm("properties", "a=2")));
+        when(a(RequestIsMade.class).to(get("/changes/pilot/myapp")));
 
-        then(response(html()), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td(""), td("1"))));
-        then(response(html()), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td("1"), td("2"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td(""), td("1"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td("1"), td("2"))));
     }
 }

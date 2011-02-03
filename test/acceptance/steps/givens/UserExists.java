@@ -3,20 +3,18 @@ package acceptance.steps.givens;
 import com.googlecode.propidle.authorisation.users.*;
 import static com.googlecode.propidle.authorisation.users.User.user;
 import acceptance.Values;
-import acceptance.steps.Given;
 
 import java.util.concurrent.Callable;
 
 public class UserExists implements Callable<User> {
-    private final Username username;
-    private final Password password;
-
     private final Users users;
     private final PasswordHasher passwordHasher;
 
-    public UserExists(Username username, Password password, Users users, PasswordHasher passwordHasher) {
-        this.username = username;
-        this.password = password;
+    private Username username;
+    private Password password;
+
+
+    public UserExists(Users users, PasswordHasher passwordHasher) {
         this.users = users;
         this.passwordHasher = passwordHasher;
     }
@@ -27,7 +25,12 @@ public class UserExists implements Callable<User> {
         return user;
     }
 
-    public static Given<User> userExists(Values usingValues) {
-        return new Given<User>(UserExists.class, usingValues);
+    public UserExists with(Username username) {
+        this.username = username;
+        return this;
+    }
+    public UserExists and(Password password) {
+        this.password = password;
+        return this;
     }
 }

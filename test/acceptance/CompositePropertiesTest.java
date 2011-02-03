@@ -1,27 +1,23 @@
 package acceptance;
 
-import acceptance.PropertiesApplicationTestCase;
-import static acceptance.Values.with;
-import static acceptance.steps.whens.RequestIsMade.browserRequests;
-import static acceptance.steps.thens.Responses.content;
-import static acceptance.steps.thens.Responses.response;
-import static acceptance.steps.thens.Responses.asProperties;
-import static acceptance.steps.givens.PropertiesExist.propertiesExist;
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import acceptance.steps.givens.PropertiesExist;
+import acceptance.steps.thens.LastResponse;
+import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
+import acceptance.steps.whens.RequestIsMade;
 import static com.googlecode.propidle.Properties.properties;
+import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
-import org.junit.Test;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import org.junit.Test;
 
 public class CompositePropertiesTest extends PropertiesApplicationTestCase {
     @Test
     public void allowsCompositionOfManyPropertyFilesUsingUrls() throws Exception {
-        given(propertiesExist(with(propertiesPath("common/myApp")).and(properties("from.base=1\nfrom.override=basevalue"))));
-        given(propertiesExist(with(propertiesPath("pilot/myApp/v123")).and(properties("from.override=overriddenvalue"))));
+        given(that(PropertiesExist.class).with(propertiesPath("common/myApp")).and(properties("from.base=1\nfrom.override=basevalue")));
+        given(that(PropertiesExist.class).with(propertiesPath("pilot/myApp/v123")).and(properties("from.override=overriddenvalue")));
 
-        when(browserRequests(get("/composite.properties?url=/properties/common/myApp&url=/properties/pilot/myApp/v123&url=")));
+        when(a(RequestIsMade.class).to(get("/composite.properties?url=/properties/common/myApp&url=/properties/pilot/myApp/v123&url=")));
 
-        then(response(asProperties()), is(properties("from.base=1\nfrom.override=overriddenvalue\n")));
+        then(thePropertiesFileFrom(), the(LastResponse.class), is(properties("from.base=1\nfrom.override=overriddenvalue\n")));
     }
 }

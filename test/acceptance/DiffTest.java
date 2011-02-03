@@ -2,12 +2,10 @@ package acceptance;
 
 import static com.googlecode.propidle.Properties.properties;
 import static com.googlecode.propidle.PropertiesPath.propertiesPath;
-import acceptance.PropertiesApplicationTestCase;
-import static acceptance.Values.with;
-import static acceptance.steps.givens.PropertiesExist.propertiesExist;
-import static acceptance.steps.thens.Responses.html;
-import static acceptance.steps.thens.Responses.response;
-import static acceptance.steps.whens.RequestIsMade.browserRequests;
+import static acceptance.steps.thens.LastResponse.theHtmlOf;
+import acceptance.steps.thens.LastResponse;
+import acceptance.steps.givens.PropertiesExist;
+import acceptance.steps.whens.RequestIsMade;
 import static com.googlecode.propidle.util.HtmlRegexes.td;
 import static com.googlecode.propidle.util.HtmlRegexes.tr;
 import static com.googlecode.propidle.util.RegexMatcher.matches;
@@ -17,18 +15,18 @@ import org.junit.Test;
 public class DiffTest extends PropertiesApplicationTestCase {
     @Test
     public void canProvideADiffOfTwoPropertiesFiles() throws Exception {
-        given(propertiesExist(with(propertiesPath("base")).and(properties("changed=changed value 1\nunchanged=unchanged value\nremoved=removed value"))));
-        given(propertiesExist(with(propertiesPath("other")).and(properties("changed=changed value 2\nunchanged=unchanged value\nnew=new value"))));
+        given(that(PropertiesExist.class).with(propertiesPath("base")).and(properties("changed=changed value 1\nunchanged=unchanged value\nremoved=removed value")));
+        given(that(PropertiesExist.class).with(propertiesPath("other")).and(properties("changed=changed value 2\nunchanged=unchanged value\nnew=new value")));
 
-        System.out.println(when(browserRequests(get("/properties/base"))));
-        when(browserRequests(
+        when(a(RequestIsMade.class).to(get("/properties/base")));
+        when(a(RequestIsMade.class).to(
                 get("/diff").
                         withQuery("left", "/properties/base").
                         withQuery("right", "/properties/other")));
 
-        then(response(html()), matches(tr(td("removed"), td("removed value"), td(""))));
-        then(response(html()), matches(tr(td("changed"), td("changed value 1"), td("changed value 2"))));
-        then(response(html()), matches(tr(td("unchanged"), td("unchanged value"), td("unchanged value"))));
-        then(response(html()), matches(tr(td("new"), td(""), td("new value"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("removed"), td("removed value"), td(""))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("changed"), td("changed value 1"), td("changed value 2"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("unchanged"), td("unchanged value"), td("unchanged value"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("new"), td(""), td("new value"))));
     }
 }
