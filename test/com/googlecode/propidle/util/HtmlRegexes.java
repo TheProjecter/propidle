@@ -22,11 +22,11 @@ public class HtmlRegexes {
         return "<img.*?src=\"" + href + "\".*?>";
     }
 
-    public static String a(String href) {
-        return a(href, href);
+    public static String anchor(String href) {
+        return anchor(href, href);
     }
 
-    public static String a(String href, String text) {
+    public static String anchor(String href, String text) {
         return "<a.*? href=\"" + href + "\".*?>" + text + "</a>";
     }
 

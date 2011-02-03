@@ -1,6 +1,5 @@
 package acceptance.steps.thens;
 
-import acceptance.steps.Then;
 import acceptance.steps.WebClient;
 import static com.googlecode.propidle.Properties.properties;
 import com.googlecode.totallylazy.Callable1;
@@ -14,10 +13,10 @@ import static org.hamcrest.Matchers.*;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-public class Responses implements Callable<Response> {
+public class LastResponse implements Callable<Response> {
     private final WebClient webClient;
 
-    public Responses(WebClient webClient) {
+    public LastResponse(WebClient webClient) {
         this.webClient = webClient;
     }
 
@@ -25,19 +24,15 @@ public class Responses implements Callable<Response> {
         return webClient.currentPage();
     }
 
-    public static <T> Then<T> response(Callable1<Response, T> map) {
-        return new Then<Response>(Responses.class).map(map);
-    }
-
-    public static Callable1<Response, Status> status() {
+    public static Callable1<Response, Status> theStatusOf() {
         return method(on(Response.class).status());
     }
 
-    public static Callable1<Response, String> header(String headerName) {
+    public static Callable1<Response, String> theHeader(String headerName) {
         return method(on(Response.class).header(headerName));
     }
 
-    public static Callable1<Response, String> content() {
+    public static Callable1<Response, String> theContentOf() {
         return new Callable1<Response, String>() {
             public String call(Response response) throws Exception {
                 assertThat("Expected a successful response but got " + response.output(), response.status().code(), allOf(greaterThanOrEqualTo(200), lessThan(300)));
@@ -46,11 +41,11 @@ public class Responses implements Callable<Response> {
         };
     }
 
-    public static Callable1<Response, String> html() {
-        return content();
+    public static Callable1<Response, String> theHtmlOf() {
+        return theContentOf();
     }
 
-    public static Callable1<Response, Properties> asProperties() {
+    public static Callable1<Response, Properties> thePropertiesFileFrom() {
         return new Callable1<Response, Properties>() {
             public Properties call(Response response) throws Exception {
                 return properties(response.output().toString());

@@ -1,7 +1,6 @@
 package acceptance.steps.whens;
 
 import acceptance.steps.WebClient;
-import acceptance.steps.When;
 import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.Response;
 
@@ -13,28 +12,20 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 public class RequestIsMade implements Callable<Response> {
-    private final RequestBuilder request;
     private final WebClient webClient;
+    private RequestBuilder request;
 
-    public RequestIsMade(RequestBuilder request, WebClient webClient) {
-        this.request = request;
+    public RequestIsMade(WebClient webClient) {
         this.webClient = webClient;
     }
 
-    public static When<Response> weMakeRequest(final RequestBuilder request){
-        return serviceReceivesA(request);
-    }
-
-    public static When<Response> browserRequests(final RequestBuilder request){
-        return weMakeRequest(request.withHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML));
-    }
-
-    public static When<Response> serviceReceivesA(final RequestBuilder request){
-        return new When<Response>(RequestIsMade.class, with(request));
-    }
-
     public Response call() throws Exception {
-        webClient.handle(request);
+        webClient.handle(request.withHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML));
         return webClient.currentPage();
+    }
+
+    public RequestIsMade to(RequestBuilder request) {
+        this.request = request;
+        return this;
     }
 }

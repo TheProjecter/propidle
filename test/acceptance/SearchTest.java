@@ -2,11 +2,10 @@ package acceptance;
 
 import org.junit.Test;
 
-import static acceptance.Values.with;
-import static acceptance.steps.givens.PropertiesExist.propertiesExist;
-import static acceptance.steps.thens.Responses.html;
-import static acceptance.steps.thens.Responses.response;
-import static acceptance.steps.whens.RequestIsMade.browserRequests;
+import acceptance.steps.givens.PropertiesExist;
+import static acceptance.steps.thens.LastResponse.theHtmlOf;
+import acceptance.steps.thens.LastResponse;
+import acceptance.steps.whens.RequestIsMade;
 import static com.googlecode.propidle.Properties.properties;
 import static com.googlecode.propidle.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.HtmlRegexes.*;
@@ -18,12 +17,12 @@ import static org.hamcrest.Matchers.not;
 public class SearchTest extends PropertiesApplicationTestCase {
     @Test
     public void allowsSearchingForAStringAcrossAllFiles() throws Exception {
-        given(propertiesExist(with(propertiesPath("properties.one")).and(properties("property_one=stifled core dump"))));
-        given(propertiesExist(with(propertiesPath("properties.two")).and(properties("property_two=massive short faced bear"))));
+        given(that(PropertiesExist.class).with(propertiesPath("properties.one")).and(properties("property_one=stifled core dump")));
+        given(that(PropertiesExist.class).with(propertiesPath("properties.two")).and(properties("property_two=massive short faced bear")));
 
-        when(browserRequests(get("/search?q=core")));
+        when(a(RequestIsMade.class).to(get("/search?q=core")));
 
-        then(response(html()), matches(tr(td(a("/properties/properties.one")), td("property_one"), td("stifled core dump"))));
-        then(response(html()), not(anyOf(matches("properties.two"), matches("property_two"), matches("massive short-faced bear"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td(anchor("/properties/properties.one")), td("property_one"), td("stifled core dump"))));
+        then(theHtmlOf(), the(LastResponse.class), not(anyOf(matches("properties.two"), matches("property_two"), matches("massive short-faced bear"))));
     }
 }

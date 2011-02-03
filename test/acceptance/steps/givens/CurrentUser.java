@@ -7,25 +7,18 @@ import static com.googlecode.propidle.server.sessions.SessionId.sessionId;
 import com.googlecode.propidle.server.sessions.Sessions;
 import static com.googlecode.propidle.server.sessions.StartTime.startTime;
 import acceptance.steps.WebClient;
-import acceptance.steps.Given;
-import acceptance.steps.Step;
 import acceptance.Values;
 import com.googlecode.propidle.util.Clock;
 
 import java.util.concurrent.Callable;
 
-public class CurrentUserIs implements Callable<SessionId> {
-    private final Username username;
+public class CurrentUser implements Callable<SessionId> {
     private final Sessions sessions;
     private final Clock clock;
     private final WebClient webClient;
+    private Username username;
 
-    public static Step<SessionId> currentUserIs(Values values){
-        return new Given<SessionId>(CurrentUserIs.class, values);
-    }
-
-    public CurrentUserIs(Username username, Sessions sessions, Clock clock, WebClient webClient) {
-        this.username = username;
+    public CurrentUser(Sessions sessions, Clock clock, WebClient webClient) {
         this.sessions = sessions;
         this.clock = clock;
         this.webClient = webClient;
@@ -41,4 +34,8 @@ public class CurrentUserIs implements Callable<SessionId> {
         return id;
     }
 
+    public CurrentUser is(Username username) {
+        this.username = username;
+        return this;
+    }
 }

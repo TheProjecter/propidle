@@ -1,6 +1,5 @@
 package acceptance.steps.givens;
 
-import acceptance.steps.Given;
 import acceptance.Values;
 import com.googlecode.propidle.authorisation.users.Users;
 import com.googlecode.propidle.authorisation.users.User;
@@ -10,16 +9,16 @@ import com.googlecode.totallylazy.Option;
 import java.util.concurrent.Callable;
 
 public class UserDoesNotExist implements Callable<Option<User>> {
-    private final Username username;
     private final Users users;
+    private Username username;
 
-    public UserDoesNotExist(Username username, Users users) {
-        this.username = username;
+    public UserDoesNotExist(Users users) {
         this.users = users;
     }
 
-    public static Given<Option<User>> userDoesNotExist(final Values values){
-        return new Given<Option<User>>(UserDoesNotExist.class, values);
+    public UserDoesNotExist with(Username username) {
+        this.username = username;
+        return this;
     }
 
     public Option<User> call() throws Exception {

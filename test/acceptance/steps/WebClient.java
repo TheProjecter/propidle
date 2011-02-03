@@ -1,6 +1,7 @@
 package acceptance.steps;
 
 import com.googlecode.propidle.server.sessions.SessionId;
+import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.utterlyidle.Application;
 import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.Response;
@@ -16,6 +17,7 @@ public class WebClient {
     }
 
     public Response handle(RequestBuilder request) throws Exception {
+        if(request==null) throw new NullArgumentException("request");
         if (currentSession != null) {
             request.withHeader("cookies", "session=" + currentSession.value());
         }

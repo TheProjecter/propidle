@@ -2,12 +2,11 @@ package acceptance;
 
 import static com.googlecode.propidle.authorisation.users.Password.password;
 import static com.googlecode.propidle.authorisation.users.Username.username;
-import acceptance.PropertiesApplicationTestCase;
-import static acceptance.Values.with;
-import static acceptance.steps.givens.UserDoesNotExist.userDoesNotExist;
-import static acceptance.steps.givens.UserExists.userExists;
-import static acceptance.steps.thens.Responses.*;
-import static acceptance.steps.whens.RequestIsMade.browserRequests;
+import acceptance.steps.givens.UserExists;
+import acceptance.steps.givens.UserDoesNotExist;
+import static acceptance.steps.thens.LastResponse.*;
+import acceptance.steps.thens.LastResponse;
+import acceptance.steps.whens.RequestIsMade;
 import static com.googlecode.propidle.util.HtmlRegexes.div;
 import static com.googlecode.propidle.util.HtmlRegexes.input;
 import static com.googlecode.propidle.util.RegexMatcher.matches;
@@ -22,26 +21,26 @@ import org.junit.runner.RunWith;
 public class AuthenticationTest extends PropertiesApplicationTestCase {
     @Test
     public void onSuccessfulLoginClientIsRedirectedToRootUrl() throws Exception {
-        given(userExists(with(username("bob")).and(password("bob's password"))));
+        given(that(UserExists.class).with(username("bob")).and(password("bob's password")));
 
-        when(browserRequests(post("/authentication").
+        when(a(RequestIsMade.class).to(post("/authentication").
                 withForm("username", "bob").
                 withForm("password", "bob's password")));
 
-        then(response(status()), is(Status.SEE_OTHER));
-        then(response(header("location")), is("/"));
+        then(theStatusOf(), the(LastResponse.class), is(Status.SEE_OTHER));
+        then(theHeader("location"), inThe(LastResponse.class), is("/"));
     }
 
     @Test
     public void onUnsuccessfulLoginAnErrorMessageIsDisplayed() throws Exception {
-        given(userDoesNotExist(with(username("captain kirk"))));
+        given(that(UserDoesNotExist.class).with(username("captain kirk")));
 
-        when(browserRequests(post("/authentication").
+        when(a(RequestIsMade.class).to(post("/authentication").
                 withForm("username", "captain kirk").
                 withForm("password", "khaaaaaaaan!")));
 
-        then(response(html()), matches(div("message", "Could not authenticate 'captain kirk' with the provided credentials")));
-        then(response(html()), matches(input("username", "captain kirk")));
-        then(response(html()), matches(input("password", "")));
+        then(theHtmlOf(), the(LastResponse.class), matches(div("message", "Could not authenticate 'captain kirk' with the provided credentials")));
+        then(theHtmlOf(), the(LastResponse.class), matches(input("username", "captain kirk")));
+        then(theHtmlOf(), the(LastResponse.class), matches(input("password", "")));
     }
 }
