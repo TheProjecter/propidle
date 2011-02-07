@@ -3,7 +3,7 @@ package com.googlecode.propidle.authentication;
 import static com.googlecode.propidle.authentication.Session.session;
 import static com.googlecode.propidle.authentication.SessionId.sessionId;
 import static com.googlecode.propidle.authentication.StartTime.startTime;
-import com.googlecode.propidle.util.Clock;
+import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.authorisation.users.Username;
 import com.googlecode.propidle.authorisation.users.Password;
 import com.googlecode.totallylazy.Either;

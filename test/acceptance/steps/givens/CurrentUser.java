@@ -8,7 +8,7 @@ import com.googlecode.propidle.authentication.Sessions;
 import static com.googlecode.propidle.authentication.SessionId.sessionId;
 import static com.googlecode.propidle.authentication.StartTime.startTime;
 import acceptance.steps.WebClient;
-import com.googlecode.propidle.util.Clock;
+import com.googlecode.propidle.util.time.Clock;
 
 import java.util.concurrent.Callable;
 

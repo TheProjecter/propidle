@@ -1,6 +1,6 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.util.StringTinyType;
+import com.googlecode.propidle.util.tinytype.StringTinyType;
 import com.googlecode.totallylazy.Callable1;
 
 import static com.googlecode.totallylazy.Sequences.sequence;

@@ -1,7 +1,7 @@
 package com.googlecode.propidle.authentication;
 
-import com.googlecode.propidle.util.DateTinyType;
-import com.googlecode.propidle.util.Clock;
+import com.googlecode.propidle.util.tinytype.DateTinyType;
+import com.googlecode.propidle.util.time.Clock;
 
 import java.util.Date;
 

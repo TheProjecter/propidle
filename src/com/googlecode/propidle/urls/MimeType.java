@@ -1,10 +1,10 @@
 package com.googlecode.propidle.urls;
 
-import com.googlecode.propidle.util.StringTinyType;
+import com.googlecode.propidle.util.tinytype.StringTinyType;
 
 import javax.ws.rs.core.MediaType;
 
-public class MimeType extends StringTinyType<MimeType>{
+public class MimeType extends StringTinyType<MimeType> {
     public static MimeType TEXT_PLAIN = mimeType(MediaType.TEXT_PLAIN);
     public static MimeType TEXT_HTML = mimeType(MediaType.TEXT_HTML);
 

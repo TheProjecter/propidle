@@ -1,7 +1,7 @@
 package com.googlecode.propidle.authentication;
 
-import com.googlecode.propidle.util.TinyType;
-import com.googlecode.propidle.util.StringTinyType;
+import com.googlecode.propidle.util.tinytype.TinyType;
+import com.googlecode.propidle.util.tinytype.StringTinyType;
 
 import java.util.UUID;
 

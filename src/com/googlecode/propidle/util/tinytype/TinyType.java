@@ -1,4 +1,6 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.util.tinytype;
+
+import com.googlecode.propidle.util.NullArgumentException;
 
 public abstract class TinyType<T extends Comparable, SELF_CLASS extends TinyType<T, ? extends Object>> implements Comparable<SELF_CLASS> {
     private final T value;

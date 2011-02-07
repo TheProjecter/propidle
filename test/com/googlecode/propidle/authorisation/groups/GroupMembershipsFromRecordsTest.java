@@ -1,4 +1,4 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.authorisation.groups;
 
 import com.googlecode.propidle.authorisation.groups.GroupId;
 import static com.googlecode.propidle.authorisation.groups.GroupId.newGroupId;
@@ -8,7 +8,7 @@ import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
 import static com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords.defineGroupMembershipsRecord;
 import com.googlecode.propidle.authorisation.users.Username;
 import static com.googlecode.propidle.authorisation.users.Username.username;
-import static com.googlecode.propidle.util.HasInAnyOrder.hasInAnyOrder;
+import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
 import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
 import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;

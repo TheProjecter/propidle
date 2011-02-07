@@ -1,4 +1,4 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.util.matchers;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 

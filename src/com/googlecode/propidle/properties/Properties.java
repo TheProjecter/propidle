@@ -1,6 +1,6 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.util.TinyType;
+import com.googlecode.propidle.util.tinytype.TinyType;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
