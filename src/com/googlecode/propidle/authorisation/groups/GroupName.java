@@ -1,6 +1,6 @@
 package com.googlecode.propidle.authorisation.groups;
 
-import com.googlecode.propidle.util.StringTinyType;
+import com.googlecode.propidle.util.tinytype.StringTinyType;
 import com.googlecode.totallylazy.Callable1;
 
 public class GroupName extends StringTinyType<GroupName> {

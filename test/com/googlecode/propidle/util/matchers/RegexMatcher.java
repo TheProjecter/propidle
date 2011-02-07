@@ -1,4 +1,4 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.util.matchers;
 
 import com.googlecode.totallylazy.regex.Regex;
 import org.hamcrest.Description;

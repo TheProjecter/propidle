@@ -1,6 +1,6 @@
 package com.googlecode.propidle.versioncontrol.revisions;
 
-import com.googlecode.propidle.util.IntegerTinyType;
+import com.googlecode.propidle.util.tinytype.IntegerTinyType;
 
 public class RevisionNumber extends IntegerTinyType<RevisionNumber> {
     public static RevisionNumber revisionNumber(String value) {

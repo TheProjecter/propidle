@@ -1,4 +1,4 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.util.collections;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;

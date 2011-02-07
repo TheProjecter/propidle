@@ -1,8 +1,10 @@
 package com.googlecode.propidle.util;
 
+import com.googlecode.propidle.util.tinytype.StringTinyType;
+
 import static java.lang.String.format;
 
-public class HumanReadable extends StringTinyType<HumanReadable>{
+public class HumanReadable extends StringTinyType<HumanReadable> {
     public static HumanReadable humanReadable(String format, Object... args) {
         return humanReadable(format(format, args));
     }

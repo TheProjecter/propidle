@@ -1,6 +1,6 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.util.collections;
 
-import com.googlecode.propidle.util.MultiMap;
+import com.googlecode.propidle.util.collections.MultiMap;
 import com.googlecode.totallylazy.Option;
 import org.junit.Test;
 

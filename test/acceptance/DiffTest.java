@@ -6,9 +6,9 @@ import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.whens.RequestIsMade;
-import static com.googlecode.propidle.util.HtmlRegexes.td;
-import static com.googlecode.propidle.util.HtmlRegexes.tr;
-import static com.googlecode.propidle.util.RegexMatcher.matches;
+import static com.googlecode.propidle.util.matchers.HtmlRegexes.td;
+import static com.googlecode.propidle.util.matchers.HtmlRegexes.tr;
+import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import org.junit.Test;
 

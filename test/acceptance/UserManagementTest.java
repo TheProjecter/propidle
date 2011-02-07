@@ -12,7 +12,7 @@ import com.googlecode.propidle.authorisation.groups.GroupId;
 import static com.googlecode.propidle.authorisation.groups.Group.groupNameIs;
 import static com.googlecode.propidle.authorisation.groups.Group.getGroupId;
 import static com.googlecode.propidle.authorisation.permissions.Permission.MANAGE_USERS;
-import static com.googlecode.propidle.util.RegexMatcher.matches;
+import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.Status.SEE_OTHER;

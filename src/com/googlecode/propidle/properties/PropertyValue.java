@@ -1,6 +1,6 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.util.StringTinyType;
+import com.googlecode.propidle.util.tinytype.StringTinyType;
 
 import static com.googlecode.totallylazy.Option.none;
 

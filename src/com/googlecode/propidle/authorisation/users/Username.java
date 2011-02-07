@@ -1,6 +1,6 @@
 package com.googlecode.propidle.authorisation.users;
 
-import com.googlecode.propidle.util.StringTinyType;
+import com.googlecode.propidle.util.tinytype.StringTinyType;
 
 public class Username extends StringTinyType<Username>{
     public static final Username GUEST = username("guest");

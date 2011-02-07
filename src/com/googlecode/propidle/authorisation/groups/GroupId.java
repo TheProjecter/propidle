@@ -1,6 +1,6 @@
 package com.googlecode.propidle.authorisation.groups;
 
-import com.googlecode.propidle.util.UuidTinyType;
+import com.googlecode.propidle.util.tinytype.UuidTinyType;
 import com.googlecode.totallylazy.Callable1;
 
 import java.util.UUID;

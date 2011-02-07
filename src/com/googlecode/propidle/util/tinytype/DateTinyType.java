@@ -1,4 +1,4 @@
-package com.googlecode.propidle.util;
+package com.googlecode.propidle.util.tinytype;
 
 import java.util.Date;
 

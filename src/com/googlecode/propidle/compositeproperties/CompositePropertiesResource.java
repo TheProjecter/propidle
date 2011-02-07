@@ -5,7 +5,7 @@ import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.urls.UriGetter;
-import com.googlecode.propidle.util.MultiMap;
+import com.googlecode.propidle.util.collections.MultiMap;
 import com.googlecode.propidle.util.Predicates;
 import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.BasePath;
