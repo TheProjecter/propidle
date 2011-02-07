@@ -1,8 +1,7 @@
 package acceptance.steps.givens;
 
-import com.googlecode.propidle.AllProperties;
-import com.googlecode.propidle.PropertiesPath;
-import acceptance.Values;
+import com.googlecode.propidle.properties.AllProperties;
+import com.googlecode.propidle.properties.PropertiesPath;
 
 import java.util.Properties;
 import java.util.concurrent.Callable;

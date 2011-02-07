@@ -1,6 +1,6 @@
 package com.googlecode.propidle.urls;
 
-import com.googlecode.propidle.PropertiesPath;
+import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.utterlyidle.io.Url;
 
 public interface UrlResolver {

@@ -1,6 +1,6 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
-import com.googlecode.propidle.PropertiesPath;
+import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 
 public interface AllChanges {

@@ -1,7 +1,7 @@
 package com.googlecode.propidle.search;
 
-import com.googlecode.propidle.PropertyName;
-import com.googlecode.propidle.PropertyValue;
+import com.googlecode.propidle.properties.PropertyName;
+import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.utterlyidle.io.Url;
 
 public class SearchResult {

@@ -1,7 +1,7 @@
 package com.googlecode.propidle.indexing;
 
 import com.googlecode.propidle.PathType;
-import com.googlecode.propidle.PropertiesPath;
+import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.search.FileNameSearcher;
 import com.googlecode.propidle.search.LuceneFileNameSearcher;
 import com.googlecode.propidle.search.Query;
@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.indexing.IndexWriterActivator.indexWriter;
 import static com.googlecode.propidle.util.TemporaryIndex.emptyFileSystemDirectory;
 import static com.googlecode.totallylazy.Pair.pair;

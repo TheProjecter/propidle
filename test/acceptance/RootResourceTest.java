@@ -5,7 +5,7 @@ import acceptance.steps.whens.RequestIsMade;
 import static acceptance.steps.thens.LastResponse.theStatusOf;
 import static acceptance.steps.thens.LastResponse.theHeader;
 import acceptance.steps.thens.LastResponse;
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.Status.SEE_OTHER;
 import org.junit.Test;

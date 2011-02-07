@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.googlecode.propidle.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.indexing.IndexWriterActivator.indexWriter;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;

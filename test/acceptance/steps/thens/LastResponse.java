@@ -1,10 +1,8 @@
 package acceptance.steps.thens;
 
 import acceptance.steps.WebClient;
-import static com.googlecode.propidle.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import com.googlecode.totallylazy.Callable1;
-import static com.googlecode.totallylazy.proxy.Call.method;
-import static com.googlecode.totallylazy.proxy.Call.on;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import static org.hamcrest.MatcherAssert.assertThat;

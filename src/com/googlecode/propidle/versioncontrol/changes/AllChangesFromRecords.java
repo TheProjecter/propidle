@@ -1,10 +1,10 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
-import com.googlecode.propidle.PropertiesPath;
-import static com.googlecode.propidle.PropertyComparison.changedProperty;
-import static com.googlecode.propidle.PropertyName.propertyName;
-import com.googlecode.propidle.PropertyValue;
-import static com.googlecode.propidle.PropertyValue.propertyValue;
+import com.googlecode.propidle.properties.PropertiesPath;
+import static com.googlecode.propidle.diff.PropertyComparison.changedProperty;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import com.googlecode.propidle.properties.PropertyValue;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import com.googlecode.totallylazy.Callable1;
