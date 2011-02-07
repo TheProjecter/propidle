@@ -1,50 +1,41 @@
 package acceptance;
 
-import acceptance.steps.WebClient;
-import acceptance.steps.WebClientModule;
+import acceptance.steps.CloseTransaction;
 import com.googlecode.propidle.TestPropertiesApplication;
-import com.googlecode.propidle.persistence.Transaction;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.*;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Maps.map;
 import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.Request;
+import com.googlecode.utterlyidle.MemoryResponse;
 import static com.googlecode.utterlyidle.BasePath.basePath;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import com.googlecode.yatspec.junit.SpecRunner;
-import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
-import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.apache.lucene.index.IndexWriter;
+import com.googlecode.yatspec.rendering.WithCustomRendering;
+import com.googlecode.yatspec.rendering.Renderer;
 import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.Callable;
+import java.util.Map;
+import java.util.HashMap;
+import static java.lang.String.format;
 
 @RunWith(SpecRunner.class)
-public abstract class PropertiesApplicationTestCase extends TestState {
+public abstract class PropertiesApplicationTestCase extends TestState implements WithCustomRendering {
     protected TestPropertiesApplication application;
-    protected WebClient webClient;
     private Container businessTransaction;
-
-    @Before
-    public void addModules() throws Exception {
-        application().add(new WebClientModule());
-    }
-
-    @Before
-    public void createWebClient() throws Exception {
-        webClient = new WebClient(application());
-    }
 
     private TestPropertiesApplication application() throws Exception {
         if (application == null) {
-            application = new TestPropertiesApplication();
+            application = new TestPropertiesApplication(new TestSupportModule(this, interestingGivens, capturedInputAndOutputs));
         }
         return application;
     }
-
 
     protected <T> T given(Callable<T> step) throws Exception {
         return perform(step);
@@ -64,12 +55,12 @@ public abstract class PropertiesApplicationTestCase extends TestState {
 
     @SuppressWarnings("unchecked")
     private <T> T perform(Callable<T> step) throws Exception {
-        try{
+        try {
             Container container = new SimpleContainer(businessTransaction());
             container.addInstance(Callable.class, step);
-            container.add(CloseTransactionAfter.class);
-            return (T) container.get(CloseTransactionAfter.class).call();
-        }finally{
+            container.add(CloseTransaction.class);
+            return (T) container.get(CloseTransaction.class).call();
+        } finally {
             businessTransaction = null;
         }
     }
@@ -81,9 +72,6 @@ public abstract class PropertiesApplicationTestCase extends TestState {
             requestScope.addInstance(BasePath.class, basePath("/"));
 
             businessTransaction = new SimpleContainer(requestScope);
-            businessTransaction.addInstance(WebClient.class, webClient);
-            businessTransaction.addInstance(InterestingGivens.class, interestingGivens);
-            businessTransaction.addInstance(CapturedInputAndOutputs.class, capturedInputAndOutputs);
         }
         return businessTransaction;
     }
@@ -105,34 +93,16 @@ public abstract class PropertiesApplicationTestCase extends TestState {
     }
 
     private <T> T create(Class<T> something) throws Exception {
-        Container container = businessTransaction();
-        container.add(something);
-        return container.get(something);
+        return businessTransaction().get(something);
     }
 
-    public static class CloseTransactionAfter implements Callable {
-        private final IndexWriter indexWriter;
-        private final Transaction transaction;
-        private final Callable step;
+    public Map<Class, Renderer> getCustomRenderers() {
+        return map(Class.class, Renderer.class, pair(MemoryResponse.class, new ResponseRenderer()));
+    }
 
-        public CloseTransactionAfter(IndexWriter indexWriter, Transaction transaction, Callable step) {
-            this.indexWriter = indexWriter;
-            this.transaction = transaction;
-            this.step = step;
-        }
-
-        public Object call() throws Exception {
-            Object result;
-            try {
-                result = step.call();
-                indexWriter.commit();
-            } catch (Exception e) {
-                transaction.rollback();
-                throw new RuntimeException("Did not commit transaction", e);
-            }
-            transaction.commit();
-            return result;
-
+    private class ResponseRenderer implements Renderer<Response>{
+        public String render(Response response) throws Exception {
+            return Strings.escapeXml(format("%s\n\n%s", response.toString(), Strings.toString(response.bytes())));
         }
     }
 }

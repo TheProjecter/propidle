@@ -19,7 +19,7 @@ import java.util.Date;
 
 public class SessionsFromRecords implements Sessions {
     private static final Keyword SESSIONS = keyword("sessions");
-    private static final Keyword<String> ID = keyword("id", String.class);
+    private static final Keyword<String> SESSION_ID = keyword("session_id", String.class);
     private static final Keyword<String> USERNAME = keyword("username", String.class);
     private static final Keyword<Date> START_TIME = keyword("starttime", Date.class);
 
@@ -30,13 +30,13 @@ public class SessionsFromRecords implements Sessions {
     }
 
     public Sessions put(Session session) {
-        records.remove(SESSIONS, (where(ID, is(session.id().value()))));
+        records.remove(SESSIONS, (where(SESSION_ID, is(session.id().value()))));
         records.add(SESSIONS, serialise(session));
         return this;
     }
 
     public Option<Session> get(SessionId id) {
-        Option<Record> record = records.get(SESSIONS).filter(where(ID, is(id.value().toString()))).headOption();
+        Option<Record> record = records.get(SESSIONS).filter(where(SESSION_ID, is(id.value().toString()))).headOption();
 
         if (record.isEmpty()) {
             return none(Session.class);
@@ -47,20 +47,20 @@ public class SessionsFromRecords implements Sessions {
 
     private Session deserialise(Record record) {
         return session(
-                sessionId(record.get(ID)),
+                sessionId(record.get(SESSION_ID)),
                 username(record.get(USERNAME)),
                 startTime(record.get(START_TIME)));
     }
 
     private Record serialise(Session session) {
         return record().
-                set(ID, session.id().value().toString()).
+                set(SESSION_ID, session.id().value().toString()).
                 set(USERNAME, session.username().toString()).
                 set(START_TIME, session.startTime().value());
     }
 
     public static Records defineSessionsRecord(Records records) {
-        records.define(SESSIONS, ID, USERNAME, START_TIME);
+        records.define(SESSIONS, SESSION_ID, USERNAME, START_TIME);
         return records;
     }
 }

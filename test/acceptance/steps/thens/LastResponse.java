@@ -25,11 +25,19 @@ public class LastResponse implements Callable<Response> {
     }
 
     public static Callable1<Response, Status> theStatusOf() {
-        return method(on(Response.class).status());
+        return new Callable1<Response, Status>() {
+            public Status call(Response response) throws Exception {
+                return response.status();
+            }
+        };
     }
 
-    public static Callable1<Response, String> theHeader(String headerName) {
-        return method(on(Response.class).header(headerName));
+    public static Callable1<Response, String> theHeader(final String headerName) {
+        return new Callable1<Response, String>() {
+            public String call(Response response) throws Exception {
+                return response.header(headerName);
+            }
+        };
     }
 
     public static Callable1<Response, String> theContentOf() {

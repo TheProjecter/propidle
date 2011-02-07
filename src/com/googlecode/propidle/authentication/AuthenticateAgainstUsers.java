@@ -4,6 +4,7 @@ import static com.googlecode.propidle.authentication.AuthenticationToken.authent
 import com.googlecode.propidle.authorisation.users.*;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Right;
+import com.googlecode.totallylazy.Option;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
 
@@ -17,12 +18,12 @@ public class AuthenticateAgainstUsers implements Authenticator {
     }
 
     public Either<AuthenticationToken, AuthenticationException> authenticate(Username username, Password password) {
-        User user = users.get(username);
-        if (user == null) return exception(username);
+        Option<User> user = users.get(username);
+        if (user.isEmpty()) return exception(username);
 
         PasswordHash expectedHash = passwordHasher.hash(password);
 
-        if (!expectedHash.equals(user.passwordHash())) {
+        if (!expectedHash.equals(user.get().passwordHash())) {
             return exception(username);
         } else {
             return left(authenticationToken());

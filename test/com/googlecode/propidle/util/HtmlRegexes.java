@@ -7,11 +7,11 @@ Because who wants to use xml in Java?
  */
 public class HtmlRegexes {
     public static String tr(String... regexesOfContents) {
-        return "<tr.*?>" + concat(regexesOfContents) + "</tr>";
+        return "<tr.*?>\\s*" + concat(regexesOfContents) + "\\s*</tr>";
     }
 
     public static String td(String contents) {
-        return "<td.*?>" + contents + "</td>";
+        return "<td.*?>" + contents + "</td>\\s*";
     }
 
     public static String li(String contents) {

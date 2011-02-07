@@ -30,6 +30,8 @@ import com.googlecode.propidle.server.sessions.Sessions;
 import com.googlecode.propidle.server.sessions.SessionsFromRecords;
 import com.googlecode.propidle.server.staticcontent.FavIconResource;
 import com.googlecode.propidle.server.staticcontent.StaticContentResource;
+import com.googlecode.propidle.server.usermanagement.UsersResource;
+import com.googlecode.propidle.server.usermanagement.GroupsResource;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
@@ -62,6 +64,12 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
 import static com.googlecode.propidle.authorisation.users.PasswordSalt.passwordSalt;
+import com.googlecode.propidle.authorisation.groups.GroupsFromRecords;
+import com.googlecode.propidle.authorisation.groups.Groups;
+import com.googlecode.propidle.authorisation.groups.GroupMemberships;
+import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
+import com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords;
+import com.googlecode.propidle.authorisation.permissions.GroupPermissions;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
@@ -127,6 +135,9 @@ public class PropertiesModule extends AbstractModule {
         container.decorate(HighestRevisionNumbers.class, LockHighestRevisionNumbersDecorator.class);
         container.add(AllChanges.class, AllChangesFromRecords.class);
         container.add(Users.class, UsersFromRecords.class);
+        container.add(Groups.class, GroupsFromRecords.class);
+        container.add(GroupPermissions.class, GroupPermissionsFromRecords.class);
+        container.add(GroupMemberships.class, GroupMembershipsFromRecords.class);
         container.add(Sessions.class, SessionsFromRecords.class);
 
         container.add(UriGetter.class, SimpleUriGetter.class);
@@ -147,6 +158,8 @@ public class PropertiesModule extends AbstractModule {
         resources.add(SearchResource.class);
         resources.add(StaticContentResource.class);
         resources.add(FavIconResource.class);
+        resources.add(UsersResource.class);
+        resources.add(GroupsResource.class);
         return this;
     }
 
@@ -165,6 +178,7 @@ public class PropertiesModule extends AbstractModule {
         handlers.add(where(entity(Model.class), nameIs(DiffResource.NAME)), renderer(new ModelTemplateRenderer("DiffResource_html", DiffResource.class)));
         handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
         handlers.add(where(entity(Model.class), nameIs(CompositePropertiesResource.NAME)), renderer(new ModelTemplateRenderer("CompositePropertiesResource_html", CompositePropertiesResource.class)));
+        handlers.add(where(entity(Model.class), nameIs(UsersResource.NAME)), renderer(new ModelTemplateRenderer("User_html", UsersResource.class)));
         return this;
     }
 

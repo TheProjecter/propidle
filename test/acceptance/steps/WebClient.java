@@ -5,23 +5,31 @@ import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.utterlyidle.Application;
 import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.MemoryResponse;
+import com.googlecode.utterlyidle.Request;
+import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
 
 public class WebClient {
     private final Application application;
+    private final TestLogger logger;
     private SessionId currentSession;
     private Response lastResponse;
 
-    public WebClient(Application application) {
+    public WebClient(Application application, TestLogger logger) {
         this.application = application;
+        this.logger = logger;
     }
 
-    public Response handle(RequestBuilder request) throws Exception {
-        if(request==null) throw new NullArgumentException("request");
+    public Response handle(RequestBuilder requestBuilder) throws Exception {
+        if(requestBuilder ==null) throw new NullArgumentException("request");
         if (currentSession != null) {
-            request.withHeader("cookies", "session=" + currentSession.value());
+            requestBuilder.withHeader("cookies", "session=" + currentSession.value());
         }
-        Response response = application.handle(request.build());
+        Request request = requestBuilder.build();
+        Response response = application.handle(request);
+
+        logger.log("request", request);
+        logger.log("response", response);
+
         lastResponse = response;
         return response;
     }

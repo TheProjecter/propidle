@@ -3,8 +3,8 @@ package com.googlecode.propidle.authorisation.users;
 import static com.googlecode.propidle.authorisation.users.PasswordHash.passwordHash;
 import static com.googlecode.propidle.authorisation.users.User.user;
 import static com.googlecode.propidle.authorisation.users.Username.username;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
-import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import com.googlecode.totallylazy.records.Keyword;
@@ -14,9 +14,9 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
 public class UsersFromRecords implements Users {
-    private static final Keyword USERS = keyword("users");
-    private static final Keyword<String> USERNAME = keyword("username", String.class);
-    private static final Keyword<String> PASSWORD_HASH = keyword("password_hash", String.class);
+    public static final Keyword USERS = keyword("users");
+    public static final Keyword<String> USERNAME = keyword("username", String.class);
+    public static final Keyword<String> PASSWORD_HASH = keyword("password_hash", String.class);
 
     private final Records records;
 
@@ -24,25 +24,20 @@ public class UsersFromRecords implements Users {
         this.records = records;
     }
 
-    public User get(Username username) {
-        Option<Record> record = records.get(USERS).filter(where(USERNAME, is(username.value()))).headOption();
-        if (record.isEmpty()) {
-            return null;
-        } else {
-            return deserialise(record.get());
-        }
+    public Option<User> get(Username username) {
+        return records.get(USERS).filter(where(USERNAME, is(username.value()))).headOption().map(deserialise());
     }
 
-    public Users put(User user) {
+    public User put(User user) {
         remove(user.username());
         records.add(USERS, serialise(user));
-        return this;
+        return user;
     }
 
     public Option<User> remove(Username username) {
-        User existing = get(username);
+        Option<User> existing = get(username);
         records.remove(USERS, where(USERNAME, is(username.value())));
-        return some(existing);
+        return existing;
     }
 
     private Record serialise(User user) {
@@ -51,10 +46,14 @@ public class UsersFromRecords implements Users {
                 set(PASSWORD_HASH, user.passwordHash().value());
     }
 
-    private User deserialise(Record record) {
-        return user(
-                username(record.get(USERNAME)),
-                passwordHash(record.get(PASSWORD_HASH)));
+    private Callable1<Record, User> deserialise() {
+        return new Callable1<Record, User>() {
+            public User call(Record record) throws Exception {
+                return user(
+                        username(record.get(USERNAME)),
+                        passwordHash(record.get(PASSWORD_HASH)));
+            }
+        };
     }
 
     public static Records defineUsersRecord(Records records) {
