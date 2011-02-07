@@ -1,13 +1,13 @@
 package acceptance.steps.givens;
 
 import com.googlecode.propidle.authorisation.users.Username;
+import static com.googlecode.propidle.authorisation.users.Username.username;
 import static com.googlecode.propidle.server.sessions.Session.session;
 import com.googlecode.propidle.server.sessions.SessionId;
 import static com.googlecode.propidle.server.sessions.SessionId.sessionId;
 import com.googlecode.propidle.server.sessions.Sessions;
 import static com.googlecode.propidle.server.sessions.StartTime.startTime;
 import acceptance.steps.WebClient;
-import acceptance.Values;
 import com.googlecode.propidle.util.Clock;
 
 import java.util.concurrent.Callable;
@@ -34,8 +34,8 @@ public class CurrentUser implements Callable<SessionId> {
         return id;
     }
 
-    public CurrentUser is(Username username) {
-        this.username = username;
+    public CurrentUser is(String username) {
+        this.username = username(username);
         return this;
     }
 }

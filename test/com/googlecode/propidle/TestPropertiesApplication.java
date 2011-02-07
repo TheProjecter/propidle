@@ -1,10 +1,11 @@
 package com.googlecode.propidle;
 
-import acceptance.PropertiesApplicationTestCase;
+import acceptance.steps.CloseTransaction;
 import static com.googlecode.propidle.aliases.AliasesFromRecords.defineAliasRecord;
 import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defineUsersRecord;
-import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
-import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
+import static com.googlecode.propidle.authorisation.groups.GroupsFromRecords.defineGroupsRecord;
+import static com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords.defineGroupMembershipsRecord;
+import static com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords.defineGroupPermissionsRecord;
 import com.googlecode.propidle.persistence.memory.InMemoryPersistenceModule;
 import com.googlecode.propidle.server.PropertiesApplication;
 import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
@@ -13,18 +14,21 @@ import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNu
 import com.googlecode.totallylazy.records.Records;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
+import com.googlecode.utterlyidle.modules.Module;
 import org.apache.lucene.store.RAMDirectory;
 
-import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class TestPropertiesApplication extends PropertiesApplication {
-    public TestPropertiesApplication() throws Exception {
+    public TestPropertiesApplication(Module... extraModules) throws Exception {
         super(
                 //                TemporaryIndex.directory(new File("/Users/mattsavage/Desktop/lucene")),
                 new RAMDirectory(),
                 new InMemoryPersistenceModule());
 //                new SqlPersistenceModule(connectionDetails("jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", "")));
+        for (Module extraModule : extraModules) {
+            add(extraModule);
+        }
         defineRecords();
     }
 
@@ -36,8 +40,8 @@ public class TestPropertiesApplication extends PropertiesApplication {
     public <T> T inTransaction(Class<? extends Callable<T>> step) throws Exception {
         Container request = new SimpleContainer(createRequestScope());
         request.add(Callable.class, step);
-        request.add(PropertiesApplicationTestCase.CloseTransactionAfter.class);
-        return (T) request.get(PropertiesApplicationTestCase.CloseTransactionAfter.class).call();
+        request.add(CloseTransaction.class);
+        return (T) request.get(CloseTransaction.class).call();
     }
 
     public static class DefineRecords implements Callable<Void> {
@@ -53,6 +57,9 @@ public class TestPropertiesApplication extends PropertiesApplication {
             defineHighestRevisionRecord(records);
             defineChangesRecord(records);
             defineAliasRecord(records);
+            defineGroupsRecord(records);
+            defineGroupMembershipsRecord(records);
+            defineGroupPermissionsRecord(records);
             return null;
         }
     }

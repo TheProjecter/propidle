@@ -16,7 +16,7 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.utterlyidle.io.Url.url;
 
 public class AliasesFromRecords implements Aliases{
-    private static final Keyword ALIASES = keyword("alias");
+    private static final Keyword ALIASES = keyword("aliases");
     private static final Keyword<String> FROM = keyword("from_resource", String.class);
     private static final Keyword<String> TO = keyword("to_url", String.class);
 

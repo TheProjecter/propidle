@@ -5,6 +5,8 @@ import static com.googlecode.propidle.authorisation.users.User.user;
 import static com.googlecode.propidle.authorisation.users.Username.username;
 import static com.googlecode.propidle.authorisation.users.UsersFromRecords.defineUsersRecord;
 import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import static com.googlecode.totallylazy.Option.none;
+import com.googlecode.totallylazy.Option;
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -23,7 +25,7 @@ public class UsersFromRecordsTest {
                 username("donald trump"),
                 passwordHash("fluffy smooshbag")));
 
-        assertThat(users.get(username("donald trump")).passwordHash(), is(passwordHash("fluffy smooshbag")));
+        assertThat(users.get(username("donald trump")).get().passwordHash(), is(passwordHash("fluffy smooshbag")));
     }
 
     @Test
@@ -34,6 +36,8 @@ public class UsersFromRecordsTest {
 
         assertThat(users.remove(username("steve tyler")).isEmpty(), is(false));
 
-        assertThat(users.get(username("steve tyler")), is(nullValue()));
+        assertThat(users.get(username("steve tyler")), is((Option)none()));
+
+        assertThat(users.remove(username("steve tyler")), is((Option)none()));
     }
 }
