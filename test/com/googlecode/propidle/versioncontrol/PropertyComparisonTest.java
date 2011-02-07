@@ -1,11 +1,11 @@
 package com.googlecode.propidle.versioncontrol;
 
-import com.googlecode.propidle.PropertyComparison;
-import com.googlecode.propidle.PropertyName;
+import com.googlecode.propidle.diff.PropertyComparison;
+import com.googlecode.propidle.properties.PropertyName;
 import org.junit.Test;
 
-import static com.googlecode.propidle.PropertyValue.propertyValue;
-import static com.googlecode.propidle.PropertyComparison.*;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
+import static com.googlecode.propidle.diff.PropertyComparison.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

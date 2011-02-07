@@ -1,14 +1,14 @@
 package com.googlecode.propidle.client.changenotification;
 
-import com.googlecode.propidle.PropertyComparison;
+import com.googlecode.propidle.diff.PropertyComparison;
 import org.junit.Test;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.PropertyComparison.createdProperty;
-import static com.googlecode.propidle.PropertyName.propertyName;
-import static com.googlecode.propidle.PropertyName.propertyNames;
-import static com.googlecode.propidle.PropertyValue.propertyValue;
+import static com.googlecode.propidle.diff.PropertyComparison.createdProperty;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyName.propertyNames;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.client.changenotification.PropertyChangeEvent.propertyChangeEvent;
 import com.googlecode.propidle.client.changenotification.PropertyChangeFilter;
 import com.googlecode.propidle.client.PropertyChangeListener;

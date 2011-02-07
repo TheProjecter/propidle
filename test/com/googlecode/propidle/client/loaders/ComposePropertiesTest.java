@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.propidle.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.client.loaders.ComposeProperties.composeProperties;
 
 import java.util.Properties;

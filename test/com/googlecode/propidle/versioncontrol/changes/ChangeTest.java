@@ -1,7 +1,7 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
-import com.googlecode.propidle.PropertiesPath;
-import com.googlecode.propidle.PropertyComparison;
+import com.googlecode.propidle.properties.PropertiesPath;
+import com.googlecode.propidle.diff.PropertyComparison;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.Properties.properties;
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.PropertyComparison.*;
-import static com.googlecode.propidle.PropertyName.propertyName;
-import static com.googlecode.propidle.PropertyValue.propertyValue;
+import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.diff.PropertyComparison.*;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;

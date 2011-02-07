@@ -6,7 +6,7 @@ import com.googlecode.totallylazy.Pair;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.propidle.Properties.toPairs;
+import static com.googlecode.propidle.properties.Properties.toPairs;
 
 public final class ResolveVariables implements Callable<Properties> {
     private final Callable<Properties> loader;

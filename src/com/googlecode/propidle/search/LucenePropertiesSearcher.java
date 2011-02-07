@@ -6,8 +6,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
-import static com.googlecode.propidle.PropertyName.propertyName;
-import static com.googlecode.propidle.PropertyValue.propertyValue;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.indexing.LucenePropertiesIndexer.*;
 import static com.googlecode.propidle.search.SearchResult.searchResult;
 import static com.googlecode.totallylazy.Sequences.empty;

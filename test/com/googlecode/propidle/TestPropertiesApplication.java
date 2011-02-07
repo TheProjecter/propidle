@@ -8,7 +8,7 @@ import static com.googlecode.propidle.authorisation.groups.GroupMembershipsFromR
 import static com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords.defineGroupPermissionsRecord;
 import com.googlecode.propidle.persistence.memory.InMemoryPersistenceModule;
 import com.googlecode.propidle.server.PropertiesApplication;
-import static com.googlecode.propidle.server.sessions.SessionsFromRecords.defineSessionsRecord;
+import static com.googlecode.propidle.authentication.SessionsFromRecords.defineSessionsRecord;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
 import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.defineHighestRevisionRecord;
 import com.googlecode.totallylazy.records.Records;

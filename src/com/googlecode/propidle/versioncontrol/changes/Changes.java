@@ -1,8 +1,8 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
-import com.googlecode.propidle.PropertiesPath;
-import com.googlecode.propidle.PropertyComparison;
-import com.googlecode.propidle.PropertyName;
+import com.googlecode.propidle.properties.PropertiesPath;
+import com.googlecode.propidle.properties.PropertyName;
+import com.googlecode.propidle.diff.PropertyComparison;
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable1;

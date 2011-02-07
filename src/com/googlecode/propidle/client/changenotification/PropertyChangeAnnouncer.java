@@ -1,13 +1,13 @@
 package com.googlecode.propidle.client.changenotification;
 
-import com.googlecode.propidle.PropertyComparison;
-import com.googlecode.propidle.PropertyDiffTool;
+import com.googlecode.propidle.diff.PropertyComparison;
+import com.googlecode.propidle.diff.PropertyDiffTool;
 import com.googlecode.totallylazy.Sequence;
 import org.jmock.example.announcer.Announcer;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.PropertyDiffTool.propertyValueChanged;
+import static com.googlecode.propidle.diff.PropertyDiffTool.propertyValueChanged;
 import static com.googlecode.propidle.client.changenotification.PropertyChangeEvent.propertyChangeEvent;
 import com.googlecode.propidle.client.PropertyChangeNotifier;
 import com.googlecode.propidle.client.PropertyChangeListener;

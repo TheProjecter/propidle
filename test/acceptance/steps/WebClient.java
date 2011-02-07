@@ -1,6 +1,6 @@
 package acceptance.steps;
 
-import com.googlecode.propidle.server.sessions.SessionId;
+import com.googlecode.propidle.authentication.SessionId;
 import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.utterlyidle.Application;
 import com.googlecode.utterlyidle.RequestBuilder;

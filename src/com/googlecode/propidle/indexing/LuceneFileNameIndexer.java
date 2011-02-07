@@ -1,7 +1,7 @@
 package com.googlecode.propidle.indexing;
 
 import com.googlecode.propidle.PathType;
-import com.googlecode.propidle.PropertiesPath;
+import com.googlecode.propidle.properties.PropertiesPath;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -13,7 +13,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 
 import static com.googlecode.propidle.PathType.DIRECTORY;
-import static com.googlecode.propidle.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.Strings.reduceToAlphaNumerics;
 import static com.googlecode.totallylazy.Sequences.sequence;
 

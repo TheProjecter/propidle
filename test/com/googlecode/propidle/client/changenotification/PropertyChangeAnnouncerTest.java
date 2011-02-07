@@ -1,16 +1,16 @@
 package com.googlecode.propidle.client.changenotification;
 
-import com.googlecode.propidle.PropertyComparison;
+import com.googlecode.propidle.diff.PropertyComparison;
 import com.googlecode.propidle.client.changenotification.PropertyChangeAnnouncer;
 import com.googlecode.propidle.client.changenotification.RecordingPropertyChangeListener;
 import org.junit.Test;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.Properties.properties;
-import static com.googlecode.propidle.PropertyComparison.changedProperty;
-import static com.googlecode.propidle.PropertyName.propertyName;
-import static com.googlecode.propidle.PropertyValue.propertyValue;
+import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.diff.PropertyComparison.changedProperty;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.totallylazy.Pair.pair;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

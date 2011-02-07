@@ -1,6 +1,6 @@
 package com.googlecode.propidle.indexing;
 
-import com.googlecode.propidle.PropertiesPath;
+import com.googlecode.propidle.properties.PropertiesPath;
 
 public class IndexingException extends RuntimeException {
     public IndexingException(String message, Exception cause) {
