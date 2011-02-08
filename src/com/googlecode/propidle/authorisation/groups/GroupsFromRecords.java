@@ -24,6 +24,10 @@ public class GroupsFromRecords implements Groups {
         this.records = records;
     }
 
+    public Iterable<Group> get() {
+        return records.get(GROUPS).map(deserialise()).realise();
+    }
+
     public Iterable<Group> get(Iterable<GroupId> ids) {
         return records.get(GROUPS).filter(where(GROUP_ID, in(sequence(ids).map(asString())))).map(deserialise()).realise();
     }

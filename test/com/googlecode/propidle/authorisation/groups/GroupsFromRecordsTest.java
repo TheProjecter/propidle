@@ -5,6 +5,7 @@ import static com.googlecode.propidle.authorisation.groups.GroupId.newGroupId;
 import static com.googlecode.propidle.authorisation.groups.GroupName.groupName;
 import static com.googlecode.propidle.authorisation.groups.GroupsFromRecords.defineGroupsRecord;
 import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
 import com.googlecode.totallylazy.Option;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -28,4 +29,14 @@ public class GroupsFromRecordsTest {
         assertThat(groups.get(sequence(newGroupId())), is(Matchers.<Group>emptyIterable()));
     }
 
+    @Test
+    public void canGetAllGroups() throws Exception {
+        Group group1 = group(groupName("group 1"));
+        Group group2 = group(groupName("group 2"));
+
+        groups.add(group1);
+        groups.add(group2);
+
+        assertThat(groups.get(), hasInAnyOrder(group1, group2));
+    }
 }

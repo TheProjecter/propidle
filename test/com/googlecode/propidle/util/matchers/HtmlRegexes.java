@@ -2,6 +2,8 @@ package com.googlecode.propidle.util.matchers;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
+import static java.lang.String.format;
+
 /*
 Because who wants to use xml in Java?
  */
@@ -31,11 +33,15 @@ public class HtmlRegexes {
     }
 
     public static String input(String name, String value) {
-        return "<input.*? name=\"" + name + ".*? value=\"" + value ;
+        return format("<input.*? name=\"%s\".*? value=\"%s\"", name, value);
     }
 
     public static String div(String id, String content) {
-        return "<div.*? id=\"" + id + "\".*?>" + content + "</div>";
+        return format("<div.*? id=\"%s\".*?>%s</div>", id, content);
+    }
+
+    public static String option(String value, String text) {
+        return format("<option.*? value=\"%s\".*?>%s</option>", value, text);
     }
 
     public static String concat(String... strings) {
