@@ -64,7 +64,7 @@ public class UsersResource {
     public Response modify(
             @PathParam("username") Username username,
             @FormParam("password") Option<Password> password,
-            @FormParam("group") String group,
+            @FormParam("addToGroup") String group,
             FormParameters form) {
         ensureUserExists(username, password);
         groupMemberships.add(username, sequence(form.getValues("group")).map(asGroupId()));
@@ -75,15 +75,16 @@ public class UsersResource {
         Model model = model().
                 add(PropertiesModule.MODEL_NAME, NAME).
                 add("username", user.username());
-        return sequence(memberGroups).fold(model, groupModel());
+        return sequence(memberGroups).fold(sequence(groups.get()).fold(model, groupModel("allGroups")), groupModel("memberships"));
     }
 
-    private Callable2<? super Model, ? super Group, Model> groupModel() {
+    private Callable2<? super Model, ? super Group, Model> groupModel(final String itemName) {
         return new Callable2<Model, Group, Model>() {
             public Model call(Model model, Group group) throws Exception {
                 return model.
-                        add("groups", model().
-                                add("name", group.name()).
+                        add(itemName, model().
+                                add("groupName", group.name()).
+                                add("id", group.id()).
                                 add("url", basePath.file(urlOf(resource(GroupsResource.class).get(group.name())))));
             }
         };

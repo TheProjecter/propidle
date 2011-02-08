@@ -7,6 +7,8 @@ import acceptance.steps.givens.*;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
+import com.googlecode.utterlyidle.BasePath;
+import static com.googlecode.utterlyidle.BasePath.basePath;
 import com.googlecode.yadic.Container;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
@@ -38,13 +40,18 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
         container.add(MembersOf.class);
         container.add(PropertiesExist.class);
         container.add(UserDoesNotExist.class);
-        container.add(UserExists.class);
+        container.add(AUserExists.class);
         container.add(UserGroupExists.class);
         container.add(UserGroupPermissions.class);
         container.add(UserPermissions.class);
+        container.add(CurrentUserPermissions.class);
 
         container.add(LastResponse.class);
         container.add(RequestIsMade.class);
+
+
+        container.remove(BasePath.class);
+        container.addInstance(BasePath.class, basePath("/"));
         return this;
     }
 

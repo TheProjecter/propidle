@@ -2,7 +2,7 @@ package acceptance;
 
 import static com.googlecode.propidle.authorisation.users.Password.password;
 import static com.googlecode.propidle.authorisation.users.Username.username;
-import acceptance.steps.givens.UserExists;
+import acceptance.steps.givens.AUserExists;
 import acceptance.steps.givens.UserDoesNotExist;
 import static acceptance.steps.thens.LastResponse.*;
 import acceptance.steps.thens.LastResponse;
@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 public class AuthenticationTest extends PropertiesApplicationTestCase {
     @Test
     public void onSuccessfulLoginClientIsRedirectedToRootUrl() throws Exception {
-        given(that(UserExists.class).with(username("bob")).and(password("bob's password")));
+        given(that(AUserExists.class).with(username("bob")).and(password("bob's password")));
 
         when(a(RequestIsMade.class).to(post("/authentication").
                 withForm("username", "bob").

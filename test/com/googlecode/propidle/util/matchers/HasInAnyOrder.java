@@ -10,6 +10,9 @@ import java.util.List;
 public class HasInAnyOrder<T> extends TypeSafeMatcher<Iterable<T>> {
     private final Iterable<T> expected;
 
+    public static <T> Matcher<Iterable<T>> hasInAnyOrder(T... expected) {
+        return hasInAnyOrder(sequence(expected));
+    }
     public static <T> Matcher<Iterable<T>> hasInAnyOrder(Iterable<T> expected) {
         return new HasInAnyOrder<T>(expected);
     }

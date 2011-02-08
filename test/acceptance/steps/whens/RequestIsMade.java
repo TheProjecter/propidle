@@ -20,8 +20,7 @@ public class RequestIsMade implements Callable<Response> {
     }
 
     public Response call() throws Exception {
-        webClient.handle(request.withHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML));
-        return webClient.currentPage();
+        return webClient.handle(request.withHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML));
     }
 
     public RequestIsMade to(RequestBuilder request) {

@@ -84,7 +84,9 @@ input[type="submit"] {
     background:#FFCCCC;
 }
 .error-text{
-    color:#CC9933;
+    padding:10px;
+    border:1px solid #CCCCCC;
+    background-color:#FFDDDD;
 }
 .section {
     margin:10px;

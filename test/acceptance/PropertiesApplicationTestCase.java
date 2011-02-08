@@ -67,11 +67,7 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
 
     private Container businessTransaction() throws Exception {
         if (businessTransaction == null) {
-            Container requestScope = application().createRequestScope();
-            requestScope.remove(BasePath.class);
-            requestScope.addInstance(BasePath.class, basePath("/"));
-
-            businessTransaction = new SimpleContainer(requestScope);
+            businessTransaction = new SimpleContainer(application().createRequestScope());
         }
         return businessTransaction;
     }

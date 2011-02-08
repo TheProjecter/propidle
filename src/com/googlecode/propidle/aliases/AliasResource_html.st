@@ -5,10 +5,11 @@
 <body>
 <div class="section">
     <h2>Create an alias to another properties file URL</h2>
-
     $if(currentRedirectTo.empty)$
     <p class="error-text">This alias does not yet exist- hit <strong>Save</strong></p>
     $endif$
+
+    <p>Aliases work like <a href="http://tinyurl.com">tinyurl</a> for properties files</p>
 
     <div class="section">
         <form method="POST" target="$resourcePath$">
@@ -26,7 +27,6 @@
     </p>
     <p>Try it out: <a href="$aliasUrl$">$aliasUrl$</a></p>
     $endif$
-    <p>Aliases work like <a href="http://tinyurl.com">tinyurl</a> for properties files</p>
 </div>
 </body>
 </html>
