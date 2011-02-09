@@ -31,8 +31,8 @@ public class DecorateHtml extends StringTemplateDecorators {
     private Predicate<? super Pair<Request, Response>> acceptsHtml() {
         return new Predicate<Pair<Request, Response>>() {
             public boolean matches(Pair<Request, Response> requestResponse) {
-                String acceptHeader = requestResponse.first().headers().getValue(HttpHeaders.ACCEPT);
-                return acceptHeader != null && acceptHeader.contains(MimeType.TEXT_HTML.value());
+                String contentTypeHeader = requestResponse.second().headers().getValue(HttpHeaders.CONTENT_TYPE);
+                return contentTypeHeader != null && contentTypeHeader.contains(MimeType.TEXT_HTML.value());
             }
         };
     }

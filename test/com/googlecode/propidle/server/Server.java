@@ -5,8 +5,7 @@ import com.googlecode.propidle.authorisation.users.*;
 import static com.googlecode.propidle.authorisation.users.Password.password;
 import static com.googlecode.propidle.authorisation.users.User.user;
 import static com.googlecode.propidle.authorisation.users.Username.username;
-import static com.googlecode.utterlyidle.BasePath.basePath;
-import com.googlecode.utterlyidle.httpserver.RestServer;
+import com.googlecode.utterlyidle.simpleframework.RestServer;
 
 import java.util.concurrent.Callable;
 
@@ -16,7 +15,7 @@ public class Server {
         application.inTransaction(CreateTestUser.class);
 
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
-        new RestServer(port, basePath("/"), application);
+        new RestServer(port, application);
     }
 
     public static class CreateTestUser implements Callable<User> {
