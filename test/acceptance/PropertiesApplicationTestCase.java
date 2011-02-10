@@ -1,15 +1,12 @@
 package acceptance;
 
-import acceptance.steps.CloseTransaction;
+import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.totallylazy.*;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Maps.map;
-import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.MemoryResponse;
-import static com.googlecode.utterlyidle.BasePath.basePath;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -22,7 +19,6 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.Callable;
 import java.util.Map;
-import java.util.HashMap;
 import static java.lang.String.format;
 
 @RunWith(SpecRunner.class)
@@ -58,8 +54,8 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
         try {
             Container container = new SimpleContainer(businessTransaction());
             container.addInstance(Callable.class, step);
-            container.add(CloseTransaction.class);
-            return (T) container.get(CloseTransaction.class).call();
+            container.add(WrapCallableInTransaction.class);
+            return (T) container.get(WrapCallableInTransaction.class).call();
         } finally {
             businessTransaction = null;
         }
