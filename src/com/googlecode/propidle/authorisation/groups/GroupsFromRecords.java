@@ -18,7 +18,7 @@ public class GroupsFromRecords implements Groups {
     private final Records records;
     public static final Keyword GROUPS = keyword("groups");
     public static final Keyword<String> GROUP_ID = keyword("group_id", String.class);
-    public static final Keyword<String> NAME = keyword("name", String.class);
+    public static final Keyword<String> GROUP_NAME = keyword("group_name", String.class);
 
     public GroupsFromRecords(Records records) {
         this.records = records;
@@ -33,7 +33,7 @@ public class GroupsFromRecords implements Groups {
     }
 
     public Option<Group> get(GroupName name) {
-        return records.get(GROUPS).filter(where(NAME, is(name.value()))).realise().headOption().map(deserialise());
+        return records.get(GROUPS).filter(where(GROUP_NAME, is(name.value()))).realise().headOption().map(deserialise());
     }
 
     public Group add(Group group) {
@@ -47,7 +47,7 @@ public class GroupsFromRecords implements Groups {
             public Group call(Record record) throws Exception {
                 return group(
                         groupId(record.get(GROUP_ID)),
-                        groupName(record.get(NAME)));
+                        groupName(record.get(GROUP_NAME)));
             }
         };
     }
@@ -55,11 +55,11 @@ public class GroupsFromRecords implements Groups {
     private Record serialise(Group group) {
         return record().
                 set(GROUP_ID, group.id().value().toString()).
-                set(NAME, group.name().value());
+                set(GROUP_NAME, group.name().value());
     }
 
     public static Records defineGroupsRecord(Records records) {
-        records.define(GROUPS, GROUP_ID, NAME);
+        records.define(GROUPS, GROUP_ID, GROUP_NAME);
         return records;
     }
 }

@@ -54,8 +54,8 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
         try {
             Container container = new SimpleContainer(businessTransaction());
             container.addInstance(Callable.class, step);
-            container.add(WrapCallableInTransaction.class);
-            return (T) container.get(WrapCallableInTransaction.class).call();
+            container.decorate(Callable.class, WrapCallableInTransaction.class);
+            return (T) container.get(Callable.class).call();
         } finally {
             businessTransaction = null;
         }

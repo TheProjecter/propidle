@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class StartTime extends DateTinyType<StartTime> {
     public static StartTime startTime(Clock clock) {
-        return startTime(clock.currentTime());
+        return startTime(clock.time());
     }
 
     public static StartTime startTime(Date value) {

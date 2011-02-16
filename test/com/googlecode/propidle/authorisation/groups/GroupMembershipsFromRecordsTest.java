@@ -5,18 +5,17 @@ import static com.googlecode.propidle.authorisation.groups.GroupId.newGroupId;
 import com.googlecode.propidle.authorisation.groups.GroupMembership;
 import static com.googlecode.propidle.authorisation.groups.GroupMembership.groupMemberships;
 import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
-import static com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords.defineGroupMembershipsRecord;
 import com.googlecode.propidle.authorisation.users.Username;
 import static com.googlecode.propidle.authorisation.users.Username.username;
 import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
-import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 public class GroupMembershipsFromRecordsTest {
-    private final GroupMembershipsFromRecords memberships = new GroupMembershipsFromRecords(defineGroupMembershipsRecord(temporaryRecords()));
+    private final GroupMembershipsFromRecords memberships = new GroupMembershipsFromRecords(testRecordsWithAllMigrationsRun());
     private static final Username USERNAME = username("withnail");
     private static final Sequence<GroupId> SOME_GROUPS = sequence(
             newGroupId(),

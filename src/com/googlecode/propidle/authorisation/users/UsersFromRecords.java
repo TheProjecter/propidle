@@ -13,10 +13,12 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
+import java.math.BigInteger;
+
 public class UsersFromRecords implements Users {
     public static final Keyword USERS = keyword("users");
     public static final Keyword<String> USERNAME = keyword("username", String.class);
-    public static final Keyword<String> PASSWORD_HASH = keyword("password_hash", String.class);
+    public static final Keyword<Number> PASSWORD_HASH = keyword("password_hash", Number.class);
 
     private final Records records;
 

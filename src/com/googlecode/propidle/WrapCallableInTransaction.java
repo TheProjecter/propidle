@@ -1,4 +1,4 @@
-package acceptance.steps;
+package com.googlecode.propidle;
 
 import org.apache.lucene.index.IndexWriter;
 
@@ -6,22 +6,25 @@ import java.util.concurrent.Callable;
 
 import com.googlecode.propidle.persistence.Transaction;
 
-public class CloseTransaction implements Callable {
+public class WrapCallableInTransaction implements Callable {
     private final IndexWriter indexWriter;
     private final Transaction transaction;
-    private final Callable step;
+    private final Callable callable;
 
-    public CloseTransaction(IndexWriter indexWriter, Transaction transaction, Callable step) {
+    public WrapCallableInTransaction(Transaction transaction, Callable callable) {
+        this(null, transaction,  callable);
+    }
+    public WrapCallableInTransaction(IndexWriter indexWriter, Transaction transaction, Callable callable) {
         this.indexWriter = indexWriter;
         this.transaction = transaction;
-        this.step = step;
+        this.callable = callable;
     }
 
     public Object call() throws Exception {
         Object result;
         try {
-            result = step.call();
-            indexWriter.commit();
+            result = callable.call();
+            if(indexWriter!=null) indexWriter.commit();
         } catch (Exception e) {
             transaction.rollback();
             throw new RuntimeException("Did not commit transaction", e);

@@ -3,8 +3,7 @@ package com.googlecode.propidle.authorisation.groups;
 import static com.googlecode.propidle.authorisation.groups.Group.group;
 import static com.googlecode.propidle.authorisation.groups.GroupId.newGroupId;
 import static com.googlecode.propidle.authorisation.groups.GroupName.groupName;
-import static com.googlecode.propidle.authorisation.groups.GroupsFromRecords.defineGroupsRecord;
-import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
 import com.googlecode.totallylazy.Option;
 import static com.googlecode.totallylazy.Option.some;
@@ -16,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 
 public class GroupsFromRecordsTest {
-    private final Groups groups = new GroupsFromRecords(defineGroupsRecord(temporaryRecords()));
+    private final Groups groups = new GroupsFromRecords(testRecordsWithAllMigrationsRun());
 
     @Test
     public void canAddAndRetrieveGroups() throws Exception {

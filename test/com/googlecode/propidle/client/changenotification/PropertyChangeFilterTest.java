@@ -1,20 +1,16 @@
 package com.googlecode.propidle.client.changenotification;
 
+import com.googlecode.propidle.client.PropertyChangeListener;
+import static com.googlecode.propidle.client.changenotification.PropertyChangeEvent.propertyChangeEvent;
 import com.googlecode.propidle.diff.PropertyComparison;
-import org.junit.Test;
-
-import java.util.Properties;
-
 import static com.googlecode.propidle.diff.PropertyComparison.createdProperty;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyName.propertyNames;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.propidle.client.changenotification.PropertyChangeEvent.propertyChangeEvent;
-import com.googlecode.propidle.client.changenotification.PropertyChangeFilter;
-import com.googlecode.propidle.client.PropertyChangeListener;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import org.junit.Test;
+import static org.mockito.Mockito.*;
+
+import java.util.Properties;
 
 public class PropertyChangeFilterTest {
     private PropertyChangeListener decorated = mock(PropertyChangeListener.class);

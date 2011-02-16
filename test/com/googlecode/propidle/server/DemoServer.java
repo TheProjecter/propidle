@@ -9,7 +9,7 @@ import com.googlecode.utterlyidle.simpleframework.RestServer;
 
 import java.util.concurrent.Callable;
 
-public class Server {
+public class DemoServer {
     public static void main(String[] args) throws Exception {
         TestPropertiesApplication application = new TestPropertiesApplication();
         application.inTransaction(CreateTestUser.class);

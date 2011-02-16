@@ -1,27 +1,23 @@
 package com.googlecode.propidle.versioncontrol;
 
-import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.diff.PropertyComparison;
 import static com.googlecode.propidle.diff.PropertyComparison.*;
+import com.googlecode.propidle.properties.PropertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
-import com.googlecode.propidle.versioncontrol.changes.Change;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
+import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
+import com.googlecode.propidle.versioncontrol.changes.Change;
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
-import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
-import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import static com.googlecode.totallylazy.proxy.Call.method;
-import static com.googlecode.totallylazy.proxy.Call.on;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 public class AllChangesFromRecordsTest {
-    private final AllChangesFromRecords changes = new AllChangesFromRecords(defineChangesRecord(temporaryRecords()));
+    private final AllChangesFromRecords changes = new AllChangesFromRecords(testRecordsWithAllMigrationsRun());
 
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPath() {
@@ -64,7 +60,7 @@ public class AllChangesFromRecordsTest {
         changes.put(firstSetOfExpectedChanges);
         changes.put(secondSetOfExpectedChanges);
 
-        assertThat(changes.get(propertiesPath), hasExactly(firstSetOfExpectedChanges.join(secondSetOfExpectedChanges)));
+        assertThat(changes.get(propertiesPath), hasInAnyOrder(firstSetOfExpectedChanges.join(secondSetOfExpectedChanges)));
     }
 
     @Test
@@ -94,10 +90,6 @@ public class AllChangesFromRecordsTest {
         changes.put(revision0);
         changes.put(revision1);
 
-        assertThat(changes.get(propertiesPath, revisionNumber(0)), hasExactly(revision0));
-    }
-
-    private Iterable<PropertyComparison> changesFrom(Change... changes) {
-        return sequence(changes).map(method(on(Change.class).change()));
+        assertThat(changes.get(propertiesPath, revisionNumber(0)), hasInAnyOrder(revision0));
     }
 }

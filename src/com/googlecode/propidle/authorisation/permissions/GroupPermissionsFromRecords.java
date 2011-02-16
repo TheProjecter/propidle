@@ -17,6 +17,8 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
+import java.util.Set;
+
 public class GroupPermissionsFromRecords implements GroupPermissions {
     private static final Keyword GROUP_PERMISSIONS = keyword("group_permissions");
     private static final Keyword<String> PERMISSION = keyword("permission", String.class);
@@ -34,8 +36,11 @@ public class GroupPermissionsFromRecords implements GroupPermissions {
     public Iterable<GroupPermission> grant(GroupId groupId, Iterable<Permission> permissions) {
         Iterable<GroupPermission> groupPermissions = get(groupId);
         Sequence<Permission> existingPermissions = sequence(groupPermissions).map(getPermission());
-        Sequence<Permission> newPermissions = sequence(permissions).filter(not(in(existingPermissions)));
+        Set<Permission> uniquePermissions = sequence(permissions).toSet();
+        Sequence<Permission> newPermissions = sequence(uniquePermissions).filter(not(in(existingPermissions)));
+
         records.add(GROUP_PERMISSIONS, serialise(groupPermissions(groupId, newPermissions)));
+
         return sequence(groupPermissions).join(groupPermissions(groupId, newPermissions));
     }
 
@@ -77,7 +82,7 @@ public class GroupPermissionsFromRecords implements GroupPermissions {
         return records;
     }
 
-    public Callable1<GroupPermission, Permission> getPermission(){
+    public Callable1<GroupPermission, Permission> getPermission() {
         return new Callable1<GroupPermission, Permission>() {
             public Permission call(GroupPermission groupPermission) throws Exception {
                 return groupPermission.permission();
