@@ -13,8 +13,6 @@ public class ConnectionActivator implements Callable<Connection> {
     }
 
     public Connection call() throws Exception {
-        return DriverManager.getConnection(connectionDetails.url(),
-                                           connectionDetails.user(),
-                                           connectionDetails.password());
+        return connectionDetails.openConnection();
     }
 }

@@ -3,17 +3,17 @@ package com.googlecode.propidle.authorisation.permissions;
 import com.googlecode.propidle.authorisation.groups.GroupId;
 import static com.googlecode.propidle.authorisation.groups.GroupId.newGroupId;
 import static com.googlecode.propidle.authorisation.permissions.GroupPermission.groupPermissions;
-import static com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords.defineGroupPermissionsRecord;
 import static com.googlecode.propidle.authorisation.permissions.Permission.permission;
-import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
+import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
+import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import com.googlecode.totallylazy.Sequence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 public class GroupPermissionsFromRecordsTest {
-    private final GroupPermissionsFromRecords permissions = new GroupPermissionsFromRecords(defineGroupPermissionsRecord(temporaryRecords()));
+    private final GroupPermissionsFromRecords permissions = new GroupPermissionsFromRecords(testRecordsWithAllMigrationsRun());
     private static final GroupId GROUP_ID = newGroupId();
     private static final Sequence<Permission> SOME_PERMISSIONS = sequence(
             permission("eat football"),
@@ -28,10 +28,10 @@ public class GroupPermissionsFromRecordsTest {
 
         assertThat(
                 permissions.get(GROUP_ID),
-                hasExactly(expected));
+                hasInAnyOrder(expected));
         assertThat(
                 result,
-                hasExactly(expected));
+                hasInAnyOrder(expected));
     }
 
     @Test
@@ -41,15 +41,15 @@ public class GroupPermissionsFromRecordsTest {
         permissions.grant(GROUP_ID, SOME_PERMISSIONS.join(SOME_PERMISSIONS));
         assertThat(
                 permissions.get(GROUP_ID),
-                hasExactly(expected));
+                hasInAnyOrder(expected));
 
         Iterable<GroupPermission> result = permissions.grant(GROUP_ID, SOME_PERMISSIONS);
         assertThat(
                 result,
-                hasExactly(expected));
+                hasInAnyOrder(expected));
         assertThat(
                 permissions.get(GROUP_ID),
-                hasExactly(expected));
+                hasInAnyOrder(expected));
     }
 
     @Test
@@ -61,9 +61,9 @@ public class GroupPermissionsFromRecordsTest {
 
         assertThat(
                 result,
-                hasExactly(sequence(expected)));
+                hasInAnyOrder(sequence(expected)));
         assertThat(
                 permissions.get(GROUP_ID),
-                hasExactly(sequence(expected)));
+                hasInAnyOrder(sequence(expected)));
     }
 }

@@ -1,5 +1,9 @@
 package com.googlecode.propidle.persistence.jdbc;
 
+import com.googlecode.propidle.DriverManager;
+
+import java.sql.Connection;
+
 public class ConnectionDetails {
     private final String url;
     private final String user;
@@ -8,6 +12,7 @@ public class ConnectionDetails {
     public static ConnectionDetails connectionDetails(String url, String user, String password) {
         return new ConnectionDetails(url, user, password);
     }
+
     protected ConnectionDetails(String url, String user, String password) {
         this.url = url;
         this.user = user;
@@ -24,5 +29,9 @@ public class ConnectionDetails {
 
     public String password() {
         return password;
+    }
+
+    public Connection openConnection() throws Exception {
+        return DriverManager.getConnection(url(), user(), password());
     }
 }

@@ -2,19 +2,20 @@ package com.googlecode.propidle.util;
 
 import static java.lang.String.format;
 import java.security.MessageDigest;
+import java.math.BigInteger;
 
 /*
 Based on http://www.anyexample.com/programming/java/java_simple_class_to_compute_sha_1_hash.xml
  */
 public class Sha1 {
 
-    public static String sha1(String text) {
+    public static BigInteger sha1(String text) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
 
             md.update(text.getBytes("iso-8859-1"), 0, text.length());
 
-            return convertToHex(md.digest());
+            return new BigInteger(convertToHex(md.digest()), 16);
         } catch (Exception e) {
             throw new ThisShouldNeverHappenException(format("Problem hashing %s", text), e);
         }

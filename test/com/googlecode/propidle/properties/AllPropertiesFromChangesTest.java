@@ -1,22 +1,19 @@
 package com.googlecode.propidle.properties;
 
+import static com.googlecode.propidle.diff.PropertyComparison.*;
+import com.googlecode.propidle.diff.PropertyDiffTool;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.properties.AllPropertiesFromChanges;
-import static com.googlecode.propidle.diff.PropertyComparison.*;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.propidle.util.TemporaryRecords.temporaryRecords;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
-import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.propertyNameOfChange;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
-import com.googlecode.propidle.diff.PropertyDiffTool;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import com.googlecode.totallylazy.records.Records;
@@ -40,7 +37,7 @@ public class AllPropertiesFromChangesTest {
     @Before
     public void createRepository() throws Exception {
         highestRevisionNumbers = mock(HighestRevisionNumbers.class);
-        records = defineChangesRecord(temporaryRecords());
+        records = testRecordsWithAllMigrationsRun();
         changes = new AllChangesFromRecords(records);
         repository = new AllPropertiesFromChanges(changes, new PropertyDiffTool(), highestRevisionNumbers);
         givenRevisionIs(0);

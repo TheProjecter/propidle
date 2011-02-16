@@ -10,11 +10,9 @@ public class TestPropertiesApplication extends PropertiesApplication {
         super(
 //                TemporaryIndex.directory(new File("/Users/mattsavage/Desktop/lucene")),
 new RAMDirectory(),
-new InMemoryPersistenceModule());
+new InMemoryPersistenceModule(),
+extraModules);
 //                new SqlPersistenceModule(connectionDetails("jdbc:hsqldb:mem:" + UUID.randomUUID(), "SA", "")));
-        for (Module extraModule : extraModules) {
-            add(extraModule);
-        }
     }
 
 }

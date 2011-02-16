@@ -20,8 +20,8 @@ import java.util.Date;
 public class SessionsFromRecords implements Sessions {
     private static final Keyword SESSIONS = keyword("sessions");
     private static final Keyword<String> SESSION_ID = keyword("session_id", String.class);
-    private static final Keyword<String> USERNAME = keyword("username", String.class);
-    private static final Keyword<Date> START_TIME = keyword("starttime", Date.class);
+    private static final Keyword<String> SESSION_USERNAME = keyword("session_username", String.class);
+    private static final Keyword<Date> SESSION_START_TIME = keyword("session_start_time", Date.class);
 
     private final Records records;
 
@@ -48,19 +48,19 @@ public class SessionsFromRecords implements Sessions {
     private Session deserialise(Record record) {
         return session(
                 sessionId(record.get(SESSION_ID)),
-                username(record.get(USERNAME)),
-                StartTime.startTime(record.get(START_TIME)));
+                username(record.get(SESSION_USERNAME)),
+                StartTime.startTime(record.get(SESSION_START_TIME)));
     }
 
     private Record serialise(Session session) {
         return record().
                 set(SESSION_ID, session.id().value().toString()).
-                set(USERNAME, session.username().toString()).
-                set(START_TIME, session.startTime().value());
+                set(SESSION_USERNAME, session.username().toString()).
+                set(SESSION_START_TIME, session.startTime().value());
     }
 
     public static Records defineSessionsRecord(Records records) {
-        records.define(SESSIONS, SESSION_ID, USERNAME, START_TIME);
+        records.define(SESSIONS, SESSION_ID, SESSION_USERNAME, SESSION_START_TIME);
         return records;
     }
 }
