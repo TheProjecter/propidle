@@ -15,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
+import com.googlecode.propidle.urls.UrlResolver;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
@@ -23,9 +24,11 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 public class SearchResource {
     public static final String NAME = "search";
     private final PropertiesSearcher searcher;
+    private final UrlResolver urlResolver;
 
-    public SearchResource(PropertiesSearcher searcher) {
+    public SearchResource(PropertiesSearcher searcher, UrlResolver urlResolver) {
         this.searcher = searcher;
+        this.urlResolver = urlResolver;
     }
 
     @GET
@@ -45,7 +48,7 @@ public class SearchResource {
         return new Callable2<Model, SearchResult, Model>() {
             public Model call(Model model, SearchResult searchResult) throws Exception {
                 return model.add("matches", model().
-                        add("url", searchResult.path()).
+                        add("url", urlResolver.resolvePropertiesUrl(searchResult.path())).
                         add("propertyName", searchResult.propertyName()).
                         add("propertyValue", searchResult.propertyValue())
                 );

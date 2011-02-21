@@ -39,7 +39,7 @@ public class Server {
         new RestServer(
                 port,
                 application);
-        System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime()));
+        System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
         System.out.println(format("Running on port %s", port));
     }
 
