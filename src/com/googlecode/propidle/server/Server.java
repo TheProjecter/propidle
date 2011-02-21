@@ -15,6 +15,7 @@ import org.apache.lucene.store.RAMDirectory;
 
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
+import java.io.IOException;
 
 public class Server {
     public static void main(String[] args) throws Exception {
@@ -30,11 +31,16 @@ public class Server {
 
         runMigrations(application);
         rebuildLuceneIndexes(application);
+        startServer(port, application);
+    }
 
+    private static void startServer(int port, PropertiesApplication application) throws IOException {
+        long start = nanoTime();
         new RestServer(
                 port,
                 application);
-        System.out.println("Running on port " + port);
+        System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime()));
+        System.out.println(format("Running on port %s", port));
     }
 
     private static void rebuildLuceneIndexes(PropertiesApplication application) throws Exception {
@@ -49,7 +55,7 @@ public class Server {
         long start = nanoTime();
         Sequence<MigrationEvent> migrations = sequence(application.inTransaction(RunMigrations.class));
         if (!migrations.isEmpty()) {
-            System.out.println(format("Ran migrations in %s:ms", calculateMilliseconds(start, nanoTime())));
+            System.out.println(format("Ran migrations in %sms", calculateMilliseconds(start, nanoTime())));
             System.out.println("--------------------------------------------");
             migrations.forEach(Runnables.<MigrationEvent>printLine("%s"));
             System.out.println("--------------------------------------------");
