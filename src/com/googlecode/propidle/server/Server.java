@@ -1,49 +1,74 @@
 package com.googlecode.propidle.server;
 
+import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 import com.googlecode.propidle.migrations.MigrationsModule;
 import com.googlecode.propidle.migrations.history.MigrationEvent;
-import static com.googlecode.propidle.migrations.sql.AdminConnectionDetails.adminConnectionDetails;
-import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
-import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
 import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
+import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
+import com.googlecode.utterlyidle.io.Url;
+import static com.googlecode.utterlyidle.io.Url.url;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.simpleframework.RestServer;
 import org.apache.lucene.store.RAMDirectory;
 
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
+import java.util.Properties;
+import java.util.concurrent.Callable;
 
 public class Server {
-    public static void main(String[] args) throws Exception {
-        int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
+    public static final String PORT = "port";
+    private static RestServer server;
 
-        new Server(port);
+    public static void main(String[] args) throws Exception {
+        if (args.length != 1) {
+            System.err.println("please provide a valid url for a properties file");
+            return;
+        }
+
+        new Server(url(args[0]));
     }
 
-    public Server(int port, Module... extraModules) throws Exception {
-        ConnectionDetails connection = connectionDetails("jdbc:hsqldb:file:test", "SA", "");
+    public Server(Url propertiesUrl, Module... extraModules) throws Exception {
+        this(propertiesAtUrl(propertiesUrl.toURL()), extraModules);
+    }
+
+    public Server(Properties properties, Module... extraModules) throws Exception {
+        this(returns(properties), extraModules);
+    }
+
+    public Server(Callable<Properties> propertyLoader, Module... extraModules) throws Exception {
         PropertiesApplication application = new PropertiesApplication(
+                propertyLoader,
                 new RAMDirectory(),
-                new SqlPersistenceModule(connection),
-                modules(connection, extraModules));
+                new SqlPersistenceModule(),
+                modules(new MigrationsModule(), extraModules));
+
+        int port = parseInt(propertyLoader.call().getProperty(PORT));
 
         runMigrations(application);
         rebuildLuceneIndexes(application);
         startServer(port, application);
+
     }
 
-    private Module[] modules(ConnectionDetails connection, Module... extraModules) {
-        return sequence((Module) new MigrationsModule(adminConnectionDetails(connection))).join(sequence(extraModules)).toArray(Module.class);
+    public void stop() throws Exception {
+        server.stop();
+    }
+
+    private Module[] modules(final Module module, Module... extraModules) {
+        return sequence(module).join(sequence(extraModules)).toArray(Module.class);
     }
 
     private static void startServer(int port, PropertiesApplication application) throws IOException {
         long start = nanoTime();
-        new RestServer(
+        server = new RestServer(
                 port,
                 application);
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));

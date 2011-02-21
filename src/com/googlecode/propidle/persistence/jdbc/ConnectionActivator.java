@@ -6,9 +6,9 @@ import com.googlecode.propidle.DriverManager;
 import java.util.concurrent.Callable;
 
 public class ConnectionActivator implements Callable<Connection> {
-    private final ConnectionDetails connectionDetails;
+    private final NormalUseConnectionDetails connectionDetails;
 
-    public ConnectionActivator(ConnectionDetails connectionDetails) {
+    public ConnectionActivator(NormalUseConnectionDetails connectionDetails) {
         this.connectionDetails = connectionDetails;
     }
 

@@ -9,11 +9,12 @@ import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.Directory;
 
 import java.util.concurrent.Callable;
+import java.util.Properties;
 
 public class PropertiesApplication extends RestApplication {
-    public PropertiesApplication(Directory directory, PersistenceModule persistenceModule, Module... extraModules) {
+    public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, PersistenceModule persistenceModule, Module... extraModules) {
         super();
-        add(new PropertiesModule(directory));
+        add(new PropertiesModule(propertyLoader, directory));
         add(persistenceModule);
         for (Module extraModule : extraModules) {
             add(extraModule);

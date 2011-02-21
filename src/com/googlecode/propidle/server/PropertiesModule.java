@@ -67,6 +67,9 @@ import com.googlecode.propidle.authorisation.groups.GroupMemberships;
 import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
 import com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords;
 import com.googlecode.propidle.authorisation.permissions.GroupPermissions;
+import com.googlecode.propidle.client.DynamicProperties;
+import com.googlecode.propidle.client.DynamicPropertiesActivator;
+import com.googlecode.propidle.client.SnapshotPropertiesActivator;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
@@ -75,15 +78,20 @@ import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.rende
 
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import java.util.Properties;
+import java.util.concurrent.Callable;
 
 @SuppressWarnings("unchecked")
 public class PropertiesModule extends AbstractModule {
     public static final String MODEL_NAME = "MODEL_NAME";
-    private final Directory directory;
     public static final String TITLE = "title";
 
+    private final Directory directory;
+    private final Callable<Properties> propertyLoader;
 
-    public PropertiesModule(Directory directory) {
+
+    public PropertiesModule(Callable<Properties> propertyLoader, Directory directory) {
+        this.propertyLoader = propertyLoader;
         if (directory == null) throw new NullArgumentException("directory");
         this.directory = directory;
     }
@@ -93,10 +101,13 @@ public class PropertiesModule extends AbstractModule {
         container.addInstance(Directory.class, directory);
         container.addInstance(Analyzer.class, new StandardAnalyzer(Version.LUCENE_30));
         container.addActivator(IndexWriter.class, IndexWriterActivator.class);
+        container.addActivator(DynamicProperties.class, new DynamicPropertiesActivator(propertyLoader));
+        container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
         return this;
     }
 
     public Module addPerRequestObjects(Container container) {
+        container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
         container.addInstance(ConvertExtensionToAcceptHeader.Replacements.class,
                               replacements(pair("properties", TEXT_PLAIN), pair("html", TEXT_HTML)));
         container.decorate(HttpHandler.class, ConvertExtensionToAcceptHeader.class);

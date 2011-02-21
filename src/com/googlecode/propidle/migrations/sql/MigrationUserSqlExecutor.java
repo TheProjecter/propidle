@@ -3,10 +3,10 @@ package com.googlecode.propidle.migrations.sql;
 import java.sql.SQLException;
 import java.sql.Connection;
 
-public class AdminSqlExecutor implements SqlExecutor {
+public class MigrationUserSqlExecutor implements SqlExecutor {
     private final Connection connection;
 
-    public AdminSqlExecutor(Connection connection) {
+    public MigrationUserSqlExecutor(Connection connection) {
         this.connection = connection;
     }
 

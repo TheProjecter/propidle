@@ -1,22 +1,24 @@
 package com.googlecode.propidle.migrations.sql;
 
+import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
-public class AdminSqlExecutorActivator implements Callable<SqlExecutor>, Closeable {
-    private final AdminConnectionDetails connectionDetails;
+public class MigrationUserSqlExecutorActivator implements Callable<SqlExecutor>, Closeable {
+    private final MigrationConnectionDetails connectionDetails;
     private Connection connection;
 
-    public AdminSqlExecutorActivator(AdminConnectionDetails connectionDetails) {
+    public MigrationUserSqlExecutorActivator(MigrationConnectionDetails connectionDetails) {
         this.connectionDetails = connectionDetails;
     }
 
-    public AdminSqlExecutor call() throws Exception {
+    public MigrationUserSqlExecutor call() throws Exception {
         connection = connectionDetails.openConnection();
-        return new AdminSqlExecutor(connection);
+        return new MigrationUserSqlExecutor(connection);
     }
 
     public void close() throws IOException {

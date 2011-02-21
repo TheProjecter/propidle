@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import static java.lang.String.format;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -126,5 +127,12 @@ public class Properties {
                 return properties(text);
             }
         };
+    }
+
+    public static String getOrFail(java.util.Properties properties, String name) {
+        if(!properties.containsKey(name)){
+            throw new RuntimeException(format("Expected property '%s' to be defined", name));
+        }
+        return properties.getProperty(name);
     }
 }
