@@ -9,19 +9,22 @@ import com.googlecode.totallylazy.records.sql.SqlRecords;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
+import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.yadic.Container;
 
 import java.sql.Connection;
 
-public class SqlPersistenceModule implements PersistenceModule, RequestScopedModule {
-    public final ConnectionDetails connectionDetails;
+public class SqlPersistenceModule implements PersistenceModule, RequestScopedModule, ApplicationScopedModule {
+    public SqlPersistenceModule() {
+    }
 
-    public SqlPersistenceModule(ConnectionDetails connectionDetails) {
-        this.connectionDetails = connectionDetails;
+    public Module addPerApplicationObjects(Container container) {
+        container.add(NormalUseConnectionDetails.class);
+        return this;
     }
 
     public Module addPerRequestObjects(Container container) {
-        container.addInstance(ConnectionDetails.class, connectionDetails);
+        container.add(NormalUseConnectionDetails.class);
         container.addActivator(Connection.class, ConnectionActivator.class);
         container.add(SqlPersistence.class);
         container.addActivator(Transaction.class, container.getActivator(SqlPersistence.class));

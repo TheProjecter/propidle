@@ -4,14 +4,10 @@ import com.googlecode.propidle.DriverManager;
 
 import java.sql.Connection;
 
-public class ConnectionDetails {
+public abstract class ConnectionDetails {
     private final String url;
     private final String user;
     private final String password;
-
-    public static ConnectionDetails connectionDetails(String url, String user, String password) {
-        return new ConnectionDetails(url, user, password);
-    }
 
     protected ConnectionDetails(String url, String user, String password) {
         this.url = url;
