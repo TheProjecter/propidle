@@ -28,19 +28,19 @@ import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class LuceneFileNameIndexerTest {
+public class LuceneFileNameIndexTest {
     private final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
     private final Directory directory = emptyFileSystemDirectory();// LucenePropertiesIndexerTest.directory("/Users/mattsavage/Desktop/lucene");
     private IndexWriter writer = indexWriter(directory, analyzer);
 
-    private final FileNameIndexer propertiesIndexer = new LuceneFileNameIndexer(writer, Version.LUCENE_30);
+    private final FileNameIndex propertiesIndexer = new LuceneFileNameIndex(writer, Version.LUCENE_30);
     private final FileNameSearcher searcher = new LuceneFileNameSearcher(directory, analyzer, Version.LUCENE_30);
 
     @Test
     public void shouldFindFileNames() throws Exception {
-        propertiesIndexer.index(PropertiesPath.propertiesPath("/production/roundhouseAWoodLouse"));
-        propertiesIndexer.index(PropertiesPath.propertiesPath("/production/kneeAFlea"));
-        propertiesIndexer.index(PropertiesPath.propertiesPath("/pilot/killAKrill"));
+        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/roundhouseAWoodLouse"));
+        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/kneeAFlea"));
+        propertiesIndexer.set(PropertiesPath.propertiesPath("/pilot/killAKrill"));
         writer.commit();
 
         assertThat(query("production"), hasSize(2));
@@ -50,21 +50,21 @@ public class LuceneFileNameIndexerTest {
 
     @Test
     public void shouldNotDuplicateFilenames() throws Exception {
-        propertiesIndexer.index(PropertiesPath.propertiesPath("/production/shoeAShrew"));
+        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/shoeAShrew"));
         writer.commit();
         assertThat(query("shoeAShrew"), hasSize(1));
 
-        propertiesIndexer.index(PropertiesPath.propertiesPath("/production/shoeAShrew"));
+        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/shoeAShrew"));
         writer.commit();
         assertThat(query("shoeAShrew"), hasSize(1));
     }
 
     @Test
     public void shouldAllowSearchingByParent() throws Exception {
-        propertiesIndexer.index(propertiesPath("/production/shoeAShrew"));
-        propertiesIndexer.index(propertiesPath("/production/shoeAShrew/123"));
-        propertiesIndexer.index(propertiesPath("/production/shoeAShrew/125"));
-        propertiesIndexer.index(propertiesPath("/pilot/shoeAShrew"));
+        propertiesIndexer.set(propertiesPath("/production/shoeAShrew"));
+        propertiesIndexer.set(propertiesPath("/production/shoeAShrew/123"));
+        propertiesIndexer.set(propertiesPath("/production/shoeAShrew/125"));
+        propertiesIndexer.set(propertiesPath("/pilot/shoeAShrew"));
         writer.commit();
 
         assertThat(findChildrenOf("/production/shoeAShrew"), hasSize(2));
@@ -84,7 +84,7 @@ public class LuceneFileNameIndexerTest {
 
     @Test
     public void shouldIndexFullHierarchy() throws Exception {
-        propertiesIndexer.index(PropertiesPath.propertiesPath("/production/stabACrab/1234"));
+        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/stabACrab/1234"));
         writer.commit();
 
         Sequence<Pair<PropertiesPath, PathType>> childrenOfRoot = findChildrenOf("/");

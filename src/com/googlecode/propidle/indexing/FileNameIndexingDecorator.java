@@ -8,9 +8,9 @@ import java.util.Properties;
 
 public class FileNameIndexingDecorator implements AllProperties {
     private final AllProperties decorated;
-    private final FileNameIndexer indexer;
+    private final FileNameIndex indexer;
 
-    public FileNameIndexingDecorator(AllProperties decorated, FileNameIndexer indexer) {
+    public FileNameIndexingDecorator(AllProperties decorated, FileNameIndex indexer) {
         this.decorated = decorated;
         this.indexer = indexer;
     }
@@ -20,7 +20,7 @@ public class FileNameIndexingDecorator implements AllProperties {
     }
 
     public RevisionNumber put(PropertiesPath path, Properties properties) {
-        indexer.index(path);
+        indexer.set(path);
         return decorated.put(path, properties);
     }
 }

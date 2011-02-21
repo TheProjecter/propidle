@@ -23,10 +23,6 @@ public class LuceneSearcher {
         this.version = version;
     }
 
-    public <T> Iterable<T> search(Directory directory, Query query, Callable1<? super Document, T> documentDeserializer) {
-        return sequence(search(directory, query)).map(documentDeserializer);
-    }
-
     public Iterable<Document> search(Directory directory, Query query) {
         if (query.isEmpty()) return sequence();
         try {

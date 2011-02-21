@@ -2,9 +2,10 @@ package com.googlecode.propidle.search;
 
 import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.indexing.LuceneFileNameIndexer;
+import com.googlecode.propidle.indexing.LuceneFileNameIndex;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
@@ -12,7 +13,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.indexing.LuceneFileNameIndexer.*;
+import static com.googlecode.propidle.indexing.LuceneFileNameIndex.*;
 import static com.googlecode.propidle.search.Query.query;
 import static com.googlecode.totallylazy.Pair.pair;
 
@@ -31,12 +32,12 @@ public class LuceneFileNameSearcher implements FileNameSearcher {
         Query modifiedQuery = query.
                 againstFields(ALL_FIELDS).
                 and(String.format("+%s:\"%s\"", PATH_TYPE, PathType.FILE));
-        return allFieldsSearcher.search(directory, modifiedQuery, deserialize());
+        return sequence(allFieldsSearcher.search(directory, modifiedQuery)).map(deserialize());
     }
 
     public Iterable<Pair<PropertiesPath, PathType>> childrenOf(PropertiesPath path) {
-        Query query = query(String.format("+%s:\"%s\"", LuceneFileNameIndexer.PARENT, path));
-        return parentSearcher.search(directory, query, deserialize());
+        Query query = query(String.format("+%s:\"%s\"", LuceneFileNameIndex.PARENT, path));
+        return sequence(parentSearcher.search(directory, query)).map(deserialize());
     }
 
     private Callable1<? super Document, Pair<PropertiesPath, PathType>> deserialize() {

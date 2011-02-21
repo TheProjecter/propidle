@@ -1,7 +1,7 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
-import com.googlecode.propidle.properties.PropertiesPath;
 import static com.googlecode.propidle.diff.PropertyComparison.changedProperty;
+import com.googlecode.propidle.properties.PropertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import com.googlecode.propidle.properties.PropertyValue;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
@@ -9,7 +9,6 @@ import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.numbers.Numbers;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -21,7 +20,7 @@ import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
 public class AllChangesFromRecords implements AllChanges {
-    public static final Keyword<String> CHANGES = Keyword.keyword("changes", String.class);
+    public static final Keyword CHANGES = Keyword.keyword("changes");
     public static final Keyword<String> PROPERTIES_PATH = Keyword.keyword("properties_path", String.class);
     public static final Keyword<Integer> REVISION_NUMBER = Keyword.keyword("revision_number", Integer.class);
     public static final Keyword<String> PROPERTY_NAME = Keyword.keyword("property_name", String.class);
@@ -77,7 +76,7 @@ public class AllChangesFromRecords implements AllChanges {
         };
     }
 
-    private Callable1<? super Record, Change> deserialise() {
+    public static Callable1<? super Record, Change> deserialise() {
         return new Callable1<Record, Change>() {
             public Change call(Record record) throws Exception {
                 return new Change(

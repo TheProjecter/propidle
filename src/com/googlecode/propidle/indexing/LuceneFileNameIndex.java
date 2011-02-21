@@ -17,7 +17,7 @@ import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.Strings.reduceToAlphaNumerics;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class LuceneFileNameIndexer implements FileNameIndexer {
+public class LuceneFileNameIndex implements FileNameIndex {
     public static final String PATH = "path";
     public static final String PATH_TYPE = "path.type";
     public static final String PARENT = "parent";
@@ -27,12 +27,12 @@ public class LuceneFileNameIndexer implements FileNameIndexer {
     private final IndexWriter writer;
     private final QueryParser queryParser;
 
-    public LuceneFileNameIndexer(IndexWriter writer, Version version) {
+    public LuceneFileNameIndex(IndexWriter writer, Version version) {
         this.writer = writer;
         this.queryParser = new QueryParser(version, PATH, new KeywordAnalyzer());
     }
 
-    public void index(PropertiesPath path) {
+    public void set(PropertiesPath path) {
         indexIncludingParents(path, PathType.FILE);
     }
 
