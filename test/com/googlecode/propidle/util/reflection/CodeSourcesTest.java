@@ -1,15 +1,12 @@
 package com.googlecode.propidle.util.reflection;
 
+import static com.googlecode.propidle.util.matchers.UrlMatching.urlMatching;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Sequence;
-import static com.googlecode.totallylazy.Predicates.predicate;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import com.googlecode.propidle.util.matchers.UrlMatching;
-import static com.googlecode.propidle.util.matchers.UrlMatching.urlMatching;
-import com.googlecode.propidle.util.reflection.CodeSources;
+import static com.googlecode.totallylazy.matchers.Matchers.predicate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.io.IOException;

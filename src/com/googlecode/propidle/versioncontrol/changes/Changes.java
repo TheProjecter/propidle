@@ -6,19 +6,11 @@ import com.googlecode.propidle.diff.PropertyComparison;
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Sequence;
 
 import java.util.Properties;
 
 public class Changes {
-    public static Callable2<? super Properties, ? super Change, Properties> applyChange() {
-        return new Callable2<Properties, Change, Properties>() {
-            public Properties call(Properties properties, Change change) throws Exception {
-                return change.applyTo(properties);
-            }
-        };
-    }
 
     public static Iterable<Change> changes(PropertiesPath path, RevisionNumber revisionNumber, Sequence<PropertyComparison> comparisons) {
         return comparisons.map(toChange(path, revisionNumber));
@@ -33,7 +25,7 @@ public class Changes {
     }
 
     public static Properties properties(Sequence<Change> changes) {
-        return changes.sortBy(revisionNumberOfChange()).fold(new Properties(), applyChange());
+        return changes.sortBy(revisionNumberOfChange()).fold(new Properties(), Change.applyChange());
     }
 
     public static Callable1<? super Change, RevisionNumber> revisionNumberOfChange() {

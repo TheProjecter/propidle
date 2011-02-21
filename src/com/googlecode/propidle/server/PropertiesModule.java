@@ -119,9 +119,9 @@ public class PropertiesModule extends AbstractModule {
         container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
         container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
 
-        container.add(PropertiesIndexer.class, LucenePropertiesIndexer.class);
+        container.add(PropertiesIndex.class, LucenePropertiesIndex.class);
         container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
-        container.add(FileNameIndexer.class, LuceneFileNameIndexer.class);
+        container.add(FileNameIndex.class, LuceneFileNameIndex.class);
         container.add(FileNameSearcher.class, LuceneFileNameSearcher.class);
 
         container.add(AllProperties.class, AllPropertiesFromChanges.class);

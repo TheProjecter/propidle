@@ -45,7 +45,7 @@ public class SearchResource {
         return new Callable2<Model, SearchResult, Model>() {
             public Model call(Model model, SearchResult searchResult) throws Exception {
                 return model.add("matches", model().
-                        add("url", searchResult.url()).
+                        add("url", searchResult.path()).
                         add("propertyName", searchResult.propertyName()).
                         add("propertyValue", searchResult.propertyValue())
                 );

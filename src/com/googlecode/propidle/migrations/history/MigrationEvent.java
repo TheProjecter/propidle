@@ -38,7 +38,7 @@ public class MigrationEvent {
 
     @Override
     public String toString() {
-        return format("%s-%s on %s", number(), name, dateRun);
+        return format("%S: %s-%s", dateRun, number(), name);
     }
 
     @Override
