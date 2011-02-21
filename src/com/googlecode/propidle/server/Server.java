@@ -23,7 +23,7 @@ public class Server {
 
         // Check port is free
 
-        ConnectionDetails connection = connectionDetails("jdbc:hsqldb:file:monger", "SA", "");
+        ConnectionDetails connection = connectionDetails("jdbc:hsqldb:file:test", "SA", "");
         PropertiesApplication application = new PropertiesApplication(
                 new RAMDirectory(),
                 new SqlPersistenceModule(connection),
