@@ -10,28 +10,35 @@ import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
+import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.simpleframework.RestServer;
 import org.apache.lucene.store.RAMDirectory;
 
+import java.io.IOException;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
-import java.io.IOException;
 
 public class Server {
     public static void main(String[] args) throws Exception {
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
 
-        // Check port is free
+        new Server(port);
+    }
 
+    public Server(int port, Module... extraModules) throws Exception {
         ConnectionDetails connection = connectionDetails("jdbc:hsqldb:file:test", "SA", "");
         PropertiesApplication application = new PropertiesApplication(
                 new RAMDirectory(),
                 new SqlPersistenceModule(connection),
-                new MigrationsModule(adminConnectionDetails(connection)));
+                modules(connection, extraModules));
 
         runMigrations(application);
         rebuildLuceneIndexes(application);
         startServer(port, application);
+    }
+
+    private Module[] modules(ConnectionDetails connection, Module... extraModules) {
+        return sequence((Module) new MigrationsModule(adminConnectionDetails(connection))).join(sequence(extraModules)).toArray(Module.class);
     }
 
     private static void startServer(int port, PropertiesApplication application) throws IOException {
