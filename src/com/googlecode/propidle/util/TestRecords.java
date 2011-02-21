@@ -23,9 +23,10 @@ public class TestRecords {
 
     public static Records testRecordsWithAllMigrationsRun() {
         SimpleContainer container = container();
-        container.add(MigrationConnectionDetails.class);
 
-        new MigrationsModule().addPerRequestObjects(container);
+        MigrationsModule migrationsModule = new MigrationsModule();
+        migrationsModule.addPerApplicationObjects(container);
+        migrationsModule.addPerRequestObjects(container);
 
         try {
             inTransaction(container, RunMigrations.class);
