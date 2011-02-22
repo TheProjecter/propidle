@@ -1,13 +1,23 @@
 package com.googlecode.propidle.persistence.jdbc;
 
 import com.googlecode.propidle.DriverManager;
+import static com.googlecode.propidle.properties.Properties.getOrFail;
 
 import java.sql.Connection;
+import java.util.Properties;
 
-public abstract class ConnectionDetails {
+public class ConnectionDetails {
+    public static final String URL = "jdbc.url";
+    public static final String USER = "jdbc.user";
+    public static final String PASSWORD = "jdbc.password";
+
     private final String url;
     private final String user;
     private final String password;
+
+    public ConnectionDetails(Properties properties) {
+        this(getOrFail(properties, URL), getOrFail(properties, USER), getOrFail(properties, PASSWORD));
+    }
 
     protected ConnectionDetails(String url, String user, String password) {
         this.url = url;

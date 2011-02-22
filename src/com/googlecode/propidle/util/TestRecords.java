@@ -3,7 +3,7 @@ package com.googlecode.propidle.util;
 import com.googlecode.propidle.migrations.MigrationsModule;
 import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
 import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
-import com.googlecode.propidle.persistence.jdbc.NormalUseConnectionDetails;
+import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import com.googlecode.propidle.server.RunMigrations;
 import com.googlecode.propidle.util.time.Clock;
@@ -49,13 +49,12 @@ public class TestRecords {
     public static Properties inMemoryDatabaseConfiguraton() {
         String jdbcUrl = "jdbc:hsqldb:mem:" + randomUUID();
         return properties(
-                pair(MigrationConnectionDetails.URL, jdbcUrl),
-                pair(MigrationConnectionDetails.USER, "SA"),
-                pair(MigrationConnectionDetails.PASSWORD, ""),
+                pair(ConnectionDetails.URL, jdbcUrl),
+                pair(ConnectionDetails.USER, "SA"),
+                pair(ConnectionDetails.PASSWORD, ""),
 
-                pair(NormalUseConnectionDetails.URL, jdbcUrl),
-                pair(NormalUseConnectionDetails.USER, "SA"),
-                pair(NormalUseConnectionDetails.PASSWORD, "")
+                pair(MigrationConnectionDetails.USER, "SA"),
+                pair(MigrationConnectionDetails.PASSWORD, "")
         );
     }
 }
