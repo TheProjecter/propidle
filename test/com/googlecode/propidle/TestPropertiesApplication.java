@@ -1,9 +1,7 @@
 package com.googlecode.propidle;
 
-import com.googlecode.propidle.persistence.memory.InMemoryPersistenceModule;
-import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.persistenceStrategy;
-import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.Option.IN_MEMORY;
-import com.googlecode.propidle.persistence.PropertiesBasedPersistence;
+import static com.googlecode.propidle.persistence.PersistenceModules.Option.IN_MEMORY;
+import com.googlecode.propidle.persistence.PersistenceModules;
 import com.googlecode.propidle.server.PropertiesApplication;
 import static com.googlecode.propidle.util.TestRecords.inMemoryDatabaseConfiguraton;
 import static com.googlecode.totallylazy.Callables.returns;
@@ -19,7 +17,7 @@ public class TestPropertiesApplication extends PropertiesApplication {
         super(
                 returns(inMemoryDatabaseConfiguraton()),
                 new RAMDirectory(),
-                persistenceStrategy(IN_MEMORY).join(extraModules));
+                PersistenceModules.persistenceModules(IN_MEMORY).join(extraModules));
     }
 
 }

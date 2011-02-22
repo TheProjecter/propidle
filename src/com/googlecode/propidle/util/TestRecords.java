@@ -1,10 +1,12 @@
 package com.googlecode.propidle.util;
 
 import com.googlecode.propidle.migrations.MigrationsModule;
-import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.Option.IN_MEMORY;
-import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.persistenceStrategy;
+import static com.googlecode.propidle.persistence.PersistenceModules.Option.IN_MEMORY;
+import static com.googlecode.propidle.persistence.PersistenceModules.Option.HSQL;
+import static com.googlecode.propidle.persistence.PersistenceModules.PERSISTENCE;
 import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
 import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
+import com.googlecode.propidle.persistence.PersistenceModules;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import com.googlecode.propidle.server.RunMigrations;
@@ -48,7 +50,7 @@ public class TestRecords {
         container.add(Clock.class, SystemClock.class);
         container.addInstance(Properties.class, inMemoryDatabaseConfiguraton());
 
-        Sequence<Module> modules = persistenceStrategy(IN_MEMORY);
+        Sequence<Module> modules = PersistenceModules.persistenceModules(IN_MEMORY);
         modules.safeCast(RequestScopedModule.class).forEach(addPerRequestObjects(container));
         modules.safeCast(ApplicationScopedModule.class).forEach(addPerApplicationObjects(container));
 
@@ -58,6 +60,8 @@ public class TestRecords {
     public static Properties inMemoryDatabaseConfiguraton() {
         String jdbcUrl = "jdbc:hsqldb:mem:" + randomUUID();
         return properties(
+                pair(PERSISTENCE, HSQL.name()),
+                
                 pair(ConnectionDetails.URL, jdbcUrl),
                 pair(ConnectionDetails.USER, "SA"),
                 pair(ConnectionDetails.PASSWORD, ""),

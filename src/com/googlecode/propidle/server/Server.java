@@ -3,7 +3,7 @@ package com.googlecode.propidle.server;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 import com.googlecode.propidle.migrations.MigrationsModule;
 import com.googlecode.propidle.migrations.history.MigrationEvent;
-import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.persistenceStrategy;
+import static com.googlecode.propidle.persistence.PersistenceModules.persistenceModules;
 import static com.googlecode.totallylazy.Callables.returns;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
@@ -52,7 +52,7 @@ public class Server {
         PropertiesApplication application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
-                persistenceStrategy(propertyLoader.call()).
+                persistenceModules(propertyLoader.call()).
                         join(extraModules).
                         add(new MigrationsModule()));
 
