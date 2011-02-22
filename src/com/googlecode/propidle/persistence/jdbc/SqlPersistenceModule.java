@@ -13,6 +13,7 @@ import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.yadic.Container;
 
 import java.sql.Connection;
+import java.util.Properties;
 
 public class SqlPersistenceModule implements PersistenceModule, RequestScopedModule, ApplicationScopedModule {
     public SqlPersistenceModule() {
@@ -31,7 +32,6 @@ public class SqlPersistenceModule implements PersistenceModule, RequestScopedMod
         container.addActivator(ConnectionProvider.class, container.getActivator(SqlPersistence.class));
         container.addActivator(SqlRecords.class, SqlRecordsActivator.class);
         container.addActivator(Records.class, container.getActivator(SqlRecords.class));
-        container.add(RecordLock.class, HsqlRecordLock.class);
         if(container.contains(HttpHandler.class)){
             container.decorate(HttpHandler.class, CloseConnectionDecorator.class);
         }

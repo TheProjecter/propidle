@@ -26,9 +26,7 @@ public class ServerTest {
 
     @Before
     public void startServer() throws Exception {
-        Properties properties = inMemoryDatabaseConfiguraton();
-        properties.setProperty(PORT, "8000");
-        server = new Server(properties);
+        server = new TestServer(8000);
     }
 
     @After

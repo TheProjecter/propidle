@@ -1,20 +1,27 @@
 package com.googlecode.propidle.util;
 
 import com.googlecode.propidle.migrations.MigrationsModule;
-import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
-import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
+import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.Option.IN_MEMORY;
+import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.persistenceStrategy;
 import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
+import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import com.googlecode.propidle.server.RunMigrations;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
-import static com.googlecode.propidle.properties.Properties.properties;
-import com.googlecode.totallylazy.records.Records;
 import static com.googlecode.totallylazy.Pair.pair;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.records.Records;
+import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
+import com.googlecode.utterlyidle.modules.Module;
+import static com.googlecode.utterlyidle.modules.Modules.addPerApplicationObjects;
+import static com.googlecode.utterlyidle.modules.Modules.addPerRequestObjects;
+import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.SimpleContainer;
 
-import static java.util.UUID.randomUUID;
 import java.util.Properties;
+import static java.util.UUID.randomUUID;
 
 public class TestRecords {
     public static Records emptyTestRecords() {
@@ -41,7 +48,9 @@ public class TestRecords {
         container.add(Clock.class, SystemClock.class);
         container.addInstance(Properties.class, inMemoryDatabaseConfiguraton());
 
-        new SqlPersistenceModule().addPerRequestObjects(container);
+        Sequence<Module> modules = persistenceStrategy(IN_MEMORY);
+        modules.safeCast(RequestScopedModule.class).forEach(addPerRequestObjects(container));
+        modules.safeCast(ApplicationScopedModule.class).forEach(addPerApplicationObjects(container));
 
         return container;
     }
