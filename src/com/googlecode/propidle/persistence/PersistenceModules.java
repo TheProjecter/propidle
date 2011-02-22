@@ -12,7 +12,7 @@ import com.googlecode.utterlyidle.modules.Module;
 import static java.lang.String.format;
 import java.util.Properties;
 
-public class PropertiesBasedPersistence {
+public class PersistenceModules {
     public static final String PERSISTENCE = "persistence";
 
     public static enum Option {
@@ -21,11 +21,11 @@ public class PropertiesBasedPersistence {
         IN_MEMORY
     }
 
-    public static Sequence<Module> persistenceStrategy(Properties properties) {
-        return persistenceStrategy(parse(getOrFail(properties, PERSISTENCE)));
+    public static Sequence<Module> persistenceModules(Properties properties) {
+        return persistenceModules(parse(getOrFail(properties, PERSISTENCE)));
     }
 
-    public static Sequence<Module> persistenceStrategy(Option option) {
+    public static Sequence<Module> persistenceModules(Option option) {
         switch (option) {
             case HSQL:
                 return sequence(new SqlPersistenceModule(), new HsqlModule()).safeCast(Module.class);
