@@ -14,6 +14,6 @@ public class OracleRecordLock extends SqlRecordLock {
     }
 
     protected String lockStatement(Keyword recordName) {
-        return String.format("LOCK TABLE %s IN EXCLUSIVE", recordName);
+        return String.format("LOCK TABLE %s IN EXCLUSIVE MODE", recordName);
     }
 }
