@@ -3,10 +3,11 @@ package com.googlecode.propidle.server;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 import com.googlecode.propidle.migrations.MigrationsModule;
 import com.googlecode.propidle.migrations.history.MigrationEvent;
-import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
+import static com.googlecode.propidle.persistence.PropertiesBasedPersistence.persistenceStrategy;
+import static com.googlecode.totallylazy.Callables.returns;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
-import static com.googlecode.totallylazy.Callables.returns;
+import com.googlecode.totallylazy.Sequences;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 import com.googlecode.utterlyidle.io.Url;
@@ -35,20 +36,25 @@ public class Server {
         new Server(url(args[0]));
     }
 
-    public Server(Url propertiesUrl, Module... extraModules) throws Exception {
+    public Server(Url propertiesUrl) throws Exception {
+        this(propertiesUrl, Sequences.<Module>sequence());
+    }
+
+    public Server(Url propertiesUrl, Iterable<Module> extraModules) throws Exception {
         this(propertiesAtUrl(propertiesUrl.toURL()), extraModules);
     }
 
-    public Server(Properties properties, Module... extraModules) throws Exception {
+    public Server(Properties properties, Iterable<Module> extraModules) throws Exception {
         this(returns(properties), extraModules);
     }
 
-    public Server(Callable<Properties> propertyLoader, Module... extraModules) throws Exception {
+    public Server(Callable<Properties> propertyLoader, Iterable<Module> extraModules) throws Exception {
         PropertiesApplication application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
-                new SqlPersistenceModule(),
-                modules(new MigrationsModule(), extraModules));
+                persistenceStrategy(propertyLoader.call()).
+                        join(extraModules).
+                        add(new MigrationsModule()));
 
         int port = parseInt(propertyLoader.call().getProperty(PORT));
 
@@ -60,10 +66,6 @@ public class Server {
 
     public void stop() throws Exception {
         server.stop();
-    }
-
-    private Module[] modules(final Module module, Module... extraModules) {
-        return sequence(module).join(sequence(extraModules)).toArray(Module.class);
     }
 
     private static void startServer(int port, PropertiesApplication application) throws IOException {

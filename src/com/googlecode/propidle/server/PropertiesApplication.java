@@ -12,12 +12,11 @@ import java.util.concurrent.Callable;
 import java.util.Properties;
 
 public class PropertiesApplication extends RestApplication {
-    public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, PersistenceModule persistenceModule, Module... extraModules) {
+    public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) {
         super();
         add(new PropertiesModule(propertyLoader, directory));
-        add(persistenceModule);
-        for (Module extraModule : extraModules) {
-            add(extraModule);
+        for (Module module : modules) {
+            add(module);
         }
     }
 
