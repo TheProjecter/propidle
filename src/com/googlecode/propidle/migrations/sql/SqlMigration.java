@@ -5,6 +5,7 @@ import com.googlecode.propidle.migrations.MigrationId;
 import static com.googlecode.propidle.migrations.MigrationId.migrationId;
 import static com.googlecode.propidle.migrations.MigrationName.migrationName;
 import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
+import com.googlecode.totallylazy.records.sql.SqlRecords;
 
 import java.net.URL;
 import java.util.concurrent.Callable;
@@ -14,26 +15,26 @@ import static java.lang.String.format;
 
 public class SqlMigration implements Runnable {
     private static final Pattern pattern = Pattern.compile(".*/([0-9]+)\\-(.*)\\.sql$");
-    private final SqlExecutor executor;
+    private final SqlRecords records;
     private final Callable<String> sql;
 
-    public static SqlMigration sqlMigration(URL url, SqlExecutor executor) {
-        return sqlMigration(Urls.getUrl(url), executor);
+    public static SqlMigration sqlMigration(URL url, SqlRecords records) {
+        return sqlMigration(Urls.getUrl(url), records);
     }
 
-    public static SqlMigration sqlMigration(Callable<String> sql, SqlExecutor executor) {
-        return new SqlMigration(executor, sql);
+    public static SqlMigration sqlMigration(Callable<String> sql, SqlRecords records) {
+        return new SqlMigration(records, sql);
     }
 
-    protected SqlMigration(SqlExecutor executor, Callable<String> sql) {
-        this.executor = executor;
+    protected SqlMigration(SqlRecords records, Callable<String> sql) {
+        this.records = records;
         this.sql = sql;
     }
 
     public void run() {
         String sqlString = sqlString();
         try {
-            executor.execute(sqlString);
+            records.update(sqlString);
         } catch (Exception e) {
             throw new RuntimeException("Could not execute sql migration:\n" + sqlString, e);
         }

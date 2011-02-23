@@ -1,9 +1,6 @@
 package com.googlecode.propidle.migrations.bootstrap.oracle;
 
-import com.googlecode.propidle.migrations.sql.SqlExecutor;
-import com.googlecode.propidle.migrations.bootstrap.Bootstrapper;
 import com.googlecode.propidle.migrations.bootstrap.SqlBootstrapper;
-import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.records.sql.SqlRecords;
 
 public class OracleCreateMigrationLogTable extends SqlBootstrapper {
