@@ -3,6 +3,7 @@ package com.googlecode.propidle;
 import static com.googlecode.propidle.PersistenceMechanism.IN_MEMORY;
 import com.googlecode.propidle.server.PersistenceModules;
 import com.googlecode.propidle.server.PropertiesApplication;
+import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.util.TestRecords.hsqlConfiguraton;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.totallylazy.Callables.returns;
@@ -18,7 +19,7 @@ public class TestPropertiesApplication extends PropertiesApplication {
         super(
                 returns(hsqlConfiguraton()),
                 new RAMDirectory(),
-                PersistenceModules.persistenceModules(properties("persistence=im_memory")).join(extraModules));
+                persistenceModules(properties("persistence=in_memory")).join(extraModules));
     }
 
 }
