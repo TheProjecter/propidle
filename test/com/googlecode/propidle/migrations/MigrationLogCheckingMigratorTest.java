@@ -4,9 +4,9 @@ import static com.googlecode.propidle.migrations.Migration.migration;
 import static com.googlecode.propidle.migrations.MigrationId.migrationId;
 import static com.googlecode.propidle.migrations.MigrationName.migrationName;
 import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
-import com.googlecode.propidle.migrations.history.MigrationEvent;
-import com.googlecode.propidle.migrations.history.MigrationHistory;
-import com.googlecode.propidle.migrations.history.MigrationHistoryFromRecords;
+import com.googlecode.propidle.migrations.log.MigrationLogItem;
+import com.googlecode.propidle.migrations.log.MigrationLog;
+import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import com.googlecode.propidle.util.time.StoppedClock;
 import static com.googlecode.propidle.util.time.StoppedClock.stoppedClock;
 import static com.googlecode.totallylazy.Option.option;
@@ -21,10 +21,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryCheckingMigratorTest {
+public class MigrationLogCheckingMigratorTest {
     private final StoppedClock clock = stoppedClock();
-    private final MigrationHistory migrationHistory = new MigrationHistoryFromRecords(new MemoryRecords());
-    private final HistoryCheckingMigrator migrator = new HistoryCheckingMigrator(migrationHistory, clock);
+    private final MigrationLog migrationLog = new MigrationLogFromRecords(new MemoryRecords());
+    private final MigrationLogCheckingMigrator migrator = new MigrationLogCheckingMigrator(migrationLog, clock);
 
     @Test
     public void runsMigrationFilesInOrder() throws Exception {
@@ -50,8 +50,8 @@ public class HistoryCheckingMigratorTest {
         Migration migration = migrationsPerformed.first();
 
         assertThat(
-                migrationHistory.get(migration.number()),
-                is(option(new MigrationEvent(clock.time(), migration.number(), migration.name()))));
+                migrationLog.get(migration.number()),
+                is(option(new MigrationLogItem(clock.time(), migration.number(), migration.name()))));
     }
 
     @Test

@@ -19,20 +19,20 @@ public class UsersFromRecordsTest {
     public void shouldReplaceExistingUserWithSameName() throws Exception {
         users.put(user(
                 username("donald trump"),
-                passwordHash(new BigInteger("1"))));
+                passwordHash("SOMEHEXSTRING")));
 
         users.put(user(
                 username("donald trump"),
-                passwordHash(new BigInteger("2"))));
+                passwordHash("SOMEOTHERHEXSTRING")));
 
-        assertThat(users.get(username("donald trump")).get().passwordHash(), is(passwordHash(new BigInteger("2"))));
+        assertThat(users.get(username("donald trump")).get().passwordHash(), is(passwordHash("SOMEOTHERHEXSTRING")));
     }
 
     @Test
     public void shouldBeAbleToRemoveAUser() throws Exception {
         users.put(user(
                 username("steve tyler"),
-                passwordHash(new BigInteger("1"))));
+                passwordHash("SOMEHEXSTRING")));
 
         assertThat(users.remove(username("steve tyler")).isEmpty(), is(false));
 

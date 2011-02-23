@@ -1,24 +1,23 @@
-package com.googlecode.propidle.migrations.history;
+package com.googlecode.propidle.migrations.log;
 
 import com.googlecode.propidle.migrations.MigrationNumber;
 import com.googlecode.propidle.migrations.MigrationName;
 import com.googlecode.propidle.migrations.Migration;
-import com.googlecode.propidle.Dates;
 import static com.googlecode.propidle.Dates.stripMillis;
 
 import java.util.Date;
 import static java.lang.String.format;
 
-public class MigrationEvent {
+public class MigrationLogItem {
     private final Date dateRun;
     private final MigrationNumber number;
     private final MigrationName name;
 
-    public MigrationEvent(Date dateRun, Migration migration) {
+    public MigrationLogItem(Date dateRun, Migration migration) {
         this(dateRun, migration.number(), migration.name());
     }
 
-    public MigrationEvent(Date dateRun, MigrationNumber number, MigrationName name) {
+    public MigrationLogItem(Date dateRun, MigrationNumber number, MigrationName name) {
         this.dateRun = dateRun;
         this.number = number;
         this.name = name;
@@ -46,7 +45,7 @@ public class MigrationEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MigrationEvent that = (MigrationEvent) o;
+        MigrationLogItem that = (MigrationLogItem) o;
 
         if (!stripMillis(dateRun).equals(stripMillis(that.dateRun))) return false;
         if (!name.equals(that.name)) return false;

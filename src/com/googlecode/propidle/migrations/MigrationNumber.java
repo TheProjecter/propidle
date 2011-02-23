@@ -7,6 +7,10 @@ import java.net.URL;
 import static java.lang.Integer.parseInt;
 
 public class MigrationNumber extends IntegerTinyType<MigrationNumber> {
+    public static MigrationNumber migrationNumber(Number value) {
+        return migrationNumber(value.intValue());
+    }
+
     public static MigrationNumber migrationNumber(Integer value) {
         return new MigrationNumber(value);
     }

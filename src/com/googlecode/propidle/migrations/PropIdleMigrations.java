@@ -5,6 +5,6 @@ import static com.googlecode.propidle.migrations.sql.SqlMigrations.sqlMigrations
 
 public class PropIdleMigrations extends Migrations {
     public PropIdleMigrations(SqlExecutor executor) {
-        super(migrations(sqlMigrationsInSamePackageAs(HistoryCheckingMigrator.class, executor)));
+        super(migrations(sqlMigrationsInSamePackageAs(PropIdleMigrations.class, executor)));
     }
 }

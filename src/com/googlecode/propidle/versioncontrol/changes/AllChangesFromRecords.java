@@ -22,7 +22,7 @@ import com.googlecode.totallylazy.records.Records;
 public class AllChangesFromRecords implements AllChanges {
     public static final Keyword CHANGES = Keyword.keyword("changes");
     public static final Keyword<String> PROPERTIES_PATH = Keyword.keyword("properties_path", String.class);
-    public static final Keyword<Integer> REVISION_NUMBER = Keyword.keyword("revision_number", Integer.class);
+    public static final Keyword<Number> REVISION_NUMBER = Keyword.keyword("revision_number", Number.class);
     public static final Keyword<String> PROPERTY_NAME = Keyword.keyword("property_name", String.class);
     public static final Keyword<String> PREVIOUS_VALUE = Keyword.keyword("previous_value", String.class);
     public static final Keyword<String> UPDATED_VALUE = Keyword.keyword("updated_value", String.class);
@@ -45,7 +45,7 @@ public class AllChangesFromRecords implements AllChanges {
                 get(CHANGES).
                 filter(
                         where(PROPERTIES_PATH, is(propertiesPath.toString())).
-                                and(where(REVISION_NUMBER, is(revisionNumber.value())))).
+                                and(where(REVISION_NUMBER, is((Number)revisionNumber.value())))).
                 map(deserialise());
     }
 

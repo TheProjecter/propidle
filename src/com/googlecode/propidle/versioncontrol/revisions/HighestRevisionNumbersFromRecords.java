@@ -9,7 +9,7 @@ import com.googlecode.totallylazy.records.Records;
 
 public class HighestRevisionNumbersFromRecords implements HighestRevisionNumbers {
     public static final Keyword<String> HIGHEST_REVISION = Keyword.keyword("highest_revision", String.class);
-    public static final Keyword<Integer> REVISION_NUMBER = Keyword.keyword("revision_number", Integer.class);
+    public static final Keyword<Number> REVISION_NUMBER = Keyword.keyword("revision_number", Number.class);
 
     private final Records records;
     private NewRevisionNumber newRevisionNumber;
