@@ -1,10 +1,10 @@
 package com.googlecode.propidle.migrations;
 
-import com.googlecode.propidle.migrations.sql.SqlExecutor;
 import static com.googlecode.propidle.migrations.sql.SqlMigrations.sqlMigrationsInSamePackageAs;
+import com.googlecode.totallylazy.records.sql.SqlRecords;
 
 public class PropIdleMigrations extends Migrations {
-    public PropIdleMigrations(SqlExecutor executor) {
-        super(migrations(sqlMigrationsInSamePackageAs(PropIdleMigrations.class, executor)));
+    public PropIdleMigrations(SqlRecords records) {
+        super(migrations(sqlMigrationsInSamePackageAs(PropIdleMigrations.class, records)));
     }
 }

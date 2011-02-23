@@ -16,11 +16,14 @@ import java.sql.Connection;
 import java.util.Properties;
 
 public class SqlPersistenceModule implements PersistenceModule, RequestScopedModule, ApplicationScopedModule {
-    public SqlPersistenceModule() {
+    private final ConnectionDetails connectionDetails;
+
+    public SqlPersistenceModule(ConnectionDetails connectionDetails) {
+        this.connectionDetails = connectionDetails;
     }
 
     public Module addPerApplicationObjects(Container container) {
-        container.add(ConnectionDetails.class);
+        container.addInstance(ConnectionDetails.class, connectionDetails);
         return this;
     }
 

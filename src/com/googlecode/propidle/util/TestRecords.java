@@ -3,16 +3,17 @@ package com.googlecode.propidle.util;
 import static com.googlecode.propidle.MigrationsModules.migrationsModules;
 import static com.googlecode.propidle.PersistenceMechanism.HSQL;
 import static com.googlecode.propidle.PersistenceMechanism.PERSISTENCE;
-import static com.googlecode.propidle.persistence.PersistenceModules.persistenceModules;
-import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
-import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
+import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import com.googlecode.propidle.server.RunMigrations;
+import com.googlecode.propidle.server.Server;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
+import static com.googlecode.propidle.util.Callables.chain;
 import static com.googlecode.totallylazy.Pair.pair;
 import com.googlecode.totallylazy.Sequence;
+import static com.googlecode.totallylazy.Callers.call;
 import com.googlecode.totallylazy.records.Records;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
@@ -32,7 +33,7 @@ public class TestRecords {
 
     public static Records testRecordsWithAllMigrationsRun() {
         Properties properties = hsqlConfiguraton();
-        Container container = addToContainer(container(properties), migrationsModules(properties));
+        Container container = migrationsModules(properties).fold(container(properties), chain(Container.class));
         try {
             inTransaction(container, RunMigrations.class);
         } catch (Exception e) {
@@ -42,16 +43,15 @@ public class TestRecords {
     }
 
     public static Properties hsqlConfiguraton() {
-        String jdbcUrl = "jdbc:hsqldb:mem:" + randomUUID();
         return properties(
                 pair(PERSISTENCE, HSQL.name()),
 
-                pair(ConnectionDetails.URL, jdbcUrl),
-                pair(ConnectionDetails.USER, "SA"),
-                pair(ConnectionDetails.PASSWORD, ""),
+                pair(Server.JDBC_URL, "jdbc:hsqldb:mem:" + randomUUID()),
+                pair(Server.JDBC_USER, "SA"),
+                pair(Server.JDBC_PASSWORD, ""),
 
-                pair(MigrationConnectionDetails.USER, "SA"),
-                pair(MigrationConnectionDetails.PASSWORD, "")
+                pair(Server.MIGRATION_JDBC_USER, "SA"),
+                pair(Server.MIGRATION_JDBC_PASSWORD, "")
         );
     }
 

@@ -1,17 +1,13 @@
 package com.googlecode.propidle.migrations.bootstrap;
 
-import com.googlecode.propidle.migrations.bootstrap.Bootstrapper;
-import com.googlecode.propidle.migrations.sql.SqlExecutor;
-import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import static com.googlecode.propidle.migrations.log.MigrationLogFromRecords.MIGRATION_LOG;
-import com.googlecode.totallylazy.Strings;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.empty;
-import com.googlecode.totallylazy.records.sql.SqlRecords;
+import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.sql.SqlRecords;
 
-import java.util.Iterator;
 import static java.lang.String.format;
+import java.util.Iterator;
 
 public class SqlBootstrapper implements Bootstrapper {
     protected final SqlRecords records;
@@ -23,7 +19,7 @@ public class SqlBootstrapper implements Bootstrapper {
     }
 
     public void run() {
-        if(tableExists()){
+        if (tableExists()) {
             return;
         }
         String createMigrationLogSql = Strings.toString(SqlBootstrapper.class.getResourceAsStream("create_migration_log.sql"));

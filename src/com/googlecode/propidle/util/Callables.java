@@ -4,6 +4,8 @@ import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Callable2;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import com.googlecode.utterlyidle.io.Url;
 
 import static com.googlecode.totallylazy.Left.left;
@@ -36,6 +38,25 @@ public class Callables {
         return new Callable1<String, Url>() {
             public Url call(String path) throws Exception {
                 return url(path);
+            }
+        };
+    }
+
+    public static <T> Callable1<T, T> chain(final Callable1<T, T>... callables) {
+        return new Callable1<T, T>() {
+            public T call(T t) throws Exception {
+                return sequence(callables).fold(t, Callables.<T>chain());
+            }
+        };
+    }
+
+    public static <T> Callable2<T, Callable1<T, T>, T> chain(Class<T> aClass) {
+        return chain();
+    }
+    public static <T> Callable2<T, Callable1<T, T>, T> chain() {
+        return new Callable2<T, Callable1<T, T>, T>() {
+            public T call(T t, Callable1<T, T> callable) throws Exception {
+                return callable.call(t);
             }
         };
     }
