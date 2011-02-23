@@ -16,16 +16,21 @@
     <property name="release.src.path" value="${artifacts}/${release.src}"/>
     <property name="release.pom.path" value="${artifacts}/${release.pom}"/>
     <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
+    <property name="build.dependencies.dir" value="lib/build"/>
+    <property name="runtime.dependencies.dir" value="lib/runtime"/>
+    <property name="optional.dependencies.dir" value="lib/runtime-optional"/>
 
     <import file="${build}/macros.xml"/>
+    <import file="${build}/shavenmaven.xml"/>
 
-    <path id="all.dependancies">
-        <fileset id="release.dependancies" dir="lib" includes="**/*.jar"/>
-        <fileset id="build.dependancies" dir="${build}/lib" includes="**/*.jar"/>
+    <path id="all.dependencies">
+        <fileset dir="${build.dependencies.dir}" includes="**/*.jar"/>
+        <fileset dir="${runtime.dependencies.dir}" includes="**/*.jar"/>
+        <fileset dir="${optional.dependencies.dir}" includes="**/*.jar"/>
     </path>
 
     <path id="all.jars">
-        <path refid="all.dependancies"/>
+        <path refid="all.dependencies"/>
         <path path="${release.jar.path}"/>
         <path path="${test.jar.path}"/>
     </path>
@@ -35,7 +40,7 @@
     </target>
 
     <target name="compile">
-        <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependancies"
+        <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependencies"
                          version="${release.version}"/>
         <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
     </target>
@@ -43,6 +48,19 @@
     <target name="test">
         <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}"/>
     </target>
+
+    <target name="update">
+        <install version="20"/>
+        <parallel>
+            <update dependencies="build/build.dependencies"
+                    directory="${build.dependencies.dir}"/>
+            <update dependencies="build/runtime.dependencies"
+                    directory="${runtime.dependencies.dir}"/>
+            <update dependencies="build/optional.dependencies"
+                    directory="${optional.dependencies.dir}"/>
+        </parallel>
+    </target>
+
 
     <target name="package">
         <mkdir dir="${artifacts}"/>
@@ -74,7 +92,7 @@
         </copy>
     </target>
 
-    <target name="build" depends="clean, compile, test, package" description="build all"/>
+    <target name="build" depends="clean, update, compile, test, package" description="build all"/>
 
     <target name="local-install" depends="build" description="Install in local mvn repo">
         <exec executable="mvn">

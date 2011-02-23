@@ -1,10 +1,9 @@
 package com.googlecode.propidle;
 
-import oracle.sql.TIMESTAMP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import org.junit.Test;
 import static org.junit.Assert.fail;
+import org.junit.Test;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,14 +21,6 @@ public class CoercionsTest {
         Date coerced = Coercions.coerce(timestamp, Date.class);
         assertThat(coerced, is(sameInstance((Date) timestamp)));
     }
-
-//    @Test
-//    public void canConvertOracleTimestampToDateOrTimestamp() throws Exception {
-//        TIMESTAMP timestamp = new TIMESTAMP(new java.sql.Date(6789));
-//
-//        assertThat(Coercions.coerce(timestamp, Timestamp.class), is(timestamp.timestampValue()));
-//        assertThat(Coercions.coerce(timestamp, Date.class), is((Date) timestamp.timestampValue()));
-//    }
 
     @Test
     public void willThrowAnExceptionForUnsupportedConversions() throws Exception {
