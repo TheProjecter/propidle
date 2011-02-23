@@ -7,3 +7,4 @@ build/artifacts
 .DS_Store
 *.ipr
 twig.properties
+lib
