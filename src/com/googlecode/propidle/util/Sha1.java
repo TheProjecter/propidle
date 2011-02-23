@@ -9,13 +9,13 @@ Based on http://www.anyexample.com/programming/java/java_simple_class_to_compute
  */
 public class Sha1 {
 
-    public static BigInteger sha1(String text) {
+    public static String sha1(String text) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
 
             md.update(text.getBytes("iso-8859-1"), 0, text.length());
 
-            return new BigInteger(convertToHex(md.digest()), 16);
+            return convertToHex(md.digest());
         } catch (Exception e) {
             throw new ThisShouldNeverHappenException(format("Problem hashing %s", text), e);
         }

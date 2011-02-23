@@ -1,27 +1,27 @@
 package com.googlecode.propidle.migrations;
 
 import com.googlecode.propidle.util.time.Clock;
-import com.googlecode.propidle.migrations.history.MigrationEvent;
-import com.googlecode.propidle.migrations.history.MigrationHistory;
+import com.googlecode.propidle.migrations.log.MigrationLogItem;
+import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Runnable1;
 import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-public class HistoryCheckingMigrator implements Migrator {
-    private final MigrationHistory migrationHistory;
+public class MigrationLogCheckingMigrator implements Migrator {
+    private final MigrationLog migrationLog;
     private final Clock clock;
 
-    public HistoryCheckingMigrator(MigrationHistory migrationHistory, Clock clock) {
-        this.migrationHistory = migrationHistory;
+    public MigrationLogCheckingMigrator(MigrationLog migrationLog, Clock clock) {
+        this.migrationLog = migrationLog;
         this.clock = clock;
     }
 
-    public Iterable<MigrationEvent> migrate(Iterable<Migration> migrations) {
+    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations) {
         Sequence<Migration> migrationsToRun = sequence(migrations).filter(notYetRun()).sortBy(Migration.getMigrationNumber());
         migrationsToRun.forEach(run());
-        return migrationHistory.add(migrationsToRun.map(toMigrationEvent()));
+        return migrationLog.add(migrationsToRun.map(toMigrationEvent()));
     }
 
     private Runnable1<Migration> run() {
@@ -32,10 +32,10 @@ public class HistoryCheckingMigrator implements Migrator {
         };
     }
 
-    private Callable1<? super Migration, MigrationEvent> toMigrationEvent() {
-        return new Callable1<Migration, MigrationEvent>() {
-            public MigrationEvent call(Migration migration) throws Exception {
-                return new MigrationEvent(clock.time(), migration);
+    private Callable1<? super Migration, MigrationLogItem> toMigrationEvent() {
+        return new Callable1<Migration, MigrationLogItem>() {
+            public MigrationLogItem call(Migration migration) throws Exception {
+                return new MigrationLogItem(clock.time(), migration);
             }
         };
     }
@@ -43,7 +43,7 @@ public class HistoryCheckingMigrator implements Migrator {
     private Predicate<? super Migration> notYetRun() {
         return new Predicate<Migration>() {
             public boolean matches(Migration migration) {
-                return migrationHistory.get(migration.number()).isEmpty();
+                return migrationLog.get(migration.number()).isEmpty();
             }
         };
     }

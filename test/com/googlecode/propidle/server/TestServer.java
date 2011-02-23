@@ -1,6 +1,6 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.util.TestRecords.inMemoryDatabaseConfiguraton;
+import static com.googlecode.propidle.util.TestRecords.hsqlConfiguraton;
 import static com.googlecode.totallylazy.Sequences.empty;
 import com.googlecode.utterlyidle.modules.Module;
 
@@ -16,7 +16,7 @@ public class TestServer extends Server {
     }
 
     private static Properties propertiesFor(int port) {
-        Properties properties = inMemoryDatabaseConfiguraton();
+        Properties properties = hsqlConfiguraton();
         properties.setProperty(PORT, String.valueOf(port));
         return properties;
     }

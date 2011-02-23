@@ -1,12 +1,9 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.server.Server.PORT;
-import static com.googlecode.propidle.util.TestRecords.inMemoryDatabaseConfiguraton;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Runnable1;
 import com.googlecode.totallylazy.Strings;
 import static com.googlecode.utterlyidle.Status.OK;
-import static com.googlecode.utterlyidle.Status.SEE_OTHER;
 import com.googlecode.utterlyidle.io.Url;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.io.Url.writeBytes;
@@ -19,7 +16,6 @@ import org.junit.Test;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import java.io.InputStream;
-import java.util.Properties;
 
 public class ServerTest {
     private Server server;

@@ -1,3 +1,3 @@
 create table highest_revision (
-    revision_number        NUMERIC
+    revision_number        INTEGER
 );

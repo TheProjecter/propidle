@@ -1,12 +1,12 @@
 package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.migrations.*;
-import com.googlecode.propidle.migrations.history.MigrationEvent;
+import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 import java.util.concurrent.Callable;
 
-public class RunMigrations implements Callable<Iterable<MigrationEvent>> {
+public class RunMigrations implements Callable<Iterable<MigrationLogItem>> {
     private final Migrator migrator;
     private final Migrations migrations;
 
@@ -15,7 +15,7 @@ public class RunMigrations implements Callable<Iterable<MigrationEvent>> {
         this.migrations = migrations;
     }
 
-    public Iterable<MigrationEvent> call() throws Exception {
+    public Iterable<MigrationLogItem> call() throws Exception {
         return migrator.migrate(migrations);
     }
 }

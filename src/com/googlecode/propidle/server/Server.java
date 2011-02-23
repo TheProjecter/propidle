@@ -1,8 +1,8 @@
 package com.googlecode.propidle.server;
 
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
-import com.googlecode.propidle.migrations.MigrationsModule;
-import com.googlecode.propidle.migrations.history.MigrationEvent;
+import static com.googlecode.propidle.MigrationsModules.migrationsModules;
+import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import static com.googlecode.propidle.persistence.PersistenceModules.persistenceModules;
 import static com.googlecode.totallylazy.Callables.returns;
 import com.googlecode.totallylazy.Runnables;
@@ -49,12 +49,13 @@ public class Server {
     }
 
     public Server(Callable<Properties> propertyLoader, Iterable<Module> extraModules) throws Exception {
+        Properties properties = propertyLoader.call();
         PropertiesApplication application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
-                persistenceModules(propertyLoader.call()).
+                persistenceModules(properties).
                         join(extraModules).
-                        add(new MigrationsModule()));
+                        join(migrationsModules(properties)));
 
         int port = parseInt(propertyLoader.call().getProperty(PORT));
 
@@ -84,14 +85,14 @@ public class Server {
         System.out.println(format("Re-indexing finished in %sms", calculateMilliseconds(start, nanoTime())));
     }
 
-    private static Iterable<MigrationEvent> runMigrations(PropertiesApplication application) throws Exception {
+    private static Iterable<MigrationLogItem> runMigrations(PropertiesApplication application) throws Exception {
         System.out.println("Running migrations...");
         long start = nanoTime();
-        Sequence<MigrationEvent> migrations = sequence(application.inTransaction(RunMigrations.class));
+        Sequence<MigrationLogItem> migrations = sequence(application.inTransaction(RunMigrations.class));
         if (!migrations.isEmpty()) {
             System.out.println(format("Ran migrations in %sms", calculateMilliseconds(start, nanoTime())));
             System.out.println("--------------------------------------------");
-            migrations.forEach(Runnables.<MigrationEvent>printLine("%s"));
+            migrations.forEach(Runnables.<MigrationLogItem>printLine("%s"));
             System.out.println("--------------------------------------------");
         } else {
             System.out.println("No migrations to run");

@@ -15,7 +15,15 @@ public class ConnectionDetails {
     private final String user;
     private final String password;
 
-    public ConnectionDetails(Properties properties) {
+    public static ConnectionDetails connectionDetails(Properties properties) {
+        return new ConnectionDetails(properties);
+    }
+
+    public static ConnectionDetails connectionDetails(String url, String user, String password) {
+        return new ConnectionDetails(url, user, password);
+    }
+
+    protected ConnectionDetails(Properties properties) {
         this(getOrFail(properties, URL), getOrFail(properties, USER), getOrFail(properties, PASSWORD));
     }
 
@@ -38,6 +46,9 @@ public class ConnectionDetails {
     }
 
     public Connection openConnection() throws Exception {
+        if(url().startsWith("jdbc:oracle:thin")){
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+        }
         return DriverManager.getConnection(url(), user(), password());
     }
 }

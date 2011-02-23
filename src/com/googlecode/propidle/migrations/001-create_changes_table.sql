@@ -1,6 +1,6 @@
 create table changes (
     properties_path        VARCHAR(256)     NOT NULL,
-    revision_number        NUMERIC          NOT NULL,
+    revision_number        INTEGER          NOT NULL,
     property_name          VARCHAR(256)     NOT NULL,
     previous_value         VARCHAR(1024),
     updated_value          VARCHAR(1024),

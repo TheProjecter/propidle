@@ -1,11 +1,11 @@
 package com.googlecode.propidle.migrations;
 
-import com.googlecode.propidle.migrations.history.MigrationHistory;
-import com.googlecode.propidle.migrations.history.MigrationHistoryFromRecords;
+import com.googlecode.propidle.migrations.log.MigrationLog;
+import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import com.googlecode.propidle.migrations.sql.MigrationUserSqlExecutorActivator;
 import com.googlecode.propidle.migrations.sql.SqlExecutor;
 import com.googlecode.propidle.persistence.jdbc.MigrationConnectionDetails;
-import com.googlecode.propidle.server.EnsureMigrationHistoryRecordIsDefined;
+import com.googlecode.propidle.migrations.bootstrap.MigrationLogBootstrapper;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
@@ -17,10 +17,10 @@ public class MigrationsModule implements RequestScopedModule, ApplicationScopedM
 
     public Module addPerRequestObjects(Container container) {
         container.
-                add(MigrationHistory.class, MigrationHistoryFromRecords.class).
-                add(Migrator.class, HistoryCheckingMigrator.class).
-                decorate(Migrator.class, LockMigrationsRecord.class).
-                decorate(Migrator.class, EnsureMigrationHistoryRecordIsDefined.class).
+                add(MigrationLog.class, MigrationLogFromRecords.class).
+                add(Migrator.class, MigrationLogCheckingMigrator.class).
+                decorate(Migrator.class, LockMigrationLogRecord.class).
+                decorate(Migrator.class, MigrationLogBootstrapper.class).
                 addActivator(SqlExecutor.class, MigrationUserSqlExecutorActivator.class).
                 add(Migrations.class, PropIdleMigrations.class);
         return this;

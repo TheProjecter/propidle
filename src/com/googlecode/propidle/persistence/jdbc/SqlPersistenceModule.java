@@ -25,7 +25,6 @@ public class SqlPersistenceModule implements PersistenceModule, RequestScopedMod
     }
 
     public Module addPerRequestObjects(Container container) {
-        container.add(ConnectionDetails.class);
         container.addActivator(Connection.class, ConnectionActivator.class);
         container.add(SqlPersistence.class);
         container.addActivator(Transaction.class, container.getActivator(SqlPersistence.class));
