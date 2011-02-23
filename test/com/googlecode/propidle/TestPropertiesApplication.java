@@ -21,5 +21,4 @@ public class TestPropertiesApplication extends PropertiesApplication {
                 new RAMDirectory(),
                 persistenceModules(properties("persistence=in_memory")).join(extraModules));
     }
-
 }

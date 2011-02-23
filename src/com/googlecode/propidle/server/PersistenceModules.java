@@ -2,6 +2,7 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.PersistenceMechanism;
 import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
+import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
 import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
 import com.googlecode.propidle.persistence.jdbc.hsql.HsqlModule;
 import com.googlecode.propidle.persistence.jdbc.oracle.OracleModule;
@@ -19,9 +20,9 @@ public class PersistenceModules {
         PersistenceMechanism persistenceMechanism = PersistenceMechanism.fromProperties(properties);
         switch (persistenceMechanism) {
             case HSQL:
-                return sqlModules(connectionDetails(properties), new HsqlModule());
+                return sqlModules(runtimeConnection(properties), new HsqlModule());
             case ORACLE:
-                return sqlModules(connectionDetails(properties), new OracleModule());
+                return sqlModules(runtimeConnection(properties), new OracleModule());
             case IN_MEMORY:
                 return sequence(new InMemoryPersistenceModule()).safeCast(Module.class);
             default:
@@ -47,15 +48,15 @@ public class PersistenceModules {
                 join(sequence(modules));
     }
 
-    private static ConnectionDetails connectionDetails(Properties properties) {
-        return ConnectionDetails.connectionDetails(getOrFail(properties, Server.JDBC_URL),
-                                                   getOrFail(properties, Server.JDBC_USER),
-                                                   getOrFail(properties, Server.JDBC_PASSWORD));
+    private static ConnectionDetails runtimeConnection(Properties properties) {
+        return connectionDetails(getOrFail(properties, Server.JDBC_URL),
+                                 getOrFail(properties, Server.JDBC_USER),
+                                 getOrFail(properties, Server.JDBC_PASSWORD));
     }
 
     private static ConnectionDetails migrationConnectionDetails(Properties properties) {
-        return ConnectionDetails.connectionDetails(getOrFail(properties, Server.JDBC_URL),
-                                                   getOrFail(properties, Server.MIGRATION_JDBC_USER),
-                                                   getOrFail(properties, Server.MIGRATION_JDBC_PASSWORD));
+        return connectionDetails(getOrFail(properties, Server.JDBC_URL),
+                                 getOrFail(properties, Server.MIGRATION_JDBC_USER),
+                                 getOrFail(properties, Server.MIGRATION_JDBC_PASSWORD));
     }
 }
