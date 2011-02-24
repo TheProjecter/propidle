@@ -42,14 +42,6 @@ public class Callables {
         };
     }
 
-    public static <T> Callable1<T, T> chain(final Callable1<T, T>... callables) {
-        return new Callable1<T, T>() {
-            public T call(T t) throws Exception {
-                return sequence(callables).fold(t, Callables.<T>chain());
-            }
-        };
-    }
-
     public static <T> Callable2<T, Callable1<T, T>, T> chain(Class<T> aClass) {
         return chain();
     }
