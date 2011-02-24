@@ -46,7 +46,7 @@ public class DiffResource {
     }
 
     @GET
-    public Model get(@QueryParam("left") Either<String, Url> leftUrl, @QueryParam("right") Either<String, Url> rightUrl) throws Throwable {
+    public Model get(@QueryParam("left") Either<String, Url> leftUrl, @QueryParam("right") Either<String, Url> rightUrl) {
         Either<String, Properties> leftResult = tryToGetProperties(leftUrl);
         Either<String, Properties> rightResult = tryToGetProperties(rightUrl);
 

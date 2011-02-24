@@ -1,6 +1,5 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.propidle.persistence.PersistenceModule;
 import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.utterlyidle.RestApplication;
 import com.googlecode.utterlyidle.modules.Module;
@@ -8,8 +7,8 @@ import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.Directory;
 
-import java.util.concurrent.Callable;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
 public class PropertiesApplication extends RestApplication {
     public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) {

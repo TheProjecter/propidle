@@ -9,7 +9,7 @@ public class AuthenticationException extends Exception {
     private HumanReadable message;
 
     public AuthenticationException(Username username) {
-        this(username, (Throwable) null);
+        this(username, null);
     }
 
     public AuthenticationException(Username username, Throwable cause) {
