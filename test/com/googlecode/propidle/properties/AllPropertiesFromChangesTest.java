@@ -32,12 +32,12 @@ public class AllPropertiesFromChangesTest {
     private static final PropertiesPath PATH = propertiesPath(UUID.randomUUID().toString());
     private AllChanges changes;
     private HighestRevisionNumbers highestRevisionNumbers;
-    private Records records;
 
     @Before
     public void createRepository() throws Exception {
         highestRevisionNumbers = mock(HighestRevisionNumbers.class);
-        records = testRecordsWithAllMigrationsRun();
+
+        Records records=testRecordsWithAllMigrationsRun();
         changes = new AllChangesFromRecords(records);
         repository = new AllPropertiesFromChanges(changes, new PropertyDiffTool(), highestRevisionNumbers);
         givenRevisionIs(0);
