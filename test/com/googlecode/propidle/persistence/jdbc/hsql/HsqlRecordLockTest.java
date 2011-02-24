@@ -43,22 +43,19 @@ public class HsqlRecordLockTest {
 
     @Test
     public void shouldStayLockedUntilReleased() throws SQLException, InterruptedException {
-        tryTestWithWaitTimeOf(200);
-    }
-
-    private void tryTestWithWaitTimeOf(final int millisToWaitForLock) throws InterruptedException, SQLException {
+        int millisToWaitForLock = 200;
         assertThat("FIRST connection should be able to get lock",
                    canGetLock(firstConnection, millisToWaitForLock),
                    is(true));
 
         assertThat("SECOND connection should NOT be able to get lock until FIRST connection is closed",
-                   canGetLock(secondConnection, millisToWaitForLock),
+                   canGetLock(secondConnection, 200),
                    is(false));
 
         firstConnection.close();
 
         assertThat("SECOND connection should be able to get lock after FIRST connection is closed",
-                   canGetLock(secondConnection, millisToWaitForLock),
+                   canGetLock(secondConnection, 200),
                    is(true));
     }
 
