@@ -6,8 +6,6 @@ import com.googlecode.utterlyidle.Response;
 
 import java.util.concurrent.Callable;
 
-import static acceptance.Values.with;
-
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 

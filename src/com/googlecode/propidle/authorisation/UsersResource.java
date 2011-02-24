@@ -66,8 +66,8 @@ public class UsersResource {
             @FormParam("password") Option<Password> password,
             @FormParam("addToGroup") String group,
             FormParameters form) {
-        ensureUserExists(username, password);
-        groupMemberships.add(username, sequence(form.getValues("group")).map(asGroupId()));
+        User user = ensureUserExists(username, password);
+        groupMemberships.add(user.username(), sequence(form.getValues("group")).map(asGroupId()));
         return redirect(resource(UsersResource.class).get(username));
     }
 

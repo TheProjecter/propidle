@@ -1,6 +1,5 @@
 package acceptance.steps.givens;
 
-import acceptance.Values;
 import com.googlecode.propidle.authorisation.users.Users;
 import com.googlecode.propidle.authorisation.users.User;
 import com.googlecode.propidle.authorisation.users.Username;

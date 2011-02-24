@@ -5,7 +5,6 @@ import com.googlecode.propidle.aliases.Aliases;
 import com.googlecode.propidle.aliases.AliasPath;
 import com.googlecode.propidle.aliases.AliasDestination;
 import static com.googlecode.propidle.aliases.Alias.alias;
-import acceptance.Values;
 
 import java.util.concurrent.Callable;
 
@@ -16,8 +15,6 @@ public class AliasExists implements Callable<Alias> {
 
     public AliasExists(Aliases aliases) {
         this.aliases = aliases;
-        this.from = from;
-        this.to = to;
     }
 
     public AliasExists from(AliasPath from) {

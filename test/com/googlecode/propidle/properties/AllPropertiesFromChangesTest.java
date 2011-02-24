@@ -34,7 +34,7 @@ public class AllPropertiesFromChangesTest {
     private HighestRevisionNumbers highestRevisionNumbers;
 
     @Before
-    public void createRepository() throws Exception {
+    public void createRepository() {
         highestRevisionNumbers = mock(HighestRevisionNumbers.class);
 
         Records records=testRecordsWithAllMigrationsRun();
