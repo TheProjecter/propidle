@@ -32,9 +32,6 @@ public class ConnectionDetails {
     }
 
     public Connection openConnection() throws Exception {
-        if (url().startsWith("jdbc:oracle:thin")) {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-        }
         return DriverManager.getConnection(url(), user(), password());
     }
 }

@@ -1,6 +1,5 @@
 mvn:org.hamcrest:hamcrest-core:jar:1.2
 mvn:org.hamcrest:hamcrest-library:jar:1.2
-mvn:org.hsqldb:hsqldb:jar:2.0.0
 mvn:org.jdom:jdom:jar:1.1
 mvn:jaxen:jaxen:jar:1.1.1
 mvn:junit:junit-dep:jar:4.8.2
