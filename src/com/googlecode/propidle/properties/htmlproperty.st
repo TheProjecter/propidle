@@ -1,0 +1,1 @@
+$it.name$=$it.value$$\r$

@@ -1,0 +1,1 @@
+<li><a href="$it.url$"><img src="/static/$it.pathType$.png" style="margin-right:10px"/>$it.filename$</a></li>
