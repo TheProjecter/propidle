@@ -2,11 +2,12 @@
   <library name="runtime">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/lib/runtime" />
-      <root url="file://$PROJECT_DIR$/lib/runtime-optional" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-232-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/runtime/yadic-122-sources.jar!/" />
+    </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/runtime" recursive="false" />
-    <jarDirectory url="file://$PROJECT_DIR$/lib/runtime-optional" recursive="false" />
   </library>
 </component>
