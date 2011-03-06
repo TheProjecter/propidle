@@ -2,17 +2,18 @@ package com.googlecode.propidle.util.reflection;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
-import java.io.IOException;
 import java.io.File;
-import static java.lang.String.format;
+import java.io.IOException;
 import java.net.URL;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.security.CodeSource;
+
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.lang.String.format;
 
 public class CodeSources {
     public static Iterable<URL> resourcesInCodeSource(Class type) {
@@ -29,12 +30,12 @@ public class CodeSources {
     }
 
     private static Iterable<URL> resourcesOnDisk(String basePath, Class theClass) {
-        String pathToClassFromCodeSource = theClass.getCanonicalName().replaceAll("\\.","/");
+        String pathToClassFromCodeSource = theClass.getCanonicalName().replaceAll("\\.", "/");
         String pathToCodeSource = basePath + pathToClassFromCodeSource;
 
         return sequence(new File(pathToCodeSource).getParentFile().listFiles()).map(new Callable1<File, URL>() {
             public URL call(File file) throws Exception {
-                return file.toURL();
+                return file.toURI().toURL();
             }
         });
     }
