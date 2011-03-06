@@ -8,7 +8,6 @@ import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.sitemesh.StringTemplateDecorators;
 import com.googlecode.utterlyidle.sitemesh.TemplateName;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import javax.ws.rs.core.HttpHeaders;
 
