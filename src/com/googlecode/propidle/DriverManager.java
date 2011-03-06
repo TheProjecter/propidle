@@ -17,18 +17,10 @@ public class DriverManager {
 
     @SuppressWarnings("unchecked")
     public static Connection getConnection(String url, String username, String password) throws Exception {
-        driverWakerUppers.filter(matches(url)).map(second(Runnable.class)).forEach(run());
+        driverWakerUppers.filter(matches(url)).map(second(Runnable.class)).forEach(Runnables.run());
         return java.sql.DriverManager.getConnection(url,
                                                     username,
                                                     password);
-    }
-
-    public static Runnable1<Runnable> run() {
-        return new Runnable1<Runnable>() {
-            public void run(Runnable runnable) {
-                runnable.run();
-            }
-        };
     }
 
     private static Predicate<? super Pair<Predicate<String>, Runnable>> matches(final String url) {

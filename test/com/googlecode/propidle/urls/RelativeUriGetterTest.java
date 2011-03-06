@@ -9,6 +9,7 @@ import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.URI;
 
 import static com.googlecode.propidle.requesthandlers.StubHandler.stubHandler;
@@ -99,6 +100,10 @@ public class RelativeUriGetterTest {
             }
 
             public ResponseHandlers responseHandlers() {
+                throw new UnsupportedOperationException();
+            }
+
+            public void close() throws IOException {
                 throw new UnsupportedOperationException();
             }
         };

@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+
 import static java.lang.String.format;
 
 import static com.googlecode.totallylazy.Pair.pair;
@@ -27,7 +28,7 @@ public class Properties {
         return properties;
     }
 
-    public static java.util.Properties properties(TinyType<String,?> text) {
+    public static java.util.Properties properties(TinyType<String, ?> text) {
         return properties(text.value());
     }
 
@@ -62,9 +63,9 @@ public class Properties {
         return sequence(properties.entrySet()).map(toPair());
     }
 
-    private static Callable1<? super java.util.Properties, Iterable<? extends Map.Entry<Object, Object>>> entrySets() {
-        return new Callable1<java.util.Properties, Iterable<? extends Map.Entry<Object, Object>>>() {
-            public Iterable<? extends Map.Entry<Object, Object>> call(java.util.Properties properties) throws Exception {
+    private static Callable1<? super java.util.Properties, Iterable<Map.Entry<Object, Object>>> entrySets() {
+        return new Callable1<java.util.Properties, Iterable<Map.Entry<Object, Object>>>() {
+            public Iterable<Map.Entry<Object, Object>> call(java.util.Properties properties) throws Exception {
                 return properties.entrySet();
             }
         };
@@ -130,7 +131,7 @@ public class Properties {
     }
 
     public static String getOrFail(java.util.Properties properties, String name) {
-        if(!properties.containsKey(name)){
+        if (!properties.containsKey(name)) {
             throw new RuntimeException(format("Expected property '%s' to be defined", name));
         }
         return properties.getProperty(name);

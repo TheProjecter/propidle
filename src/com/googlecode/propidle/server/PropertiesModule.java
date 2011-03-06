@@ -115,7 +115,6 @@ public class PropertiesModule extends AbstractModule {
         container.decorate(HttpHandler.class, TransactionDecorator.class);
         container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
         container.decorate(HttpHandler.class, SiteMeshHandler.class);
-        container.decorate(HttpHandler.class, CloseContainer.class);
 
         container.add(Decorators.class, DecorateHtml.class);
 

@@ -1,9 +1,7 @@
 package com.googlecode.propidle.persistence.jdbc;
 
 import com.googlecode.propidle.persistence.PersistenceModule;
-import com.googlecode.propidle.persistence.RecordLock;
 import com.googlecode.propidle.persistence.Transaction;
-import com.googlecode.propidle.persistence.jdbc.hsql.HsqlRecordLock;
 import com.googlecode.totallylazy.records.Records;
 import com.googlecode.totallylazy.records.sql.SqlRecords;
 import com.googlecode.utterlyidle.HttpHandler;
@@ -13,7 +11,6 @@ import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.yadic.Container;
 
 import java.sql.Connection;
-import java.util.Properties;
 
 public class SqlPersistenceModule implements PersistenceModule, RequestScopedModule, ApplicationScopedModule {
     private final ConnectionDetails connectionDetails;
@@ -29,14 +26,9 @@ public class SqlPersistenceModule implements PersistenceModule, RequestScopedMod
 
     public Module addPerRequestObjects(Container container) {
         container.addActivator(Connection.class, ConnectionActivator.class);
-        container.add(SqlPersistence.class);
-        container.addActivator(Transaction.class, container.getActivator(SqlPersistence.class));
-        container.addActivator(ConnectionProvider.class, container.getActivator(SqlPersistence.class));
-        container.addActivator(SqlRecords.class, SqlRecordsActivator.class);
+        container.add(Transaction.class, SqlPersistence.class);
+        container.add(SqlRecords.class);
         container.addActivator(Records.class, container.getActivator(SqlRecords.class));
-        if(container.contains(HttpHandler.class)){
-            container.decorate(HttpHandler.class, CloseConnectionDecorator.class);
-        }
         return this;
     }
 }

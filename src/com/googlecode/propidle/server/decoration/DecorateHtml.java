@@ -3,10 +3,12 @@ package com.googlecode.propidle.server.decoration;
 import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
+import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.sitemesh.StringTemplateDecorators;
 import com.googlecode.utterlyidle.sitemesh.TemplateName;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -15,8 +17,8 @@ import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.sitemesh.StaticDecoratorRule.staticRule;
 
 public class DecorateHtml extends StringTemplateDecorators {
-    public DecorateHtml() {
-        super(url(DecorateHtml.class.getResource("decorator.st")).parent());
+    public DecorateHtml(BasePath basePath) {
+        super(url(DecorateHtml.class.getResource("decorator.st")).parent(), basePath);
         add(staticRule(and(acceptsHtml(), responseIs2xx()), TemplateName.templateName("decorator")));
     }
 

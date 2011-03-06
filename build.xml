@@ -35,6 +35,18 @@
         <path path="${test.jar.path}"/>
     </path>
 
+    <target name="update">
+        <!--<install version="20"/>-->
+        <parallel>
+            <update dependencies="build/build.dependencies"
+                    directory="${build.dependencies.dir}"/>
+            <update dependencies="build/runtime.dependencies"
+                    directory="${runtime.dependencies.dir}"/>
+            <update dependencies="build/optional.dependencies"
+                    directory="${optional.dependencies.dir}"/>
+        </parallel>
+    </target>
+
     <target name="clean" description="cleanup all">
         <delete dir="${artifacts}"/>
     </target>
@@ -48,19 +60,6 @@
     <target name="test">
         <test jar="${test.jar.path}" classpathref="all.jars" reports="${reports}"/>
     </target>
-
-    <target name="update">
-        <install version="20"/>
-        <parallel>
-            <update dependencies="build/build.dependencies"
-                    directory="${build.dependencies.dir}"/>
-            <update dependencies="build/runtime.dependencies"
-                    directory="${runtime.dependencies.dir}"/>
-            <update dependencies="build/optional.dependencies"
-                    directory="${optional.dependencies.dir}"/>
-        </parallel>
-    </target>
-
 
     <target name="package">
         <mkdir dir="${artifacts}"/>
@@ -78,7 +77,7 @@
                    value="com/googlecode/${ant.project.name}/${ant.project.name}/${release.version}/"/>
             <entry key="release.files" value="${release.jar},${release.pom},${release.src}"/>
             <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
-            <entry key="${release.jar}.labels" value="Featured"/>
+            <entry key="${release.jar}.labels" value="Jar"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
             <entry key="${release.pom}.labels" value="POM"/>
             <entry key="${release.src}.description" value="Source file build:${build.number}"/>
@@ -92,7 +91,7 @@
         </copy>
     </target>
 
-    <target name="build" depends="clean, update, compile, test, package" description="build all"/>
+    <target name="build" depends="update, clean, compile, test, package" description="build all"/>
 
     <target name="local-install" depends="build" description="Install in local mvn repo">
         <exec executable="mvn">

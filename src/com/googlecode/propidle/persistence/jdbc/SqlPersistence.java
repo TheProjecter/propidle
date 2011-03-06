@@ -6,7 +6,7 @@ import com.googlecode.propidle.persistence.Transaction;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class SqlPersistence implements Transaction, ConnectionProvider{
+public class SqlPersistence implements Transaction{
     private final Connection connection;
 
     public SqlPersistence(Connection connection) {
@@ -17,10 +17,6 @@ public class SqlPersistence implements Transaction, ConnectionProvider{
         } catch (SQLException e) {
             throw new PersistenceException("Could not begin transaction", e);
         }
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public void commit() {

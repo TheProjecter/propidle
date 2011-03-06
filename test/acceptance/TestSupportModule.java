@@ -50,7 +50,7 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
         container.add(RequestIsMade.class);
 
 
-        container.remove(BasePath.class);
+//        container.remove(BasePath.class);
         container.addInstance(BasePath.class, basePath("/"));
         return this;
     }

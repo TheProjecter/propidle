@@ -1,12 +1,14 @@
 package com.googlecode.propidle.server;
 
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Runnable1;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Strings;
+
+import static com.googlecode.totallylazy.Runnables.write;
 import static com.googlecode.utterlyidle.Status.OK;
 import com.googlecode.utterlyidle.io.Url;
 import static com.googlecode.utterlyidle.io.Url.url;
-import static com.googlecode.utterlyidle.io.Url.writeBytes;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.After;
@@ -34,7 +36,7 @@ public class ServerTest {
     public void shouldPassSmokeTest() throws Exception {
         Url propertiesUrl = url("http://localhost:8000/properties/test");
 
-        Pair<Integer, String> post = propertiesUrl.post(APPLICATION_FORM_URLENCODED, writeBytes("properties=test:hello".getBytes()));
+        Pair<Integer, String> post = propertiesUrl.post(APPLICATION_FORM_URLENCODED, write("properties=test:hello".getBytes()));
         assertThat(post.first(), is(OK.code()));
 
         ResponseAsString getResponse = new ResponseAsString();
@@ -44,11 +46,12 @@ public class ServerTest {
         assertThat(getResponse.value(), is("# /properties/test?revision=0\ntest=hello\n"));
     }
 
-    public static class ResponseAsString implements Runnable1<InputStream> {
+    public static class ResponseAsString implements Callable1<InputStream, Void> {
         private String value;
 
-        public void run(InputStream inputStream) {
+        public Void call(InputStream inputStream) {
             value = Strings.toString(inputStream);
+            return Runnables.VOID;
         }
 
         public String value() {

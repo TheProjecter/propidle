@@ -15,6 +15,8 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
+
+import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.io.Url;
 import static com.googlecode.utterlyidle.io.Url.url;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
@@ -84,10 +86,9 @@ public class Server {
         server.stop();
     }
 
-    private static void startServer(int port, PropertiesApplication application) throws IOException {
+    private static void startServer(int port, PropertiesApplication application) throws Exception {
         long start = nanoTime();
-        server = new RestServer(
-                port,
+        server = new RestServer(port, BasePath.basePath("/"),
                 application);
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
         System.out.println(format("Running on port %s", port));
