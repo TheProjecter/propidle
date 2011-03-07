@@ -16,9 +16,7 @@ public class ModelTemplateRenderer implements Renderer<Model> {
     }
 
     public String render(final Model model) {
-//        UrlStringTemplateGroup sharedGroup = new UrlStringTemplateGroup(getUrlDirectoryContaining("input.st", ModelTemplateRenderer.class));
-        UrlStringTemplateGroup templateGroup = new UrlStringTemplateGroup(getUrlDirectoryContaining(templateName + ".st", resource));
-//        templateGroup.setSuperGroup(sharedGroup);f
+        final UrlStringTemplateGroup templateGroup = new UrlStringTemplateGroup(getUrlDirectoryContaining(templateName + ".st", resource));
         StringTemplate template = templateGroup.getInstanceOf(templateName, model);
         return template.toString();
     }
@@ -30,5 +28,4 @@ public class ModelTemplateRenderer implements Renderer<Model> {
             throw e;
         }
     }
-
 }

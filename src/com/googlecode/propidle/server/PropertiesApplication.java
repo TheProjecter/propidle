@@ -1,6 +1,7 @@
 package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.WrapCallableInTransaction;
+import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.utterlyidle.RestApplication;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
@@ -13,6 +14,7 @@ import java.util.concurrent.Callable;
 public class PropertiesApplication extends RestApplication {
     public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) {
         super();
+        add(new StatusModule());
         add(new PropertiesModule(propertyLoader, directory));
         for (Module module : modules) {
             add(module);
