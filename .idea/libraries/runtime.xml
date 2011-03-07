@@ -5,8 +5,12 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+<<<<<<< local
+      <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-224-sources.jar!/" />
+=======
       <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-232-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/runtime/yadic-122-sources.jar!/" />
+>>>>>>> other
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/runtime" recursive="false" />
   </library>

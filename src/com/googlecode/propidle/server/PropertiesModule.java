@@ -1,46 +1,48 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.propidle.properties.AllPropertiesFromChanges;
-import com.googlecode.propidle.diff.PropertyDiffTool;
 import com.googlecode.propidle.aliases.Aliases;
 import com.googlecode.propidle.aliases.AliasesFromRecords;
 import com.googlecode.propidle.aliases.AliasesResource;
-import com.googlecode.propidle.authorisation.users.*;
-import com.googlecode.propidle.indexing.*;
-import com.googlecode.propidle.search.FileNameSearcher;
-import com.googlecode.propidle.search.LuceneFileNameSearcher;
-import com.googlecode.propidle.search.LucenePropertiesSearcher;
-import com.googlecode.propidle.search.PropertiesSearcher;
-import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
-import com.googlecode.propidle.compositeproperties.CompositePropertiesResource;
-import com.googlecode.propidle.server.decoration.DecorateHtml;
-import com.googlecode.propidle.diff.DiffResource;
-import com.googlecode.propidle.filenames.FileNamesResource;
-import com.googlecode.propidle.properties.AllProperties;
-import com.googlecode.propidle.properties.*;
-import com.googlecode.propidle.root.RootResource;
-import com.googlecode.propidle.search.LuceneIndexWriterTransaction;
-import com.googlecode.propidle.search.SearchResource;
-import com.googlecode.propidle.authentication.SessionStarter;
-import com.googlecode.propidle.authentication.Sessions;
 import com.googlecode.propidle.authentication.*;
-import com.googlecode.propidle.authentication.SessionsFromRecords;
+import com.googlecode.propidle.authorisation.GroupsResource;
+import com.googlecode.propidle.authorisation.UsersResource;
+import com.googlecode.propidle.authorisation.groups.GroupMemberships;
+import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
+import com.googlecode.propidle.authorisation.groups.Groups;
+import com.googlecode.propidle.authorisation.groups.GroupsFromRecords;
+import com.googlecode.propidle.authorisation.permissions.GroupPermissions;
+import com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords;
+import com.googlecode.propidle.authorisation.users.*;
+import com.googlecode.propidle.client.DynamicProperties;
+import com.googlecode.propidle.client.DynamicPropertiesActivator;
+import com.googlecode.propidle.client.SnapshotPropertiesActivator;
+import com.googlecode.propidle.compositeproperties.CompositePropertiesResource;
+import com.googlecode.propidle.diff.DiffResource;
+import com.googlecode.propidle.diff.PropertyDiffTool;
+import com.googlecode.propidle.filenames.FileNamesResource;
+import com.googlecode.propidle.indexing.*;
+import com.googlecode.propidle.properties.AllProperties;
+import com.googlecode.propidle.properties.AllPropertiesFromChanges;
+import com.googlecode.propidle.properties.PropertiesResource;
+import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
+import com.googlecode.propidle.root.RootResource;
+import com.googlecode.propidle.search.*;
+import com.googlecode.propidle.server.decoration.DecorateHtml;
 import com.googlecode.propidle.server.staticcontent.FavIconResource;
 import com.googlecode.propidle.server.staticcontent.StaticContentResource;
-import com.googlecode.propidle.authorisation.UsersResource;
-import com.googlecode.propidle.authorisation.GroupsResource;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.propidle.urls.UrlResolver;
+import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
-import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
+import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
 import com.googlecode.propidle.versioncontrol.revisions.*;
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Resources;
@@ -52,34 +54,25 @@ import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.utterlyidle.sitemesh.Decorators;
 import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
 import com.googlecode.yadic.Container;
-import com.googlecode.yadic.resolvers.OptionResolver;
 import com.googlecode.yadic.generics.TypeFor;
+import com.googlecode.yadic.resolvers.OptionResolver;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
+import java.util.Properties;
+import java.util.concurrent.Callable;
+
 import static com.googlecode.propidle.authorisation.users.PasswordSalt.passwordSalt;
-import com.googlecode.propidle.authorisation.groups.GroupsFromRecords;
-import com.googlecode.propidle.authorisation.groups.Groups;
-import com.googlecode.propidle.authorisation.groups.GroupMemberships;
-import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
-import com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords;
-import com.googlecode.propidle.authorisation.permissions.GroupPermissions;
-import com.googlecode.propidle.client.DynamicProperties;
-import com.googlecode.propidle.client.DynamicPropertiesActivator;
-import com.googlecode.propidle.client.SnapshotPropertiesActivator;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
-
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import java.util.Properties;
-import java.util.concurrent.Callable;
 
 @SuppressWarnings("unchecked")
 public class PropertiesModule extends AbstractModule {
@@ -190,7 +183,7 @@ public class PropertiesModule extends AbstractModule {
         return this;
     }
 
-    private LogicalPredicate<Model> nameIs(final String name) {
+    public static LogicalPredicate<Model> nameIs(final String name) {
         Predicate<Model> nameMatcher = new Predicate<Model>() {
             public boolean matches(Model model) {
                 return model != null && model.containsKey(PropertiesModule.MODEL_NAME) && name.equals(model.first(PropertiesModule.MODEL_NAME));

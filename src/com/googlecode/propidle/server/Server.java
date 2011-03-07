@@ -6,6 +6,8 @@ import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import static com.googlecode.propidle.util.Callables.chain;
+
+import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Callable1;
