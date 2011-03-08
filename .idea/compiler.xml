@@ -1,32 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< local
-  <component name="BuildJarProjectSettings">
-    <option name="BUILD_JARS_ON_MAKE" value="false" />
-  </component>
-=======
->>>>>>> other
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
-<<<<<<< local
-    <resourceExtensions>
-      <entry name=".+\.(properties|xml|html|dtd|tld)" />
-      <entry name=".+\.(gif|png|jpeg|jpg)" />
-    </resourceExtensions>
-=======
     <resourceExtensions />
->>>>>>> other
     <wildcardResourcePatterns>
       <entry name="!*.java" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
-<<<<<<< local
-  </component>
-  <component name="EclipseCompilerSettings">
-    <option name="GENERATE_NO_WARNINGS" value="true" />
-    <option name="DEPRECATION" value="false" />
-=======
->>>>>>> other
   </component>
 </project>
 
