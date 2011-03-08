@@ -7,7 +7,7 @@
     <h2>Status Report</h2>
         $checks:{check |
             <table>
-                <tr colspan="2">
+                <tr colspan="2" align="left">
                     <th>$check.name$</th>
                 </tr>
                 $check.properties:{property |
@@ -17,6 +17,7 @@
                     </tr>
                 }$
             </table>
+            <hr/>
         }$
 </div>
 </body>

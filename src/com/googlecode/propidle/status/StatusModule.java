@@ -20,6 +20,7 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
 
     public Module addPerRequestObjects(final Container container) {
         container.add(StatusChecks.class);
+        container.get(StatusChecks.class).add(DisplayBuildNumber.class);
         container.get(StatusChecks.class).add(LuceneDirectoryCheck.class);
         return this;
     }
