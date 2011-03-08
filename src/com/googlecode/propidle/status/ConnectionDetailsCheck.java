@@ -35,7 +35,7 @@ public class ConnectionDetailsCheck implements StatusCheck {
         if (connection.isEmpty()) {
             return false;
         }
-        reflectiveClose().call(connection.get());
+        connection.get().close();
         return true;
     }
 
