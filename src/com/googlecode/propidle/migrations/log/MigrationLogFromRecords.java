@@ -39,6 +39,10 @@ public class MigrationLogFromRecords implements MigrationLog {
         return sequence(events).realise();
     }
 
+    public Iterable<MigrationLogItem> list() {
+        return records.get(MIGRATION_LOG).map(deserialise());
+    }
+
     private Callable1<? super MigrationLogItem, Record> serialise() {
         return new Callable1<MigrationLogItem, Record>() {
             public Record call(MigrationLogItem auditItem) throws Exception {

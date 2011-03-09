@@ -4,6 +4,7 @@ import com.googlecode.propidle.persistence.RecordLock;
 import com.googlecode.propidle.status.DatabaseVersionCheck;
 import com.googlecode.propidle.status.StatusChecks;
 import com.googlecode.propidle.status.ConnectionDetailsCheck;
+import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
