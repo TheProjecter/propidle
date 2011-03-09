@@ -2,9 +2,13 @@ package com.googlecode.propidle.urls;
 
 import com.googlecode.propidle.requesthandlers.StubHandler;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.utterlyidle.*;
-import com.googlecode.utterlyidle.handlers.ResponseHandlers;
+import com.googlecode.utterlyidle.Application;
+import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.HttpHandler;
+import com.googlecode.utterlyidle.Request;
+import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
 import org.junit.Test;
@@ -24,7 +28,10 @@ import static com.googlecode.utterlyidle.io.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 public class RelativeUriGetterTest {
     private static final BasePath BASE_PATH = basePath("/applicationRoot");
@@ -87,19 +94,15 @@ public class RelativeUriGetterTest {
                 throw new UnsupportedOperationException();
             }
 
+            public <T> T usingRequestScope(Callable1<Container, T> callable1) {
+                throw new UnsupportedOperationException();
+            }
+
             public Container createRequestScope() {
                 throw new UnsupportedOperationException();
             }
 
             public Application add(Module module) {
-                throw new UnsupportedOperationException();
-            }
-
-            public Resources resources() {
-                throw new UnsupportedOperationException();
-            }
-
-            public ResponseHandlers responseHandlers() {
                 throw new UnsupportedOperationException();
             }
 

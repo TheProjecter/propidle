@@ -2,6 +2,7 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.status.StatusModule;
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.RestApplication;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
@@ -22,8 +23,12 @@ public class PropertiesApplication extends RestApplication {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T inTransaction(Class<? extends Callable<T>> step) throws Exception {
-        return inTransaction(createRequestScope(), step);
+    public <T> T inTransaction(final Class<? extends Callable<T>> step) throws Exception {
+        return usingRequestScope(new Callable1<Container, T>() {
+            public T call(Container container) throws Exception {
+                return inTransaction(container, step);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
