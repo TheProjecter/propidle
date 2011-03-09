@@ -1,7 +1,7 @@
 package com.googlecode.propidle.persistence.jdbc.hsql;
 
+import com.googlecode.propidle.migrations.DatabaseVersionCheck;
 import com.googlecode.propidle.persistence.RecordLock;
-import com.googlecode.propidle.status.DatabaseVersionCheck;
 import com.googlecode.propidle.status.StatusChecks;
 import com.googlecode.propidle.status.ConnectionDetailsCheck;
 import com.googlecode.utterlyidle.io.Url;
