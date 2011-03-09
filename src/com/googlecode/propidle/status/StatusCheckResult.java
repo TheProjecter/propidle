@@ -28,4 +28,8 @@ public class StatusCheckResult {
     public Set<Map.Entry<String, Object>> getProperties() {
         return properties.entrySet();
     }
+
+    public Object getProperty(String name) {
+        return properties.get(name);
+    }
 }

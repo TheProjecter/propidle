@@ -69,4 +69,8 @@ public class MigrationLogFromRecords implements MigrationLog {
         records.define(MIGRATION_LOG, MIGRATION_DATE, MIGRATION_NUMBER, MIGRATION_NAME);
         return records;
     }
+
+    public static MigrationNumber databaseSchemaVersion(MigrationLogFromRecords migrationLog) {
+        return sequence(migrationLog.list()).sortBy(MigrationLogItem.getMigrationNumber()).last().number();
+    }
 }

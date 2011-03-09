@@ -2,7 +2,6 @@ package com.googlecode.propidle.status;
 
 
 import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.utterlyidle.Renderer;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import com.googlecode.utterlyidle.rendering.Model;

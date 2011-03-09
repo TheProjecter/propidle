@@ -2,7 +2,6 @@ package com.googlecode.propidle.migrations;
 
 import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import com.googlecode.propidle.server.PersistenceModules;
-import com.googlecode.propidle.server.Server;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Callable1;

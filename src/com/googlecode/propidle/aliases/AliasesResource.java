@@ -1,9 +1,5 @@
 package com.googlecode.propidle.aliases;
 
-import com.googlecode.propidle.aliases.Alias;
-import com.googlecode.propidle.aliases.AliasDestination;
-import com.googlecode.propidle.aliases.AliasPath;
-import com.googlecode.propidle.aliases.Aliases;
 import com.googlecode.propidle.server.PropertiesModule;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
