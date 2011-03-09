@@ -3,6 +3,7 @@ package com.googlecode.propidle.server;
 import static com.googlecode.propidle.MigrationsModules.migrationsModules;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 
+import com.googlecode.propidle.migrations.DatabaseVersionCheck;
 import com.googlecode.propidle.migrations.MigrationsContainer;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
 
@@ -11,22 +12,18 @@ import static com.googlecode.propidle.server.PersistenceModules.persistenceModul
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import static com.googlecode.propidle.util.Callables.chain;
 
-import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.*;
+
 import static com.googlecode.totallylazy.Callables.returns;
-import com.googlecode.totallylazy.Runnables;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.io.Url;
+
 import static com.googlecode.utterlyidle.io.Url.url;
-import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
+
 import com.googlecode.utterlyidle.modules.Module;
-import static com.googlecode.utterlyidle.modules.Modules.addPerApplicationObjects;
-import static com.googlecode.utterlyidle.modules.Modules.addPerRequestObjects;
-import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.utterlyidle.simpleframework.RestServer;
 import com.googlecode.yadic.Container;
 import org.apache.lucene.store.RAMDirectory;
@@ -34,6 +31,7 @@ import org.apache.lucene.store.RAMDirectory;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
+
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -77,10 +75,22 @@ public class Server {
 
         int port = parseInt(propertyLoader.call().getProperty(PORT));
 
-        runMigrations(properties);
-        rebuildLuceneIndexes(application);
+        Integer schemaVersion = getSchemaVersion(properties);
+        System.out.println(format("Running with database schema version %s", schemaVersion));
+        if (schemaVersion > 0) {
+            rebuildLuceneIndexes(application);
+        }
         startServer(port, application);
 
+    }
+
+    private Integer getSchemaVersion(Properties properties) throws Exception {
+        Container container = MigrationsContainer.migrationsContainer(properties);
+        Either<Throwable, Integer> schemaVersion = DatabaseVersionCheck.actualSchemaVersion(container);
+        if (schemaVersion.isRight()) {
+            return schemaVersion.right();
+        }
+        return 0;
     }
 
     public void stop() throws Exception {
@@ -89,8 +99,7 @@ public class Server {
 
     private static void startServer(int port, PropertiesApplication application) throws Exception {
         long start = nanoTime();
-        server = new RestServer(port, BasePath.basePath("/"),
-                application);
+        server = new RestServer(port, BasePath.basePath("/"), application);
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
         System.out.println(format("Running on port %s", port));
     }
@@ -100,32 +109,5 @@ public class Server {
         long start = nanoTime();
         application.inTransaction(RebuildIndex.class);
         System.out.println(format("Re-indexing finished in %sms", calculateMilliseconds(start, nanoTime())));
-    }
-
-    private static Iterable<MigrationLogItem> runMigrations(Properties properties) throws Exception {
-        System.out.println("Running migrations...");
-        long start = nanoTime();
-        Container container = migrationsContainer(properties);
-
-        Sequence<MigrationLogItem> migrations;
-        try {
-            migrations = sequence(inTransaction(container, RunMigrations.class));
-        } finally {
-            container.close();
-        }
-
-        reportMigrations(migrations, calculateMilliseconds(start, nanoTime()));
-        return migrations;
-    }
-
-    private static void reportMigrations(Sequence<MigrationLogItem> migrations, double timeTaken) {
-        if (!migrations.isEmpty()) {
-            System.out.println(format("Ran migrations in %sms", timeTaken));
-            System.out.println("--------------------------------------------");
-            migrations.forEach(Runnables.<MigrationLogItem>printLine("%s"));
-            System.out.println("--------------------------------------------");
-        } else {
-            System.out.println("No migrations to run");
-        }
     }
 }

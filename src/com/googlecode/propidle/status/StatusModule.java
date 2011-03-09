@@ -1,6 +1,7 @@
 package com.googlecode.propidle.status;
 
 import com.googlecode.propidle.server.ModelTemplateRenderer;
+import com.googlecode.utterlyidle.Renderer;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
 import com.googlecode.utterlyidle.modules.Module;
@@ -12,7 +13,6 @@ import com.googlecode.yadic.Container;
 
 import static com.googlecode.propidle.server.PropertiesModule.nameIs;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
@@ -31,7 +31,15 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
     }
 
     public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(StatusResource.NAME)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class)));
+        handlers.add(where(entity(Model.class), nameIs(StatusResource.NAME)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
         return this;
+    }
+
+    private Renderer<Action> actionRenderer() {
+        return new Renderer<Action>() {
+            public String render(Action action) throws Exception {
+                return String.format("<form action=\"%s\" method=\"POST\"><input type=\"submit\" value=\"%s\"/></form>", action.url(), action.name());
+            }
+        };
     }
 }
