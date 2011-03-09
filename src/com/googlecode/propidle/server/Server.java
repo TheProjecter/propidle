@@ -2,14 +2,15 @@ package com.googlecode.propidle.server;
 
 import static com.googlecode.propidle.MigrationsModules.migrationsModules;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
+
+import com.googlecode.propidle.migrations.MigrationsContainer;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
+
+import static com.googlecode.propidle.migrations.MigrationsContainer.migrationsContainer;
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import static com.googlecode.propidle.util.Callables.chain;
 
-import com.googlecode.propidle.status.StatusModule;
-import com.googlecode.propidle.util.time.Clock;
-import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Callable1;
 import static com.googlecode.totallylazy.Callables.returns;
 import com.googlecode.totallylazy.Runnables;
@@ -28,10 +29,8 @@ import static com.googlecode.utterlyidle.modules.Modules.addPerRequestObjects;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.utterlyidle.simpleframework.RestServer;
 import com.googlecode.yadic.Container;
-import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.RAMDirectory;
 
-import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
@@ -106,9 +105,7 @@ public class Server {
     private static Iterable<MigrationLogItem> runMigrations(Properties properties) throws Exception {
         System.out.println("Running migrations...");
         long start = nanoTime();
-        Sequence<Callable1<Container, Container>> persistenceModules = PersistenceModules.forMigrations(properties).map(adaptUtterlyIdleModule());
-        Container container = migrationsModules(properties).join(persistenceModules).fold(new SimpleContainer(), chain(Container.class));
-        container.add(Clock.class, SystemClock.class);
+        Container container = migrationsContainer(properties);
 
         Sequence<MigrationLogItem> migrations;
         try {
@@ -130,19 +127,5 @@ public class Server {
         } else {
             System.out.println("No migrations to run");
         }
-    }
-
-    private static Callable1<? super Module, Callable1<Container, Container>> adaptUtterlyIdleModule() {
-        return new Callable1<Module, Callable1<Container, Container>>() {
-            public Callable1<Container, Container> call(final Module module) throws Exception {
-                return new Callable1<Container, Container>() {
-                    public Container call(Container container) throws Exception {
-                        sequence(module).safeCast(ApplicationScopedModule.class).forEach(addPerApplicationObjects(container));
-                        sequence(module).safeCast(RequestScopedModule.class).forEach(addPerRequestObjects(container));
-                        return container;
-                    }
-                };
-            }
-        };
     }
 }

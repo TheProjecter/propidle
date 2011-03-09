@@ -3,6 +3,8 @@ package com.googlecode.propidle.migrations.log;
 import com.googlecode.propidle.migrations.MigrationNumber;
 import com.googlecode.propidle.migrations.MigrationName;
 import com.googlecode.propidle.migrations.Migration;
+import com.googlecode.totallylazy.Callable1;
+
 import static com.googlecode.propidle.Dates.stripMillis;
 
 import java.util.Date;
@@ -60,5 +62,13 @@ public class MigrationLogItem {
         result = 31 * result + number.hashCode();
         result = 31 * result + name.hashCode();
         return result;
+    }
+
+    public static Callable1<MigrationLogItem, MigrationNumber> getMigrationNumber() {
+        return new Callable1<MigrationLogItem, MigrationNumber>() {
+            public MigrationNumber call(MigrationLogItem migrationLogItem) throws Exception {
+                return migrationLogItem.number();
+            }
+        };
     }
 }

@@ -7,4 +7,6 @@ public interface MigrationLog {
     Option<MigrationLogItem> get(MigrationNumber migrationNumber);
 
     Iterable<MigrationLogItem> add(Iterable<MigrationLogItem> auditItems);
+
+    Iterable<MigrationLogItem> list();
 }

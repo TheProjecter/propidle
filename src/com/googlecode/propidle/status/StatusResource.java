@@ -2,6 +2,7 @@ package com.googlecode.propidle.status;
 
 
 import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.utterlyidle.Renderer;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -32,6 +33,8 @@ public class StatusResource {
     }
 
     private Model modelOf(StatusChecks checkList) {
-        return model().add("checks", checkList.checks()).add(PropertiesModule.MODEL_NAME, NAME);
+        Iterable<StatusCheckResult> statusCheckResults = checkList.checks();
+        return model().add("checks", statusCheckResults).add(PropertiesModule.MODEL_NAME, NAME);
     }
+
 }
