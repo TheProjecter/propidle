@@ -1,0 +1,1 @@
+<tr><td/><td/><td>$it.value$</td><td><a href="$it.url$">$it.url$</a></td></tr>

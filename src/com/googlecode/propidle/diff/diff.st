@@ -1,0 +1,1 @@
+<tr class="$it.status$"><td>$it.propertyName$</td><td>$it.previous$</td><td>$it.updated$</td></tr>
