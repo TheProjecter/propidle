@@ -1,22 +1,23 @@
 package com.googlecode.propidle.migrations.log;
 
-import static com.googlecode.propidle.migrations.MigrationName.migrationName;
-import com.googlecode.propidle.migrations.MigrationNumber;
-import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
 import com.googlecode.propidle.Coercions;
+import com.googlecode.propidle.migrations.MigrationNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import com.googlecode.totallylazy.records.Keyword;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
-import static com.googlecode.totallylazy.records.MapRecord.record;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
 
-import java.util.Date;
 import java.sql.Timestamp;
+import java.util.Date;
+
+import static com.googlecode.propidle.migrations.MigrationName.migrationName;
+import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
+import static com.googlecode.totallylazy.Predicates.is;
+import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.MapRecord.record;
 
 public class MigrationLogFromRecords implements MigrationLog {
     public static final Keyword MIGRATION_LOG = keyword("migration_log");
@@ -65,12 +66,7 @@ public class MigrationLogFromRecords implements MigrationLog {
         };
     }
 
-    public static Records defineMigrationEvents(Records records) {
-        records.define(MIGRATION_LOG, MIGRATION_DATE, MIGRATION_NUMBER, MIGRATION_NAME);
-        return records;
-    }
-
-    public static MigrationNumber databaseSchemaVersion(MigrationLogFromRecords migrationLog) {
+    public static MigrationNumber databaseSchemaVersion(MigrationLog migrationLog) {
         return sequence(migrationLog.list()).sortBy(MigrationLogItem.getMigrationNumber()).last().number();
     }
 }
