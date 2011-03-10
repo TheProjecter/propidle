@@ -5,6 +5,7 @@
 <body>
 <div class="section">
     <h2>Status Report</h2>
+        <table></table>
         $checks:{check |
             <table>
                 <tr colspan="2" align="left">

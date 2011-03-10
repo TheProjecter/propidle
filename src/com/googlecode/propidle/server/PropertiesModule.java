@@ -21,7 +21,7 @@ import com.googlecode.propidle.diff.DiffResource;
 import com.googlecode.propidle.diff.PropertyDiffTool;
 import com.googlecode.propidle.filenames.FileNamesResource;
 import com.googlecode.propidle.indexing.*;
-import com.googlecode.propidle.migrations.MigrationsResource;
+import com.googlecode.propidle.migrations.MigrationResource;
 import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertiesResource;
@@ -162,7 +162,7 @@ public class PropertiesModule extends AbstractModule {
         resources.add(FavIconResource.class);
         resources.add(UsersResource.class);
         resources.add(GroupsResource.class);
-        resources.add(MigrationsResource.class);
+        resources.add(MigrationResource.class);
         return this;
     }
 
@@ -182,6 +182,7 @@ public class PropertiesModule extends AbstractModule {
         handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
         handlers.add(where(entity(Model.class), nameIs(CompositePropertiesResource.NAME)), renderer(new ModelTemplateRenderer("CompositePropertiesResource_html", CompositePropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(UsersResource.NAME)), renderer(new ModelTemplateRenderer("User_html", UsersResource.class)));
+        handlers.add(where(entity(Model.class), nameIs(MigrationResource.NAME)), renderer(new ModelTemplateRenderer("MigrationResource_html", MigrationResource.class)));
         return this;
     }
 
