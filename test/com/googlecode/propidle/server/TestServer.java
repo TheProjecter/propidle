@@ -23,12 +23,22 @@ public class TestServer extends Server {
     }
 
     public TestServer(int port) throws Exception {
-        super(propertiesFor(port), empty(Module.class));
-        Url propertiesUrl = url("http://localhost:8000/migrations");
+        this(port, true);
 
+    }
+
+    public TestServer(int port, boolean migrateDatabase) throws Exception {
+        super(propertiesFor(port), empty(Module.class));
+
+        if (migrateDatabase) {
+            migrateDatabase();
+        }
+    }
+
+    private void migrateDatabase() {
+        Url propertiesUrl = url("http://localhost:8000/migrations");
         Pair<Integer, String> callMigrationsResource = propertiesUrl.post(APPLICATION_FORM_URLENCODED, withoutRequestContent());
         assertThat(callMigrationsResource.first(), is(OK.code()));
-
     }
 
     private Callable1<OutputStream, Void> withoutRequestContent() {

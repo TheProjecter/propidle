@@ -3,13 +3,7 @@ package com.googlecode.propidle.server;
 import static com.googlecode.propidle.MigrationsModules.migrationsModules;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 
-import com.googlecode.propidle.migrations.DatabaseVersionCheck;
-import com.googlecode.propidle.migrations.MigrationsContainer;
-import com.googlecode.propidle.migrations.log.MigrationLogItem;
-
-import static com.googlecode.propidle.migrations.MigrationsContainer.migrationsContainer;
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
-import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import static com.googlecode.propidle.util.Callables.chain;
 
 import com.googlecode.totallylazy.*;
@@ -25,7 +19,6 @@ import static com.googlecode.utterlyidle.io.Url.url;
 
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.simpleframework.RestServer;
-import com.googlecode.yadic.Container;
 import org.apache.lucene.store.RAMDirectory;
 
 import static java.lang.Integer.parseInt;
@@ -75,7 +68,7 @@ public class Server {
 
         int port = parseInt(propertyLoader.call().getProperty(PORT));
 
-        Integer schemaVersion = getSchemaVersion(properties);
+        Integer schemaVersion = schemaVersion(application.inTransaction(ReportSchemaVersion.class));
         System.out.println(format("Running with database schema version %s", schemaVersion));
         if (schemaVersion > 0) {
             rebuildLuceneIndexes(application);
@@ -84,9 +77,7 @@ public class Server {
 
     }
 
-    private Integer getSchemaVersion(Properties properties) throws Exception {
-        Container container = MigrationsContainer.migrationsContainer(properties);
-        Either<Throwable, Integer> schemaVersion = DatabaseVersionCheck.actualSchemaVersion(container);
+    private Integer schemaVersion(Either<Throwable, Integer> schemaVersion) {
         if (schemaVersion.isRight()) {
             return schemaVersion.right();
         }
