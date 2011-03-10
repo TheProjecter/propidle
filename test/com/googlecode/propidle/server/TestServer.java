@@ -19,7 +19,7 @@ import java.util.Properties;
 
 public class TestServer extends Server {
     public static void main(String[] args) throws Exception {
-        new TestServer(8000);
+        new TestServer(8000, false);
     }
 
     public TestServer(int port) throws Exception {

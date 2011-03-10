@@ -2,7 +2,7 @@ package com.googlecode.propidle.persistence.jdbc;
 
 import com.googlecode.propidle.migrations.Migration;
 import com.googlecode.propidle.migrations.Migrations;
-import com.googlecode.propidle.migrations.MigrationsResource;
+import com.googlecode.propidle.migrations.MigrationResource;
 import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.propidle.status.StatusCheck;
 import com.googlecode.propidle.status.StatusCheckResult;
@@ -49,7 +49,7 @@ public class DatabaseVersionCheck implements StatusCheck {
         Object requiredVersion = result.getProperty(REQUIRED_VERSION);
         Object actualVersion = result.getProperty(ACTUAL_VERSION);
 
-        result.add(ACTION_KEY, requiredVersion == actualVersion ? "None required" : action(actionName("Migrate"), url(urlOf(resource(MigrationsResource.class).perform()))));
+        result.add(ACTION_KEY, requiredVersion == actualVersion ? "None required" : action(actionName("Migrate"), url(urlOf(resource(MigrationResource.class).perform()))));
     }
 
     private void addRequiredSchemaVersion(StatusCheckResult result) {
