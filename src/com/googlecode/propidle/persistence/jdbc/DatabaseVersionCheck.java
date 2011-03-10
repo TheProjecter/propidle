@@ -1,12 +1,12 @@
-package com.googlecode.propidle.migrations;
+package com.googlecode.propidle.persistence.jdbc;
 
-import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
+import com.googlecode.propidle.migrations.Migration;
+import com.googlecode.propidle.migrations.Migrations;
+import com.googlecode.propidle.migrations.MigrationsResource;
+import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.propidle.status.StatusCheck;
 import com.googlecode.propidle.status.StatusCheckResult;
 import com.googlecode.totallylazy.*;
-import com.googlecode.yadic.Container;
-
-import java.util.Properties;
 
 import static com.googlecode.propidle.migrations.Migration.getMigrationNumber;
 import static com.googlecode.propidle.migrations.log.MigrationLogFromRecords.databaseSchemaVersion;
@@ -22,22 +22,24 @@ import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 
 public class DatabaseVersionCheck implements StatusCheck {
-    private final Properties properties;
     public static final String ACTION_KEY = "Action";
     private static final String REQUIRED_VERSION = "Required version";
     private static final String ACTUAL_VERSION = "Actual version";
 
-    public DatabaseVersionCheck(Properties properties) {
-        this.properties = properties;
+    private final Migrations migrations;
+    private final MigrationLog migrationLog;
+
+    public DatabaseVersionCheck(Migrations migrations, MigrationLog migrationLog) {
+        this.migrations = migrations;
+        this.migrationLog = migrationLog;
     }
 
     public StatusCheckResult check() throws Exception {
-        Container container = MigrationsContainer.migrationsContainer(properties);
         StatusCheckResult result = statusCheckResult(
                 statusCheckName(DatabaseVersionCheck.class.getSimpleName()));
 
-        addRequiredSchemaVersion(container, result);
-        result.add(ACTUAL_VERSION, actualSchemaVersion(container).value());
+        addRequiredSchemaVersion(result);
+        result.add(ACTUAL_VERSION, actualSchemaVersion(migrationLog).value());
         addResult(result);
 
         return result;
@@ -50,15 +52,14 @@ public class DatabaseVersionCheck implements StatusCheck {
         result.add(ACTION_KEY, requiredVersion == actualVersion ? "None required" : action(actionName("Migrate"), url(urlOf(resource(MigrationsResource.class).perform()))));
     }
 
-    private void addRequiredSchemaVersion(Container container, StatusCheckResult result) {
-        PropIdleMigrations migrations = container.get(PropIdleMigrations.class);
+    private void addRequiredSchemaVersion(StatusCheckResult result) {
         Migration migration = sequence(migrations).sortBy(getMigrationNumber()).last();
         result.add(REQUIRED_VERSION, migration.number().value());
     }
 
-    public static Either<Throwable, Integer> actualSchemaVersion(Container container) throws Exception {
+    public static Either<Throwable, Integer> actualSchemaVersion(MigrationLog migrationLog) throws Exception {
         try {
-            return right(databaseSchemaVersion(container.get(MigrationLogFromRecords.class)).value());
+            return right(databaseSchemaVersion(migrationLog).value());
         } catch (LazyException e) {
             return left(Exceptions.getCause().call(e));
         }
