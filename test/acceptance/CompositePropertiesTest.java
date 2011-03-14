@@ -2,13 +2,14 @@ package acceptance;
 
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
-import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Test;
+
+import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static org.hamcrest.Matchers.is;
-import org.junit.Test;
 
 public class CompositePropertiesTest extends PropertiesApplicationTestCase {
     @Test

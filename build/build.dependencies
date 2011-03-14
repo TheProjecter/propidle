@@ -6,4 +6,4 @@ mvn:junit:junit-dep:jar:4.8.2
 mvn:org.mockito:mockito-all:jar:1.8.5
 mvn:pmd:pmd:jar:4.2.5
 mvn:javax.servlet:servlet-api:jar:2.5
-mvn://repo.bodar.com/com.googlecode.yatspec:yatspec:jar:89
+mvn://repo.bodar.com/com.googlecode.yatspec:yatspec:jar:97

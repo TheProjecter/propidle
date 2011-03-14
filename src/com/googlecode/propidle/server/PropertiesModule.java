@@ -192,7 +192,7 @@ public class PropertiesModule extends AbstractModule {
                 return model != null && model.containsKey(PropertiesModule.MODEL_NAME) && name.equals(model.first(PropertiesModule.MODEL_NAME));
             }
         };
-        return and(notNull(Model.class), nameMatcher);
+        return and(notNullValue(Model.class), nameMatcher);
     }
 
 }
