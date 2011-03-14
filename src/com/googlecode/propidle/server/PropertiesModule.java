@@ -166,7 +166,6 @@ public class PropertiesModule extends AbstractModule {
         return this;
     }
 
-
     @Override
     public Module addResponseHandlers(ResponseHandlers handlers) {
         handlers.add(where(entity(Model.class), nameIs(AuthenticationResource.NAME)), renderer(new ModelTemplateRenderer("AuthenticationResource_html", AuthenticationResource.class)));
@@ -192,7 +191,7 @@ public class PropertiesModule extends AbstractModule {
                 return model != null && model.containsKey(PropertiesModule.MODEL_NAME) && name.equals(model.first(PropertiesModule.MODEL_NAME));
             }
         };
-        return and(notNullValue(Model.class), nameMatcher);
+        return notNullValue(Model.class).and(nameMatcher);
     }
 
 }
