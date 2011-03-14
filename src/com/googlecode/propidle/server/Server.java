@@ -6,6 +6,7 @@ import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesA
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.util.Callables.chain;
 
+import com.googlecode.propidle.monitoring.MonitoringModule;
 import com.googlecode.totallylazy.*;
 
 import static com.googlecode.totallylazy.Callables.returns;
@@ -64,7 +65,7 @@ public class Server {
         PropertiesApplication application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
-                persistenceModules(properties).join(extraModules));
+                persistenceModules(properties).join(extraModules).add(new MonitoringModule()));
 
         int port = parseInt(propertyLoader.call().getProperty(PORT));
 
@@ -91,6 +92,9 @@ public class Server {
     private static void startServer(int port, PropertiesApplication application) throws Exception {
         long start = nanoTime();
         server = new RestServer(port, BasePath.basePath("/"), application);
+
+        application.call(RegisterCountingMBeans.class);
+
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
         System.out.println(format("Running on port %s", port));
     }

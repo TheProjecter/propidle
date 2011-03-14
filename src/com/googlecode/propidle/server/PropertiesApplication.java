@@ -23,6 +23,15 @@ public class PropertiesApplication extends RestApplication {
     }
 
     @SuppressWarnings("unchecked")
+    public <T> T call(final Class<? extends Callable<T>> operation) throws Exception {
+        return usingRequestScope(new Callable1<Container, T>() {
+            public T call(Container container) throws Exception {
+                container.add(Callable.class, operation);
+                return (T) container.get(Callable.class).call();
+            }
+        });
+    }
+    
     public <T> T inTransaction(final Class<? extends Callable<T>> step) throws Exception {
         return usingRequestScope(new Callable1<Container, T>() {
             public T call(Container container) throws Exception {
