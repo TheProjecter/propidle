@@ -1,6 +1,5 @@
 package com.googlecode.propidle.migrations;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 
 public class MigrationId {

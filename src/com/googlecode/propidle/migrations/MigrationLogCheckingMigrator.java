@@ -17,16 +17,16 @@ public class MigrationLogCheckingMigrator implements Migrator {
         this.clock = clock;
     }
 
-    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations) {
+    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations, final ModuleName moduleName) {
         Sequence<Migration> migrationsToRun = sequence(migrations).filter(notYetRun()).sortBy(Migration.getMigrationNumber());
         migrationsToRun.forEach(Runnables.<Migration>run());
-        return migrationLog.add(migrationsToRun.map(toMigrationEvent()));
+        return migrationLog.add(migrationsToRun.map(toMigrationEvent(moduleName)));
     }
 
-    private Callable1<? super Migration, MigrationLogItem> toMigrationEvent() {
+    private Callable1<? super Migration, MigrationLogItem> toMigrationEvent(final ModuleName moduleName) {
         return new Callable1<Migration, MigrationLogItem>() {
             public MigrationLogItem call(Migration migration) throws Exception {
-                return new MigrationLogItem(clock.time(), migration);
+                return new MigrationLogItem(clock.time(), migration, moduleName);
             }
         };
     }

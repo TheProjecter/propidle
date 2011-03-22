@@ -8,6 +8,8 @@ import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import com.googlecode.propidle.util.time.StoppedClock;
+
+import static com.googlecode.propidle.migrations.ModuleName.moduleName;
 import static com.googlecode.propidle.util.time.StoppedClock.stoppedClock;
 import static com.googlecode.totallylazy.Option.option;
 import com.googlecode.totallylazy.Sequence;
@@ -36,7 +38,7 @@ public class MigrationLogCheckingMigratorTest {
                 migration(migrationId(migrationNumber(3), migrationName("third  migration")), record("third", migrationsPerformed))
         );
 
-        migrator.migrate(migrations);
+        migrator.migrate(migrations, moduleName(getClass().getSimpleName()));
 
         assertThat(migrationsPerformed, hasExactly("first", "second", "third"));
     }
@@ -45,13 +47,13 @@ public class MigrationLogCheckingMigratorTest {
     public void recordsMigrationHistory() throws Exception {
         Sequence<Migration> migrationsPerformed = sequence(migration(migrationId(migrationNumber(1), migrationName("some migration")), doNothing()));
 
-        migrator.migrate(migrationsPerformed);
+        migrator.migrate(migrationsPerformed, moduleName(getClass().getSimpleName()));
 
         Migration migration = migrationsPerformed.first();
 
         assertThat(
                 migrationLog.get(migration.number()),
-                is(option(new MigrationLogItem(clock.time(), migration.number(), migration.name()))));
+                is(option(new MigrationLogItem(clock.time(),  migration.number(), migration.name(),moduleName(getClass().getSimpleName())))));
     }
 
     @Test
@@ -59,8 +61,8 @@ public class MigrationLogCheckingMigratorTest {
         List<String> migrationsPerformed = new ArrayList<String>();
         Sequence<Migration> files = sequence(migration(migrationId(migrationNumber(1), migrationName("some migration")), record("migration happened", migrationsPerformed)));
 
-        migrator.migrate(files);
-        migrator.migrate(files);
+        migrator.migrate(files, moduleName(getClass().getSimpleName()));
+        migrator.migrate(files, moduleName(getClass().getSimpleName()));
 
         assertThat(migrationsPerformed, hasExactly("migration happened"));
     }

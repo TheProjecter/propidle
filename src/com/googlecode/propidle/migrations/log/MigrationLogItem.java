@@ -3,6 +3,7 @@ package com.googlecode.propidle.migrations.log;
 import com.googlecode.propidle.migrations.MigrationNumber;
 import com.googlecode.propidle.migrations.MigrationName;
 import com.googlecode.propidle.migrations.Migration;
+import com.googlecode.propidle.migrations.ModuleName;
 import com.googlecode.totallylazy.Callable1;
 
 import static com.googlecode.propidle.Dates.stripMillis;
@@ -13,15 +14,17 @@ import static java.lang.String.format;
 public class MigrationLogItem {
     private final Date dateRun;
     private final MigrationNumber number;
+    private final ModuleName moduleName;
     private final MigrationName name;
 
-    public MigrationLogItem(Date dateRun, Migration migration) {
-        this(dateRun, migration.number(), migration.name());
+    public MigrationLogItem(Date dateRun, Migration migration, ModuleName moduleName) {
+        this(dateRun, migration.number(), migration.name(), moduleName);
     }
 
-    public MigrationLogItem(Date dateRun, MigrationNumber number, MigrationName name) {
+    public MigrationLogItem(Date dateRun, MigrationNumber number, MigrationName name, ModuleName moduleName) {
         this.dateRun = dateRun;
         this.number = number;
+        this.moduleName = moduleName;
         this.name = name;
     }
 
@@ -35,6 +38,10 @@ public class MigrationLogItem {
 
     public MigrationName name() {
         return name;
+    }
+
+    public ModuleName moduleName() {
+        return moduleName;
     }
 
     @Override

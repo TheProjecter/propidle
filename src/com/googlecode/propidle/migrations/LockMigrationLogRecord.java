@@ -14,8 +14,8 @@ public class LockMigrationLogRecord implements Migrator {
         this.recordLock = recordLock;
     }
 
-    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations) {
+    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations, final ModuleName moduleName) {
         recordLock.aquire(MIGRATION_LOG);
-        return decorated.migrate(migrations);
+        return decorated.migrate(migrations, moduleName);
     }
 }

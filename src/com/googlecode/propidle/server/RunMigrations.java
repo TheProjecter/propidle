@@ -9,13 +9,15 @@ import java.util.concurrent.Callable;
 public class RunMigrations implements Callable<Iterable<MigrationLogItem>> {
     private final Migrator migrator;
     private final Migrations migrations;
+    private final ModuleName moduleName;
 
-    public RunMigrations(Migrator migrator, Migrations migrations) {
+    public RunMigrations(Migrator migrator, Migrations migrations, ModuleName moduleName) {
         this.migrator = migrator;
         this.migrations = migrations;
+        this.moduleName = moduleName;
     }
 
     public Iterable<MigrationLogItem> call() throws Exception {
-        return migrator.migrate(migrations);
+        return migrator.migrate(migrations, moduleName);
     }
 }

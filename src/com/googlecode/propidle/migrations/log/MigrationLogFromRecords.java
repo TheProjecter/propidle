@@ -13,6 +13,7 @@ import java.util.Date;
 
 import static com.googlecode.propidle.migrations.MigrationName.migrationName;
 import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
+import static com.googlecode.propidle.migrations.ModuleName.moduleName;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -24,6 +25,7 @@ public class MigrationLogFromRecords implements MigrationLog {
     public static final Keyword<Object> MIGRATION_DATE = keyword("migration_date", Object.class);
     public static final Keyword<Number> MIGRATION_NUMBER = keyword("migration_number", Number.class);
     public static final Keyword<String> MIGRATION_NAME = keyword("migration_name", String.class);
+    public static final Keyword<String> MODULE_NAME = keyword("module_name", String.class);
 
     private final Records records;
 
@@ -50,6 +52,7 @@ public class MigrationLogFromRecords implements MigrationLog {
                 return record().
                         set(MIGRATION_DATE, new Timestamp(auditItem.dateRun().getTime())).
                         set(MIGRATION_NUMBER, auditItem.number().value()).
+                        set(MODULE_NAME, auditItem.moduleName().value()).
                         set(MIGRATION_NAME, auditItem.name().value());
             }
         };
@@ -61,7 +64,8 @@ public class MigrationLogFromRecords implements MigrationLog {
                 return new MigrationLogItem(
                         Coercions.coerce(record.get(MIGRATION_DATE), Date.class),
                         migrationNumber(record.get(MIGRATION_NUMBER)),
-                        migrationName(record.get(MIGRATION_NAME)));
+                        migrationName(record.get(MIGRATION_NAME)), moduleName(record.get(MODULE_NAME))
+                );
             }
         };
     }
