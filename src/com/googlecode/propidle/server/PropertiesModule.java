@@ -3,16 +3,6 @@ package com.googlecode.propidle.server;
 import com.googlecode.propidle.aliases.Aliases;
 import com.googlecode.propidle.aliases.AliasesFromRecords;
 import com.googlecode.propidle.aliases.AliasesResource;
-import com.googlecode.propidle.authentication.*;
-import com.googlecode.propidle.authorisation.GroupsResource;
-import com.googlecode.propidle.authorisation.UsersResource;
-import com.googlecode.propidle.authorisation.groups.GroupMemberships;
-import com.googlecode.propidle.authorisation.groups.GroupMembershipsFromRecords;
-import com.googlecode.propidle.authorisation.groups.Groups;
-import com.googlecode.propidle.authorisation.groups.GroupsFromRecords;
-import com.googlecode.propidle.authorisation.permissions.GroupPermissions;
-import com.googlecode.propidle.authorisation.permissions.GroupPermissionsFromRecords;
-import com.googlecode.propidle.authorisation.users.*;
 import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.client.DynamicPropertiesActivator;
 import com.googlecode.propidle.client.SnapshotPropertiesActivator;
@@ -66,7 +56,6 @@ import org.apache.lucene.util.Version;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.propidle.authorisation.users.PasswordSalt.passwordSalt;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
@@ -115,10 +104,6 @@ public class PropertiesModule extends AbstractModule {
         container.add(Clock.class, SystemClock.class);
         container.add(PropertyDiffTool.class, PropertyDiffTool.class);
         container.add(UrlResolver.class, UtterlyIdleUrlResolver.class);
-        container.addInstance(PasswordSalt.class, passwordSalt("maldon"));
-        container.add(PasswordHasher.class, Sha1PasswordHasher.class);
-        container.add(SessionStarter.class);
-        container.add(Authenticator.class, AuthenticateAgainstUsers.class);
         container.addActivator(HighestExistingRevisionNumber.class, HighestExistingRevisionNumberActivator.class);
         container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
         container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
@@ -136,11 +121,6 @@ public class PropertiesModule extends AbstractModule {
         container.add(HighestRevisionNumbers.class, HighestRevisionNumbersFromRecords.class);
         container.decorate(HighestRevisionNumbers.class, LockHighestRevisionNumbersDecorator.class);
         container.add(AllChanges.class, AllChangesFromRecords.class);
-        container.add(Users.class, UsersFromRecords.class);
-        container.add(Groups.class, GroupsFromRecords.class);
-        container.add(GroupPermissions.class, GroupPermissionsFromRecords.class);
-        container.add(GroupMemberships.class, GroupMembershipsFromRecords.class);
-        container.add(Sessions.class, SessionsFromRecords.class);
 
         container.add(UriGetter.class, SimpleUriGetter.class);
         container.decorate(UriGetter.class, RelativeUriGetter.class);
@@ -149,7 +129,6 @@ public class PropertiesModule extends AbstractModule {
     }
 
     public Module addResources(Resources resources) {
-        resources.add(AuthenticationResource.class);
         resources.add(RootResource.class);
         resources.add(PropertiesResource.class);
         resources.add(FileNamesResource.class);
@@ -160,15 +139,12 @@ public class PropertiesModule extends AbstractModule {
         resources.add(SearchResource.class);
         resources.add(StaticContentResource.class);
         resources.add(FavIconResource.class);
-        resources.add(UsersResource.class);
-        resources.add(GroupsResource.class);
         resources.add(MigrationResource.class);
         return this;
     }
 
     @Override
     public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(AuthenticationResource.NAME)), renderer(new ModelTemplateRenderer("AuthenticationResource_html", AuthenticationResource.class)));
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_EDITABLE)), renderer(new ModelTemplateRenderer("EditablePropertiesResource_html", PropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_READ_ONLY)), renderer(new ModelTemplateRenderer("PropertiesResource_html", PropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.PLAIN_NAME)), renderer(new ModelTemplateRenderer("PropertiesResource_properties", PropertiesResource.class)));
@@ -180,7 +156,6 @@ public class PropertiesModule extends AbstractModule {
         handlers.add(where(entity(Model.class), nameIs(DiffResource.NAME)), renderer(new ModelTemplateRenderer("DiffResource_html", DiffResource.class)));
         handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
         handlers.add(where(entity(Model.class), nameIs(CompositePropertiesResource.NAME)), renderer(new ModelTemplateRenderer("CompositePropertiesResource_html", CompositePropertiesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(UsersResource.NAME)), renderer(new ModelTemplateRenderer("User_html", UsersResource.class)));
         handlers.add(where(entity(Model.class), nameIs(MigrationResource.NAME)), renderer(new ModelTemplateRenderer("MigrationResource_html", MigrationResource.class)));
         return this;
     }
