@@ -3,11 +3,12 @@ package com.googlecode.propidle.migrations.bootstrap;
 import static com.googlecode.propidle.migrations.MigrationName.migrationName;
 import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
 import com.googlecode.propidle.migrations.bootstrap.hsql.HsqlCreateMigrationLogTable;
-import com.googlecode.propidle.migrations.bootstrap.oracle.OracleCreateMigrationLogTable;
 import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
+
+import static com.googlecode.propidle.migrations.ModuleName.moduleName;
 import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
 import static com.googlecode.totallylazy.Option.option;
 import com.googlecode.totallylazy.Sequence;
@@ -50,8 +51,8 @@ public class CreateMigrationLogTableTest {
         bootstrapper.run(); // Should not fail
 
         Sequence<MigrationLogItem> migrations = sequence(
-                new MigrationLogItem(new Date(), migrationNumber(1), migrationName("create_toddlers_table")),
-                new MigrationLogItem(new Date(), migrationNumber(2), migrationName("index_dribble_column")));
+                new MigrationLogItem(new Date(), migrationNumber(1), migrationName("create_toddlers_table"),  moduleName(getClass().getSimpleName())),
+                new MigrationLogItem(new Date(), migrationNumber(2), migrationName("index_dribble_column"),  moduleName(getClass().getSimpleName())));
 
         migrationLog.add(migrations);
 

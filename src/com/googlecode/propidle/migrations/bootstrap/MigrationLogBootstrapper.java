@@ -2,6 +2,7 @@ package com.googlecode.propidle.migrations.bootstrap;
 
 import com.googlecode.propidle.migrations.Migration;
 import com.googlecode.propidle.migrations.Migrator;
+import com.googlecode.propidle.migrations.ModuleName;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
 
 public class MigrationLogBootstrapper implements Migrator {
@@ -13,8 +14,8 @@ public class MigrationLogBootstrapper implements Migrator {
         this.bootstrapper = bootstrapper;
     }
 
-    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations) {
+    public Iterable<MigrationLogItem> migrate(Iterable<Migration> migrations, final ModuleName moduleName) {
         bootstrapper.run();
-        return decorated.migrate(migrations);
+        return decorated.migrate(migrations, moduleName);
     }
 }
