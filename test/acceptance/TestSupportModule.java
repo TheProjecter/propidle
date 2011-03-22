@@ -36,21 +36,11 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
     public Module addPerRequestObjects(Container container) {
         container.add(AliasExists.class);
         container.add(CurrentRevision.class);
-        container.add(CurrentUser.class);
-        container.add(MembersOf.class);
         container.add(PropertiesExist.class);
-        container.add(UserDoesNotExist.class);
-        container.add(AUserExists.class);
-        container.add(UserGroupExists.class);
-        container.add(UserGroupPermissions.class);
-        container.add(UserPermissions.class);
-        container.add(CurrentUserPermissions.class);
 
         container.add(LastResponse.class);
         container.add(RequestIsMade.class);
 
-
-//        container.remove(BasePath.class);
         container.addInstance(BasePath.class, basePath("/"));
         return this;
     }
