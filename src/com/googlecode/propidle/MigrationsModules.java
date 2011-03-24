@@ -1,22 +1,13 @@
 package com.googlecode.propidle;
 
-import static com.googlecode.propidle.migrations.MigrationQueriesModule.migrationQueriesModule;
-import static com.googlecode.totallylazy.Callables.returnArgument;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Sequences.empty;
-
-import com.googlecode.propidle.migrations.MigrationQueriesModule;
-import com.googlecode.propidle.migrations.MigrationsModule;
-import com.googlecode.propidle.migrations.bootstrap.hsql.HsqlMigrationsModule;
-import com.googlecode.propidle.migrations.bootstrap.oracle.OracleMigrationsModule;
-
-import static com.googlecode.propidle.util.Callables.chain;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yadic.Container;
 
-import static java.lang.String.format;
 import java.util.Properties;
+
+import static com.googlecode.totallylazy.Sequences.empty;
+import static java.lang.String.format;
 
 public class MigrationsModules {
     public static Sequence<Callable1<Container, Container>> migrationsModules(Properties properties) {
@@ -26,9 +17,9 @@ public class MigrationsModules {
     public static Sequence<Callable1<Container, Container>> migrationsModules(PersistenceMechanism persistenceMechanism) {
         switch (persistenceMechanism) {
             case HSQL:
-                return sequence(migrationQueriesModule(), new MigrationsModule(), new HsqlMigrationsModule());
+                return empty();
             case ORACLE:
-                return sequence(migrationQueriesModule(), new MigrationsModule(), new OracleMigrationsModule());
+                return empty();
             case IN_MEMORY:
                 return empty();
             default:

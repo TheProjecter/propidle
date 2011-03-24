@@ -1,6 +1,6 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.propidle.persistence.SchemaVersion;
+import com.googlecode.propidle.migrations.SchemaVersion;
 import com.googlecode.totallylazy.Either;
 
 import java.util.concurrent.Callable;

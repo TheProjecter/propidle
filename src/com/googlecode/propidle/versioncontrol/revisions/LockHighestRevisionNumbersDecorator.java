@@ -1,6 +1,6 @@
 package com.googlecode.propidle.versioncontrol.revisions;
 
-import com.googlecode.propidle.persistence.RecordLock;
+import com.googlecode.utterlyidle.migrations.persistence.RecordLock;
 
 public class LockHighestRevisionNumbersDecorator implements HighestRevisionNumbers {
     private final HighestRevisionNumbers decorated;

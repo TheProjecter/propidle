@@ -10,8 +10,8 @@ import java.util.List;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class StatusChecks {
-    private List<Class> classes = new ArrayList<Class>();
-    private Resolver resolver;
+    private final Resolver resolver;
+    private final List<Class> classes = new ArrayList<Class>();
 
 
     public StatusChecks(Resolver resolver){
@@ -24,15 +24,6 @@ public class StatusChecks {
 
     public Iterable<StatusCheckResult> checks() {
         return sequence(classes).map(resolve()).safeCast(StatusCheck.class).map(performCheck());
-
-    }
-
-    private Callable1<StatusCheck, StatusCheckResult> performCheck() {
-        return new Callable1<StatusCheck, StatusCheckResult>() {
-            public StatusCheckResult call(StatusCheck statusCheck) throws Exception {
-                return statusCheck.check();
-            }
-        };
     }
 
     private Callable1<Class, Object> resolve() {
@@ -43,4 +34,13 @@ public class StatusChecks {
             }
         };
     }
+
+    private Callable1<StatusCheck, StatusCheckResult> performCheck() {
+        return new Callable1<StatusCheck, StatusCheckResult>() {
+            public StatusCheckResult call(StatusCheck statusCheck) throws Exception {
+                return statusCheck.check();
+            }
+        };
+    }
+
 }

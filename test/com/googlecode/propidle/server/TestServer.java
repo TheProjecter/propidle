@@ -1,6 +1,6 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.util.TestRecords.hsqlConfiguraton;
+import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
 import static com.googlecode.totallylazy.Runnables.write;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.utterlyidle.Status.OK;
@@ -46,7 +46,7 @@ public class TestServer extends Server {
     }
 
     private static Properties propertiesFor(int port) {
-        Properties properties = hsqlConfiguraton();
+        Properties properties = hsqlConfiguration();
         properties.setProperty(PORT, String.valueOf(port));
         return properties;
     }

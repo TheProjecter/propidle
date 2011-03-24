@@ -1,40 +1,31 @@
 package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.PersistenceMechanism;
-import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
-
-import static com.googlecode.propidle.migrations.MigrationQueriesModule.migrationQueriesModule;
-import static com.googlecode.propidle.persistence.jdbc.ConnectionDetails.connectionDetails;
-
-import com.googlecode.propidle.persistence.jdbc.SqlPersistenceModule;
-import com.googlecode.propidle.persistence.jdbc.hsql.HsqlModule;
-import com.googlecode.propidle.persistence.jdbc.oracle.OracleModule;
-import com.googlecode.propidle.persistence.memory.InMemoryPersistenceModule;
-
-import static com.googlecode.propidle.persistence.jdbc.SchemaVersionModule.schemaVersionModule;
-import static com.googlecode.propidle.persistence.memory.InMemorySchemaVersionModule.inMemorySchemaVersionModule;
-import static com.googlecode.propidle.properties.Properties.getOrFail;
-
-import com.googlecode.propidle.persistence.memory.InMemorySchemaVersionModule;
 import com.googlecode.totallylazy.Sequence;
-
-import static com.googlecode.propidle.util.Modules.asRequestScopeModule;
-import static com.googlecode.totallylazy.Sequences.sequence;
+import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
+import com.googlecode.utterlyidle.migrations.persistence.jdbc.SqlPersistenceModule;
+import com.googlecode.utterlyidle.migrations.persistence.jdbc.hsql.HsqlModule;
+import com.googlecode.utterlyidle.migrations.persistence.jdbc.oracle.OracleModule;
+import com.googlecode.utterlyidle.migrations.persistence.memory.InMemoryPersistenceModule;
 import com.googlecode.utterlyidle.modules.Module;
 
-import static java.lang.String.format;
 import java.util.Properties;
+
+import static com.googlecode.propidle.properties.Properties.getOrFail;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
+import static java.lang.String.format;
 
 public class PersistenceModules {
     public static Sequence<Module> persistenceModules(Properties properties) {
         PersistenceMechanism persistenceMechanism = PersistenceMechanism.fromProperties(properties);
         switch (persistenceMechanism) {
             case HSQL:
-                return sqlModules(runtimeConnection(properties), new HsqlModule()).join(schemaVersionModules());
+                return sqlModules(runtimeConnection(properties), new HsqlModule());
             case ORACLE:
-                return sqlModules(runtimeConnection(properties), new OracleModule()).join(schemaVersionModules());
+                return sqlModules(runtimeConnection(properties), new OracleModule());
             case IN_MEMORY:
-                return sequence(new InMemoryPersistenceModule()).safeCast(Module.class).join(sequence(inMemorySchemaVersionModule()));
+                return sequence(new InMemoryPersistenceModule()).safeCast(Module.class);
             default:
                 throw new UnsupportedOperationException(format("Peristence for '%s' is not implemented", persistenceMechanism));
         }
@@ -52,17 +43,13 @@ public class PersistenceModules {
         }
     }
 
-    private static Iterable<? extends Module> schemaVersionModules() {
-        return sequence(migrationQueriesModule()).map(asRequestScopeModule()).join(sequence(schemaVersionModule()));
-    }
-
     private static Sequence<Module> sqlModules(ConnectionDetails connectionDetails, Module... modules) {
         return sequence(new SqlPersistenceModule(connectionDetails)).
                 safeCast(Module.class).
                 join(sequence(modules));
     }
 
-    private static ConnectionDetails runtimeConnection(Properties properties) {
+    public static ConnectionDetails runtimeConnection(Properties properties) {
         return connectionDetails(getOrFail(properties, Server.JDBC_URL),
                                  getOrFail(properties, Server.JDBC_USER),
                                  getOrFail(properties, Server.JDBC_PASSWORD));

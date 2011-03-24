@@ -5,8 +5,8 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-232-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-241-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/runtime/totallylazy-282-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-migrations-12-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/runtime" recursive="false" />
   </library>

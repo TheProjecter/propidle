@@ -13,6 +13,8 @@ import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.Status.SEE_OTHER;
 import static org.hamcrest.Matchers.is;
+
+import com.googlecode.propidle.util.TestRecords;
 import org.junit.Test;
 
 import static javax.ws.rs.core.HttpHeaders.ACCEPT;
