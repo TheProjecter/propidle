@@ -2,6 +2,8 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.PersistenceMechanism;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.utterlyidle.migrations.bootstrap.hsql.HsqlMigrationsModule;
+import com.googlecode.utterlyidle.migrations.bootstrap.oracle.OracleMigrationsModule;
 import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
 import com.googlecode.utterlyidle.migrations.persistence.jdbc.SqlPersistenceModule;
 import com.googlecode.utterlyidle.migrations.persistence.jdbc.hsql.HsqlModule;
@@ -12,6 +14,7 @@ import com.googlecode.utterlyidle.modules.Module;
 import java.util.Properties;
 
 import static com.googlecode.propidle.properties.Properties.getOrFail;
+import static com.googlecode.propidle.util.Modules.asRequestScopeModule;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
 import static java.lang.String.format;
@@ -31,13 +34,13 @@ public class PersistenceModules {
         }
     }
 
-    public static Sequence<Module> forMigrations(Properties properties) {
+    public static Sequence<Module> forMigrations(Properties properties) throws Exception {
         PersistenceMechanism persistenceMechanism = PersistenceMechanism.fromProperties(properties);
         switch (persistenceMechanism) {
             case HSQL:
-                return sqlModules(migrationConnectionDetails(properties), new HsqlModule());
+                return sqlModules(migrationConnectionDetails(properties), new HsqlModule()).add(asRequestScopeModule().call(new HsqlMigrationsModule()));
             case ORACLE:
-                return sqlModules(migrationConnectionDetails(properties), new OracleModule());
+                return sqlModules(migrationConnectionDetails(properties), new OracleModule()).add(asRequestScopeModule().call(new OracleMigrationsModule()));
             default:
                 throw new UnsupportedOperationException(format("Migrations for '%s' is not implemented", persistenceMechanism));
         }
