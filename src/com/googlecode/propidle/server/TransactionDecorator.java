@@ -1,6 +1,6 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.propidle.persistence.Transaction;
+import com.googlecode.totallylazy.records.Transaction;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;

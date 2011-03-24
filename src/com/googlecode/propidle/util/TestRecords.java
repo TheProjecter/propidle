@@ -1,12 +1,12 @@
 package com.googlecode.propidle.util;
 
-import com.googlecode.propidle.migrations.MigrationsContainer;
-import com.googlecode.propidle.server.RunMigrations;
 import com.googlecode.propidle.server.Server;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Records;
+import com.googlecode.utterlyidle.migrations.RunMigrations;
+import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
@@ -29,17 +29,22 @@ import static java.util.UUID.randomUUID;
 public class TestRecords {
 
     public static Records testRecordsWithAllMigrationsRun() {
-        Properties properties = hsqlConfiguraton();
+        Properties properties = hsqlConfiguration();
+        runMigrations(properties);
         Container container = container(properties);
-        try {
-            inTransaction(migrationsContainer(properties), RunMigrations.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Problem running migrations", e);
-        }
         return container.get(Records.class);
     }
 
-    public static Properties hsqlConfiguraton() {
+    public static void runMigrations(Properties properties) {
+        try {
+            Iterable<MigrationLogItem> logItemIterable = inTransaction(migrationsContainer(properties), RunMigrations.class);
+            System.out.println("logItemIterable = " + logItemIterable);
+        } catch (Exception e) {
+            throw new RuntimeException("Problem running migrations", e);
+        }
+    }
+
+    public static Properties hsqlConfiguration() {
         return properties(
                 pair(PERSISTENCE, HSQL.name()),
 

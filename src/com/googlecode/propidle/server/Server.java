@@ -6,6 +6,7 @@ import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesA
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.util.Callables.chain;
 
+import com.googlecode.propidle.migrations.PropidleMigrationsModule;
 import com.googlecode.propidle.monitoring.MonitoringModule;
 import com.googlecode.totallylazy.*;
 
@@ -65,7 +66,7 @@ public class Server {
         PropertiesApplication application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
-                persistenceModules(properties).join(extraModules).add(new MonitoringModule()));
+                persistenceModules(properties).join(extraModules));
 
         int port = parseInt(propertyLoader.call().getProperty(PORT));
 

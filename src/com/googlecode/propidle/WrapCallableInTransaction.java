@@ -1,10 +1,9 @@
 package com.googlecode.propidle;
 
+import com.googlecode.totallylazy.records.Transaction;
 import org.apache.lucene.index.IndexWriter;
 
 import java.util.concurrent.Callable;
-
-import com.googlecode.propidle.persistence.Transaction;
 
 public class WrapCallableInTransaction implements Callable {
     private final IndexWriter indexWriter;

@@ -1,14 +1,13 @@
 package com.googlecode.propidle.status;
 
-import com.googlecode.propidle.persistence.jdbc.ConnectionDetails;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
 
 import java.sql.Connection;
 
 import static com.googlecode.propidle.status.StatusCheckName.statusCheckName;
 import static com.googlecode.propidle.status.StatusCheckResult.statusCheckResult;
-import static com.googlecode.totallylazy.Closeables.reflectiveClose;
 import static com.googlecode.totallylazy.Exceptions.handleException;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 

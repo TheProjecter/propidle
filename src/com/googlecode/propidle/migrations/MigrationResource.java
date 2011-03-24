@@ -1,12 +1,11 @@
 package com.googlecode.propidle.migrations;
 
-import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.propidle.server.RunMigrations;
 import com.googlecode.propidle.status.StatusResource;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.utterlyidle.migrations.RunMigrations;
+import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;
 import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.yadic.Container;
 
