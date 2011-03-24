@@ -6,8 +6,6 @@ import com.googlecode.totallylazy.Sequence;
 import com.googlecode.utterlyidle.migrations.MigrationQueriesModule;
 import com.googlecode.utterlyidle.migrations.MigrationsModule;
 import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
-import com.googlecode.utterlyidle.migrations.bootstrap.Bootstrapper;
-import com.googlecode.utterlyidle.migrations.bootstrap.hsql.HsqlCreateMigrationLogTable;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.Resolver;
@@ -24,18 +22,13 @@ public class MigrationsContainer {
         Sequence<Module> moduleSequence = PersistenceModules.forMigrations(properties);
         Sequence<Callable1<Container, Container>> persistenceModules = moduleSequence.map(adaptUtterlyIdleModule());
         Container container = migrationsModules(properties).join(persistenceModules).fold(new SimpleContainer(), chain(Container.class));
-        allTheMigrationStuffForHsql(container);
+        new MigrationsModule().call(container);
+        new MigrationQueriesModule().call(container);
         container.addInstance(Resolver.class, container);
 
 
         container.add(com.googlecode.utterlyidle.migrations.util.time.Clock.class, com.googlecode.utterlyidle.migrations.util.time.SystemClock.class);
         container.get(ModuleMigrationsCollector.class).add(PropIdleMigrations.class);
         return container;
-    }
-
-    public static void allTheMigrationStuffForHsql(Container container) throws Exception {
-        new MigrationsModule().call(container);
-        new MigrationQueriesModule().call(container);
-        container.add(Bootstrapper.class, HsqlCreateMigrationLogTable.class);
     }
 }
