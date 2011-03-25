@@ -5,6 +5,8 @@ mvn:org.apache.lucene:lucene-core:jar:3.0.3
 mvn:org.objenesis:objenesis:jar:1.2
 mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
+mvn://repo.bodar.com/com.googlecode.propidle:propidle:jar:59
+mvn://repo.bodar.com/com.googlecode.propidle:propidle:sources:59
 mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar:282
 mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:sources:282
 mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar:242

@@ -9,7 +9,6 @@ import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static org.hamcrest.Matchers.containsString;
 
-@Ignore
 public class StatusTest extends PropertiesApplicationTestCase {
     @Test
     public void presentsAStatusReport() throws Exception {
