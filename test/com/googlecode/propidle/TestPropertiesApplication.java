@@ -9,6 +9,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import com.googlecode.utterlyidle.modules.Module;
 import org.apache.lucene.store.RAMDirectory;
 
+import java.util.Properties;
+
 public class TestPropertiesApplication extends PropertiesApplication {
     public TestPropertiesApplication(Module... extraModules) {
         this(sequence(extraModules));
@@ -16,8 +18,12 @@ public class TestPropertiesApplication extends PropertiesApplication {
 
     public TestPropertiesApplication(Iterable<Module> extraModules) {
         super(
-                returns(hsqlConfiguraton()),
+                returns(testProperties()),
                 new RAMDirectory(),
-                persistenceModules(properties("persistence=in_memory")).join(extraModules));
+                persistenceModules(testProperties()).join(extraModules));
+    }
+
+    private static Properties testProperties() {
+        return properties("persistence=in_memory");
     }
 }
