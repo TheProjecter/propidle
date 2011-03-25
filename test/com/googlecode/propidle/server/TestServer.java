@@ -9,6 +9,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.googlecode.propidle.util.TestRecords;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.utterlyidle.io.Url;
@@ -46,7 +47,7 @@ public class TestServer extends Server {
     }
 
     private static Properties propertiesFor(int port) {
-        Properties properties = hsqlConfiguration();
+        Properties properties = hsqlConfiguration();;
         properties.setProperty(PORT, String.valueOf(port));
         return properties;
     }

@@ -1,5 +1,6 @@
 package com.googlecode.propidle.util;
 
+import com.googlecode.propidle.PersistenceMechanism;
 import com.googlecode.propidle.server.Server;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
@@ -16,6 +17,7 @@ import com.googlecode.yadic.SimpleContainer;
 import java.util.Properties;
 
 import static com.googlecode.propidle.PersistenceMechanism.HSQL;
+import static com.googlecode.propidle.PersistenceMechanism.IN_MEMORY;
 import static com.googlecode.propidle.PersistenceMechanism.PERSISTENCE;
 import static com.googlecode.propidle.migrations.MigrationsContainer.migrationsContainer;
 import static com.googlecode.propidle.properties.Properties.properties;
