@@ -10,6 +10,8 @@ import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
+import java.util.Properties;
+
 public class TestPropertiesApplication extends PropertiesApplication {
     public TestPropertiesApplication(Module... extraModules) throws Exception {
         this(sequence(extraModules));
@@ -17,8 +19,12 @@ public class TestPropertiesApplication extends PropertiesApplication {
 
     private TestPropertiesApplication(Iterable<Module> extraModules) throws Exception {
         super(
-                returns(hsqlConfiguration()),
+                returns(testProperties()),
                 new RAMDirectory(),
-                persistenceModules(properties("persistence=IN_MEMORY")).join(extraModules));
+                persistenceModules(testProperties()).join(extraModules));
+    }
+
+    private static Properties testProperties() {
+        return properties("persistence=in_memory");
     }
 }
