@@ -6,4 +6,6 @@ create table changes (
     updated_value          VARCHAR(1024),
 
     CONSTRAINT changes_pk PRIMARY KEY(properties_path, revision_number, property_name)
-)
+);
+
+GRANT select, insert, update, delete on changes to PROPIDLE_USER;
