@@ -10,6 +10,7 @@ import com.googlecode.utterlyidle.migrations.persistence.jdbc.SqlDialect;
 import static com.googlecode.utterlyidle.migrations.sql.SqlMigrations.sqlMigrationsInSamePackageAs;
 
 public class PropIdleMigrations implements ModuleMigrations {
+    public static final ModuleName moduleName = ModuleName.moduleName("Propidle Core");
     private final SqlRecords records;
     private final SqlDialect sqlDialect;
 
@@ -19,7 +20,7 @@ public class PropIdleMigrations implements ModuleMigrations {
     }
 
     public ModuleName moduleName() {
-        return ModuleName.moduleName("Propidle Core");
+        return moduleName;
     }
 
     public Migrations migrations() {

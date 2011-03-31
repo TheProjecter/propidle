@@ -7,7 +7,6 @@ import com.googlecode.yadic.Container;
 
 public class PropidleMigrationsModule implements RequestScopedModule {
     public Module addPerRequestObjects(Container container) {
-        container.add(ModuleMigrationsCollector.class);
         container.get(ModuleMigrationsCollector.class).add(PropIdleMigrations.class);
         return this;
     }

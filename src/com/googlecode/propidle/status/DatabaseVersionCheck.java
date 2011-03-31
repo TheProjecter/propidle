@@ -1,12 +1,11 @@
 package com.googlecode.propidle.status;
 
 import com.googlecode.propidle.migrations.MigrationResource;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Exceptions;
-import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.migrations.Migration;
+import com.googlecode.utterlyidle.migrations.ModuleMigrations;
 import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
+import com.googlecode.utterlyidle.migrations.ModuleName;
 import com.googlecode.utterlyidle.migrations.log.MigrationLog;
 
 import static com.googlecode.propidle.status.Action.action;
@@ -20,6 +19,7 @@ import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.migrations.log.MigrationLogFromRecords.databaseSchemaVersion;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
+import static java.lang.String.format;
 
 public class DatabaseVersionCheck implements StatusCheck {
     public static final String ACTION_KEY = "Action";
@@ -38,23 +38,31 @@ public class DatabaseVersionCheck implements StatusCheck {
         StatusCheckResult result = statusCheckResult(
                 statusCheckName(DatabaseVersionCheck.class.getSimpleName()));
 
-        addRequiredSchemaVersion(result);
-        result.add(ACTUAL_VERSION, actualSchemaVersion(migrationLog).value());
-        addResult(result);
+        Sequence<ModuleMigrations> allMigrations = moduleMigrationsCollector.moduleMigrations();
+        boolean migrationRequired = false;
+        for (ModuleMigrations moduleMigrations : allMigrations) {
+            Integer required = addRequiredSchemaVersion(result, moduleMigrations);
+            Either<Throwable, Integer> actual = actualSchemaVersion(moduleMigrations.moduleName(), migrationLog);
+            if(actual.isLeft() || !required.equals(actual.right())) {
+                migrationRequired = true;
+            }
+            result.add(format("%s : %s", moduleMigrations.moduleName(),ACTUAL_VERSION), actual.value());
+        }
+        addResult(migrationRequired,result);
 
         return result;
     }
 
-    private void addResult(StatusCheckResult result) throws Exception {
-        Object requiredVersion = result.getProperty(REQUIRED_VERSION);
-        Object actualVersion = result.getProperty(ACTUAL_VERSION);
+    private void addResult(boolean migrationRequired, StatusCheckResult result) throws Exception {
 
-        result.add(ACTION_KEY, requiredVersion == actualVersion ? "None required" : action(actionName("Migrate"), url(urlOf(resource(MigrationResource.class).perform()))));
+        result.add(ACTION_KEY, migrationRequired ? action(actionName("Migrate"), url(urlOf(resource(MigrationResource.class).perform()))) : "None required" );
     }
 
-    private void addRequiredSchemaVersion(StatusCheckResult result) {
-        Migration migration = sequence(moduleMigrationsCollector.moduleMigrations().first().migrations()).sortBy(migrationNumber()).last();
-        result.add(REQUIRED_VERSION, migration.number().value());
+    private Integer addRequiredSchemaVersion(StatusCheckResult result, final ModuleMigrations moduleMigrations) {
+        Migration migration = sequence(moduleMigrations.migrations()).sortBy(migrationNumber()).last();
+        Integer value = migration.number().value();
+        result.add(format("%s : %s", moduleMigrations.moduleName(),REQUIRED_VERSION), value);
+        return value;
     }
 
     private Callable1<Migration, Comparable> migrationNumber() {
@@ -65,9 +73,9 @@ public class DatabaseVersionCheck implements StatusCheck {
         };
     }
 
-    public static Either<Throwable, Integer> actualSchemaVersion(MigrationLog migrationLog) throws Exception {
+    public static Either<Throwable, Integer> actualSchemaVersion(ModuleName moduleName, MigrationLog migrationLog) throws Exception {
         try {
-            return right(databaseSchemaVersion(migrationLog).value());
+            return right(databaseSchemaVersion(moduleName, migrationLog).value());
         } catch (LazyException e) {
             return left(Exceptions.getCause().call(e));
         }

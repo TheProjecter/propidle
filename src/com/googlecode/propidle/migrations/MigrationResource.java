@@ -8,6 +8,7 @@ import com.googlecode.utterlyidle.migrations.RunMigrations;
 import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;
 import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.yadic.Container;
+import com.googlecode.yadic.Resolver;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,17 +29,19 @@ import static javax.ws.rs.core.MediaType.TEXT_HTML;
 @Produces(TEXT_HTML)
 public class MigrationResource {
     private final Properties properties;
+    private final Resolver myScope;
     public static final String NAME = "migrations";
 
-    public MigrationResource(Properties properties) {
+    public MigrationResource(Properties properties, Resolver myScope) {
         this.properties = properties;
+        this.myScope = myScope;
     }
 
     @POST
     public Model perform() throws Exception {
         long start = nanoTime();
 
-        Container container = MigrationsContainer.migrationsContainer(properties);
+        Container container = MigrationsContainer.migrationsContainer(myScope,properties);
         Sequence<MigrationLogItem> migrations;
         try {
             migrations = sequence(inTransaction(container, RunMigrations.class));
