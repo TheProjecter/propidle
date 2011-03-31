@@ -6,12 +6,14 @@ import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Records;
+import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.utterlyidle.migrations.RunMigrations;
 import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
+import com.googlecode.yadic.Resolver;
 import com.googlecode.yadic.SimpleContainer;
 
 import java.util.Properties;
@@ -32,14 +34,14 @@ public class TestRecords {
 
     public static Records testRecordsWithAllMigrationsRun() {
         Properties properties = hsqlConfiguration();
-        runMigrations(properties);
         Container container = container(properties);
+        runMigrations(container,properties);
         return container.get(Records.class);
     }
 
-    public static void runMigrations(Properties properties) {
+    public static void runMigrations(Container container, Properties properties) {
         try {
-            Iterable<MigrationLogItem> logItemIterable = inTransaction(migrationsContainer(properties), RunMigrations.class);
+            Iterable<MigrationLogItem> logItemIterable = inTransaction(migrationsContainer(container,properties), RunMigrations.class);
             System.out.println("logItemIterable = " + logItemIterable);
         } catch (Exception e) {
             throw new RuntimeException("Problem running migrations", e);
@@ -63,6 +65,8 @@ public class TestRecords {
         SimpleContainer container = new SimpleContainer();
         container.add(Clock.class, SystemClock.class);
         container.addInstance(Properties.class, properties);
+        container.add(ModuleMigrationsCollector.class);
+        container.addInstance(Resolver.class, container);
         return addToContainer(container, persistenceModules(properties));
     }
 

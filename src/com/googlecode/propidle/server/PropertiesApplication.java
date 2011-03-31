@@ -2,15 +2,13 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.migrations.PropidleMigrationsModule;
-import com.googlecode.propidle.migrations.SchemaVersionModule;
 import com.googlecode.propidle.monitoring.MonitoringModule;
 import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.RestApplication;
-import com.googlecode.utterlyidle.migrations.MigrationQueriesModule;
-import com.googlecode.utterlyidle.migrations.util.Modules;
+import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
+import com.googlecode.utterlyidle.migrations.modules.MigrationRegistrationModule;
 import com.googlecode.utterlyidle.modules.Module;
-import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.Directory;
@@ -24,6 +22,7 @@ import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeM
 public class PropertiesApplication extends RestApplication {
     public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) throws Exception {
         super();
+        add(new MigrationRegistrationModule());
         add(new StatusModule());
         add(new PropidleMigrationsModule());
         add(new MonitoringModule());

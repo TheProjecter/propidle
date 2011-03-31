@@ -18,7 +18,7 @@ public class SchemaVersionFromMigrationLog implements SchemaVersion {
 
     public Either<Throwable, Integer> versionNumber() throws Exception {
         try {
-            return right(databaseSchemaVersion(migrationLog).value());
+            return right(databaseSchemaVersion(PropIdleMigrations.moduleName,migrationLog).value());
         } catch (LazyException e) {
             return left(Exceptions.getCause().call(e));
         }
