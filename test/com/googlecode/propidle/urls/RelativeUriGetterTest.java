@@ -98,6 +98,10 @@ public class RelativeUriGetterTest {
                 throw new UnsupportedOperationException();
             }
 
+            public <T> T usingArgumentScope(Request request, Callable1<Container, T> callable) {
+                throw new UnsupportedOperationException();
+            }
+
             public Container createRequestScope() {
                 throw new UnsupportedOperationException();
             }

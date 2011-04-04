@@ -106,7 +106,7 @@ public class RebuildIndex implements Callable<Void> {
         return new Callable1<Sequence<Change>, Pair<PropertiesPath, Properties>>() {
             public Pair<PropertiesPath, Properties> call(Sequence<Change> changes) throws Exception {
                 return pair(
-                        propertiesPath(changes.first().propertiesPath()),
+                        propertiesPath(changes.first().propertiesPath().toString()),
                         changes.fold(properties(), applyChange()));
             }
         };

@@ -7,8 +7,8 @@ mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
 mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar:282
 mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:sources:282
-mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar:242
-mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:sources:242
+mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar:258
+mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:sources:258
 mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar:20
 mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:sources:20
 mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar:126
