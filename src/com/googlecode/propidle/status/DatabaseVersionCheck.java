@@ -54,8 +54,7 @@ public class DatabaseVersionCheck implements StatusCheck {
     }
 
     private void addResult(boolean migrationRequired, StatusCheckResult result) throws Exception {
-
-        result.add(ACTION_KEY, migrationRequired ? action(actionName("Migrate"), url(urlOf(resource(MigrationResource.class).perform()))) : "None required" );
+        result.add(ACTION_KEY, migrationRequired ? action(actionName("Migrate"), url("/"+urlOf(resource(MigrationResource.class).perform()))) : "None required" );
     }
 
     private Integer addRequiredSchemaVersion(StatusCheckResult result, final ModuleMigrations moduleMigrations) {
