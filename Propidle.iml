@@ -12,9 +12,45 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="build" level="project" />
-    <orderEntry type="library" name="runtime-optional" level="project" />
-    <orderEntry type="library" name="runtime" level="project" />
+    <orderEntry type="module-library">
+      <library name="build">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/build" />
+          <root url="file://$MODULE_DIR$/lib/build" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/build" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/build" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="runtime">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/runtime" />
+          <root url="file://$MODULE_DIR$/lib/runtime" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/runtime" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="runtime-optional">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/runtime-optional" />
+          <root url="file://$MODULE_DIR$/lib/runtime-optional" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/runtime-optional" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/runtime-optional" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
