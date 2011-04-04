@@ -9,6 +9,7 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Left;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.utterlyidle.Priority;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -42,11 +43,11 @@ public class DiffResource {
 
     @GET
     public Response get() throws Throwable {
-        return redirect(resource(DiffResource.class).get(Left.<String,Url>left(""), Left.<String,Url>left("")));
+        return redirect(resource(DiffResource.class).get(Left.<String,UrlWrapper>left(""), Left.<String,UrlWrapper>left("")));
     }
 
     @GET
-    public Model get(@QueryParam("left") Either<String, Url> leftUrl, @QueryParam("right") Either<String, Url> rightUrl) {
+    public Model get(@QueryParam("left") Either<String, UrlWrapper> leftUrl, @QueryParam("right") Either<String, UrlWrapper> rightUrl) {
         Either<String, Properties> leftResult = tryToGetProperties(leftUrl);
         Either<String, Properties> rightResult = tryToGetProperties(rightUrl);
 
@@ -67,10 +68,10 @@ public class DiffResource {
         );
     }
 
-    private Either<String, Properties> tryToGetProperties(Either<String, Url> url) {
+    private Either<String, Properties> tryToGetProperties(Either<String, UrlWrapper> url) {
         if (url.isLeft()) return left("Invalid url");
         try {
-            Properties properties = propertiesOrEmpty(url.right());
+            Properties properties = propertiesOrEmpty(url.right().url);
             return right(properties);
         } catch (Exception e) {
             return left("Exception occured while getting properties");
@@ -100,6 +101,16 @@ public class DiffResource {
     }
 
     private Properties propertiesOrEmpty(Url url) throws Exception {
-        return properties(uriGetter.get(url.toURI(), MimeType.TEXT_PLAIN));
+        Properties properties = properties(uriGetter.get(url.toURI(), MimeType.TEXT_PLAIN));
+        return properties;
+    }
+
+    public static class UrlWrapper {
+        public final Url url;
+
+
+        public UrlWrapper(String value) {
+            this.url = Url.url(value);
+        }
     }
 }
