@@ -5,9 +5,9 @@ import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Exceptions;
 import com.googlecode.totallylazy.LazyException;
 
-import static com.googlecode.utterlyidle.migrations.log.MigrationLogFromRecords.databaseSchemaVersion;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
+import static com.googlecode.utterlyidle.migrations.MigrationNumbers.databaseSchemaVersion;
 
 public class SchemaVersionFromMigrationLog implements SchemaVersion {
     private final MigrationLog migrationLog;
