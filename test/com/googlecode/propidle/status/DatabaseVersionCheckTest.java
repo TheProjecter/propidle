@@ -17,14 +17,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DatabaseVersionCheckTest {
-    private ModuleMigrationsCollector migrationsCollector = new ModuleMigrationsCollector(new MissingResolver());
+    private ModuleMigrationsCollector migrationsCollector = new ModuleMigrationsCollector();
 
 
     @Test
     public void statesThatVersionsAreZeroWhenThereAreNone() throws Exception {
         migrationsCollector.add(ModuleMigrationsWithNoMigrations.class);
 
-        StatusCheckResult result = new DatabaseVersionCheck(migrationsCollector, emptyMigrationLog()).check();
+        StatusCheckResult result = new DatabaseVersionCheck(migrationsCollector, emptyMigrationLog(), new MissingResolver()).check();
 
         assertThat(result.getProperty(requiredVersion()).toString(), is(equalTo("0")));
         assertThat(result.getProperty(actualVersion()).toString(), is(equalTo("0")));

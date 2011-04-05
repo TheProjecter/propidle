@@ -7,6 +7,7 @@ import com.googlecode.utterlyidle.migrations.ModuleMigrations;
 import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.utterlyidle.migrations.ModuleName;
 import com.googlecode.utterlyidle.migrations.log.MigrationLog;
+import com.googlecode.yadic.Resolver;
 
 import static com.googlecode.propidle.status.Action.action;
 import static com.googlecode.propidle.status.ActionName.actionName;
@@ -28,17 +29,19 @@ public class DatabaseVersionCheck implements StatusCheck {
 
     private final ModuleMigrationsCollector moduleMigrationsCollector;
     private final MigrationLog migrationLog;
+    private final Resolver resolver;
 
-    public DatabaseVersionCheck(ModuleMigrationsCollector moduleMigrationsCollector, MigrationLog migrationLog) {
+    public DatabaseVersionCheck(ModuleMigrationsCollector moduleMigrationsCollector, MigrationLog migrationLog, Resolver resolver) {
         this.moduleMigrationsCollector = moduleMigrationsCollector;
         this.migrationLog = migrationLog;
+        this.resolver = resolver;
     }
 
     public StatusCheckResult check() throws Exception {
         StatusCheckResult result = statusCheckResult(
                 statusCheckName(DatabaseVersionCheck.class.getSimpleName()));
 
-        Sequence<ModuleMigrations> allMigrations = moduleMigrationsCollector.moduleMigrations();
+        Sequence<ModuleMigrations> allMigrations = moduleMigrationsCollector.moduleMigrations(resolver);
         boolean migrationRequired = false;
         for (ModuleMigrations moduleMigrations : allMigrations) {
             Integer required = addRequiredSchemaVersion(result, moduleMigrations);
