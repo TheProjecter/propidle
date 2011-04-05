@@ -16,15 +16,15 @@ import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.io.Url.url;
-import static com.googlecode.utterlyidle.migrations.log.MigrationLogFromRecords.databaseSchemaVersion;
+import static com.googlecode.utterlyidle.migrations.MigrationNumbers.databaseSchemaVersion;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static java.lang.String.format;
 
 public class DatabaseVersionCheck implements StatusCheck {
     public static final String ACTION_KEY = "Action";
-    private static final String REQUIRED_VERSION = "Required version";
-    private static final String ACTUAL_VERSION = "Actual version";
+    public static final String REQUIRED_VERSION = "Required version";
+    public static final String ACTUAL_VERSION = "Actual version";
 
     private final ModuleMigrationsCollector moduleMigrationsCollector;
     private final MigrationLog migrationLog;
@@ -58,8 +58,8 @@ public class DatabaseVersionCheck implements StatusCheck {
     }
 
     private Integer addRequiredSchemaVersion(StatusCheckResult result, final ModuleMigrations moduleMigrations) {
-        Migration migration = sequence(moduleMigrations.migrations()).sortBy(migrationNumber()).last();
-        Integer value = migration.number().value();
+        Sequence<Migration> requiredMigrations = sequence(moduleMigrations.migrations()).sortBy(migrationNumber());
+        Integer value = requiredMigrations.isEmpty() ? 0 : requiredMigrations.last().number().value();
         result.add(format("%s : %s", moduleMigrations.moduleName(),REQUIRED_VERSION), value);
         return value;
     }
