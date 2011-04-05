@@ -12,10 +12,7 @@ import com.googlecode.propidle.diff.PropertyDiffTool;
 import com.googlecode.propidle.filenames.FileNamesResource;
 import com.googlecode.propidle.indexing.*;
 import com.googlecode.propidle.migrations.MigrationResource;
-import com.googlecode.propidle.properties.AllProperties;
-import com.googlecode.propidle.properties.AllPropertiesFromChanges;
-import com.googlecode.propidle.properties.PropertiesResource;
-import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
+import com.googlecode.propidle.properties.*;
 import com.googlecode.propidle.root.RootResource;
 import com.googlecode.propidle.search.*;
 import com.googlecode.propidle.server.decoration.DecorateHtml;
@@ -39,12 +36,15 @@ import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
+import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.modules.AbstractModule;
+import com.googlecode.utterlyidle.modules.ArgumentScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.utterlyidle.sitemesh.Decorators;
 import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
 import com.googlecode.yadic.Container;
+import com.googlecode.yadic.Resolver;
 import com.googlecode.yadic.generics.TypeFor;
 import com.googlecode.yadic.resolvers.OptionResolver;
 import org.apache.lucene.analysis.Analyzer;
@@ -53,6 +53,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
+import java.lang.reflect.Type;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -65,7 +66,7 @@ import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @SuppressWarnings("unchecked")
-public class PropertiesModule extends AbstractModule {
+public class PropertiesModule extends AbstractModule implements ArgumentScopedModule{
     public static final String MODEL_NAME = "MODEL_NAME";
     public static final String TITLE = "title";
 
@@ -169,4 +170,20 @@ public class PropertiesModule extends AbstractModule {
         return notNullValue(Model.class).and(nameMatcher);
     }
 
+    public Module addPerArgumentObjects(final Container container) {
+        container.add(PropertiesPath.class, PropertiesPathFromStringResolver.class);
+        return this;
+    }
+
+    public static class PropertiesPathFromStringResolver implements Resolver<PropertiesPath> {
+        private final String theValue;
+
+        public PropertiesPathFromStringResolver(String theValue) {
+            this.theValue = theValue;
+        }
+
+        public PropertiesPath resolve(Type type) throws Exception {
+             return PropertiesPath.propertiesPath(theValue);
+        }
+    }
 }

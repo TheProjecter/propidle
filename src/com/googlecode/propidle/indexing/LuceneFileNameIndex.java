@@ -40,7 +40,7 @@ public class LuceneFileNameIndex implements FileNameIndex {
         if (path.parent().equals(path)) {
             // Do nothing for root node
         } else{
-            indexIncludingParents(propertiesPath(path.parent().toString()), DIRECTORY);
+            indexIncludingParents(propertiesPath(path.parent()), DIRECTORY);
             index(path, pathType);
         }
     }
@@ -74,7 +74,7 @@ public class LuceneFileNameIndex implements FileNameIndex {
     }
 
     private Fieldable parentField(PropertiesPath path) {
-        return new Field(PARENT, propertiesPath(path.parent().toString()).toString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+        return new Field(PARENT, propertiesPath(path.parent()).toString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
     }
 
     private Fieldable searchableField(PropertiesPath path) {
