@@ -20,7 +20,7 @@ import java.util.Properties;
 
 public class TestServer extends Server {
     public static void main(String[] args) throws Exception {
-        new TestServer(8000, false);
+        new TestServer(8000, true);
     }
 
     public TestServer(int port) throws Exception {
@@ -47,7 +47,7 @@ public class TestServer extends Server {
     }
 
     private static Properties propertiesFor(int port) {
-        Properties properties = hsqlConfiguration();;
+        Properties properties = hsqlConfiguration();
         properties.setProperty(PORT, String.valueOf(port));
         return properties;
     }
