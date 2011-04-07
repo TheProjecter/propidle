@@ -1,12 +1,11 @@
 package com.googlecode.propidle.compositeproperties;
 
-import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.properties.PropertiesResource;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.urls.UriGetter;
-import com.googlecode.propidle.util.collections.MultiMap;
 import com.googlecode.propidle.util.Predicates;
+import com.googlecode.propidle.util.collections.MultiMap;
 import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.QueryParameters;
@@ -17,13 +16,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import java.util.Properties;
 
+import static com.googlecode.propidle.ModelName.modelWithName;
+import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
 import static com.googlecode.propidle.properties.Properties.*;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
-import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
 import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.isLeft;
@@ -31,6 +29,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static com.googlecode.utterlyidle.rendering.Model.model;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @Path(CompositePropertiesResource.NAME)
 @Produces(TEXT_HTML)
@@ -70,11 +70,10 @@ public class CompositePropertiesResource {
         Model propertiesAndOverrides = sequence(compositeProperties.entrySet()).
                 sortBy(key()).
                 map(toPair()).
-                fold(model(), modelOfPropertiesAndOverrides(overrides)).
+                fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
                 add("revision", requestedRevisionNumber.getOrNull()).
                 add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
                 add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, parameters))).
-                add(PropertiesModule.MODEL_NAME, NAME).
                 add(TITLE, title(urls));
 
         return urlGetResults.fold(propertiesAndOverrides, urlIntoModel());
@@ -90,7 +89,7 @@ public class CompositePropertiesResource {
                 map(propertiesFromString()).
                 fold(new Properties(), compose());
 
-        return modelOfProperties(compositeProperties).add(PropertiesModule.MODEL_NAME, PropertiesResource.PLAIN_NAME);
+        return modelOfProperties(modelWithName(PropertiesResource.PLAIN_NAME), compositeProperties);
     }
 
     private String title(Sequence<Url> urls) {

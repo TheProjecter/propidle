@@ -1,6 +1,6 @@
 package com.googlecode.propidle.search;
 
-import static com.googlecode.propidle.indexing.LucenePropertiesIndex.*;
+import static com.googlecode.propidle.search.LucenePropertiesIndex.*;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;

@@ -1,6 +1,6 @@
 package com.googlecode.propidle.aliases;
 
-import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.propidle.ModelName;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
@@ -10,6 +10,7 @@ import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
 
+import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.aliases.Alias.alias;
 import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
 import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
@@ -43,8 +44,7 @@ public class AliasesResource {
     public Model listAllAliases() {
         Iterable<Alias> alias = aliases.getAll();
 
-        Model basicModel = model().
-                add(PropertiesModule.MODEL_NAME, ALL_ALIASES).
+        Model basicModel = modelWithName(ALL_ALIASES).
                 add("aliasesUrl", basePath + ALL_ALIASES).
                 add(TITLE, "Property file aliases");
         return sequence(alias).fold(basicModel, addAliasToModel());
@@ -63,8 +63,7 @@ public class AliasesResource {
             alias = alias(aliasPath(""), aliasDestination(""));
         }
 
-        Model model = model().
-                add(PropertiesModule.MODEL_NAME, ALIAS).
+        Model model = modelWithName(ALIAS).
                 add(TITLE, "Alias \"" + from + "\"").
                 add("aliasUrl", basePath + "" + resourcePath).
                 add("redirectTo", overrideDestination.isEmpty() ? alias.to() : overrideDestination.get());

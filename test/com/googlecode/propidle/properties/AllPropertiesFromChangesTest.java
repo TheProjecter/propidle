@@ -1,7 +1,6 @@
 package com.googlecode.propidle.properties;
 
-import static com.googlecode.propidle.diff.PropertyComparison.*;
-import com.googlecode.propidle.diff.PropertyDiffTool;
+import static com.googlecode.propidle.properties.PropertyComparison.*;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;

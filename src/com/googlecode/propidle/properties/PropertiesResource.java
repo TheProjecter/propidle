@@ -1,30 +1,28 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.properties.AllProperties;
-import static com.googlecode.propidle.properties.Properties.properties;
-import com.googlecode.propidle.properties.PropertiesPath;
-import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.propidle.server.RequestedRevisionNumber;
-import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
-import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
 import com.googlecode.propidle.filenames.FileNamesResource;
-import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Option;
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
 import com.googlecode.utterlyidle.BasePath;
-import static com.googlecode.utterlyidle.proxy.Resource.*;
-
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
+import java.util.concurrent.Callable;
+
+import static com.googlecode.propidle.ModelName.name;
+import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
+import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
+import static com.googlecode.totallylazy.Option.none;
+import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.utterlyidle.proxy.Resource.*;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
-import java.util.concurrent.Callable;
 
 @Path(PropertiesResource.NAME)
 @Produces(TEXT_HTML)
@@ -58,16 +56,15 @@ public class PropertiesResource {
     @GET
     @Path("{path:.+$}")
     public Model getHtml(@PathParam("path") PropertiesPath path) {
-        return modelOf(path).
-                add(PropertiesModule.MODEL_NAME, modelName()).
-                add("changesUrl", basePath + urlOf(resource(ChangesResource.class).get(path, none(RevisionNumber.class))));
+        Model model = modelOf(path).add("changesUrl", basePath + urlOf(resource(ChangesResource.class).get(path, none(RevisionNumber.class))));
+        return name(model, modelName());
     }
 
     @GET
     @Path("{path:.+$}")
     @Produces(TEXT_PLAIN)
     public Model getProperties(@PathParam("path") PropertiesPath path) {
-        return modelOf(path).add(PropertiesModule.MODEL_NAME, PLAIN_NAME);
+        return name(modelOf(path), PLAIN_NAME);
     }
 
     @POST

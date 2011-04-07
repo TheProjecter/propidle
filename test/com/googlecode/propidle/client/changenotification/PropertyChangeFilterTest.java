@@ -2,11 +2,12 @@ package com.googlecode.propidle.client.changenotification;
 
 import com.googlecode.propidle.client.PropertyChangeListener;
 import static com.googlecode.propidle.client.changenotification.PropertyChangeEvent.propertyChangeEvent;
-import com.googlecode.propidle.diff.PropertyComparison;
-import static com.googlecode.propidle.diff.PropertyComparison.createdProperty;
+import com.googlecode.propidle.properties.PropertyComparison;
+import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyName.propertyNames;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
+
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 

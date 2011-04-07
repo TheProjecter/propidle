@@ -2,11 +2,10 @@ package com.googlecode.propidle.filenames;
 
 import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
-import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.search.FileNameSearcher;
 import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
@@ -15,11 +14,13 @@ import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import javax.ws.rs.*;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
+import static com.googlecode.propidle.ModelName.modelWithName;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.rendering.Model.model;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 @Path(FileNamesResource.NAME)
 @Produces(TEXT_HTML)
@@ -36,14 +37,13 @@ public class FileNamesResource {
 
     @GET
     public Model get(@QueryParam("q") Query query) {
-        Model model = model().
-                add(PropertiesModule.MODEL_NAME, NAME).
+        Model model = modelWithName(NAME).
                 add(PropertiesModule.TITLE, "Filenames \"" + query + "\"").
                 add("searchUrl", searchUrl()).
                 add("createPropertiesUrl", createPropertiesUrl()).
                 add("q", query.query());
         if (!query.isEmpty()) {
-            Iterable<Pair<PropertiesPath,PathType>> paths = searcher.search(query);
+            Iterable<Pair<PropertiesPath, PathType>> paths = searcher.search(query);
             sequence(paths).
                     sortBy(typeThenPath()).
                     fold(model, pathsIntoModel());
@@ -55,12 +55,12 @@ public class FileNamesResource {
     public Model getBase() {
         return getChildrenOf(propertiesPath("/"));
     }
+
     @GET
     @Path("{path:.*$}")
     public Model getChildrenOf(@PathParam("path") PropertiesPath path) {
         Iterable<Pair<PropertiesPath, PathType>> paths = searcher.childrenOf(path);
-        Model model = model().
-                add(PropertiesModule.MODEL_NAME, DIRECTORY_VIEW_NAME).
+        Model model = modelWithName(DIRECTORY_VIEW_NAME).
                 add("searchUrl", searchUrl()).
                 add("createPropertiesUrl", createPropertiesUrl()).
                 add(PropertiesModule.TITLE, "Children of \"" + path + "\"");
@@ -77,9 +77,9 @@ public class FileNamesResource {
         };
     }
 
-    private Callable2<? super Model, ? super Pair<PropertiesPath,PathType>, Model> pathsIntoModel() {
-        return new Callable2<Model, Pair<PropertiesPath,PathType>, Model>() {
-            public Model call(Model model, Pair<PropertiesPath,PathType> pathAndTypes) throws Exception {
+    private Callable2<? super Model, ? super Pair<PropertiesPath, PathType>, Model> pathsIntoModel() {
+        return new Callable2<Model, Pair<PropertiesPath, PathType>, Model>() {
+            public Model call(Model model, Pair<PropertiesPath, PathType> pathAndTypes) throws Exception {
                 PathType pathType = pathAndTypes.second();
                 PropertiesPath path = pathAndTypes.first();
                 Model fileNameModel = model().
@@ -92,9 +92,9 @@ public class FileNamesResource {
     }
 
     private Url urlOf(Pair<PropertiesPath, PathType> pathAndTypes) {
-        if(pathAndTypes.second().equals(PathType.FILE)){
+        if (pathAndTypes.second().equals(PathType.FILE)) {
             return urlResolver.resolvePropertiesUrl(pathAndTypes.first());
-        }else{
+        } else {
             return urlResolver.resolveFileNameUrl(pathAndTypes.first());
         }
     }

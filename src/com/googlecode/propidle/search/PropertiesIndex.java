@@ -1,5 +1,6 @@
-package com.googlecode.propidle.indexing;
+package com.googlecode.propidle.search;
 
+import com.googlecode.propidle.indexing.Index;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.propidle.properties.PropertiesPath;
 

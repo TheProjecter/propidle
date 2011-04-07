@@ -1,6 +1,8 @@
 package com.googlecode.propidle.indexing;
 
 import com.googlecode.propidle.PathType;
+import com.googlecode.propidle.filenames.FileNameIndex;
+import com.googlecode.propidle.filenames.LuceneFileNameIndex;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.search.FileNameSearcher;
 import com.googlecode.propidle.search.LuceneFileNameSearcher;
@@ -38,9 +40,9 @@ public class LuceneFileNameIndexTest {
 
     @Test
     public void shouldFindFileNames() throws Exception {
-        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/roundhouseAWoodLouse"));
-        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/kneeAFlea"));
-        propertiesIndexer.set(PropertiesPath.propertiesPath("/pilot/killAKrill"));
+        propertiesIndexer.set(propertiesPath("/production/roundhouseAWoodLouse"));
+        propertiesIndexer.set(propertiesPath("/production/kneeAFlea"));
+        propertiesIndexer.set(propertiesPath("/pilot/killAKrill"));
         writer.commit();
 
         assertThat(query("production"), hasSize(2));
@@ -50,11 +52,11 @@ public class LuceneFileNameIndexTest {
 
     @Test
     public void shouldNotDuplicateFilenames() throws Exception {
-        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/shoeAShrew"));
+        propertiesIndexer.set(propertiesPath("/production/shoeAShrew"));
         writer.commit();
         assertThat(query("shoeAShrew"), hasSize(1));
 
-        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/shoeAShrew"));
+        propertiesIndexer.set(propertiesPath("/production/shoeAShrew"));
         writer.commit();
         assertThat(query("shoeAShrew"), hasSize(1));
     }
@@ -84,7 +86,7 @@ public class LuceneFileNameIndexTest {
 
     @Test
     public void shouldIndexFullHierarchy() throws Exception {
-        propertiesIndexer.set(PropertiesPath.propertiesPath("/production/stabACrab/1234"));
+        propertiesIndexer.set(propertiesPath("/production/stabACrab/1234"));
         writer.commit();
 
         Sequence<Pair<PropertiesPath, PathType>> childrenOfRoot = findChildrenOf("/");

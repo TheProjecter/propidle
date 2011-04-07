@@ -1,7 +1,7 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
 import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.diff.PropertyComparison;
+import com.googlecode.propidle.properties.PropertyComparison;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.diff.PropertyComparison.*;
+import static com.googlecode.propidle.properties.PropertyComparison.*;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;

@@ -1,4 +1,4 @@
-package com.googlecode.propidle.diff;
+package com.googlecode.propidle.properties;
 
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Properties;
 
 import static com.googlecode.propidle.properties.Properties.toPair;
-import com.googlecode.propidle.properties.PropertyName;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.propidle.diff.PropertyComparison.createdProperty;
-import static com.googlecode.propidle.diff.PropertyComparison.changedProperty;
-import static com.googlecode.propidle.diff.PropertyComparison.removedProperty;
-import com.googlecode.propidle.diff.PropertyComparison;
-import com.googlecode.propidle.properties.PropertyValue;
+import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;
+import static com.googlecode.propidle.properties.PropertyComparison.changedProperty;
+import static com.googlecode.propidle.properties.PropertyComparison.removedProperty;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 

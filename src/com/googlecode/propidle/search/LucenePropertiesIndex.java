@@ -1,4 +1,4 @@
-package com.googlecode.propidle.indexing;
+package com.googlecode.propidle.search;
 
 import static com.googlecode.propidle.properties.Properties.toPairs;
 import com.googlecode.propidle.properties.PropertiesPath;
