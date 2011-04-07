@@ -1,8 +1,9 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.diff.PropertyComparison.createdProperty;
-import com.googlecode.propidle.indexing.LuceneFileNameIndex;
-import com.googlecode.propidle.indexing.LucenePropertiesIndex;
+import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;
+
+import com.googlecode.propidle.filenames.LuceneFileNameIndex;
+import com.googlecode.propidle.search.LucenePropertiesIndex;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
@@ -14,16 +15,14 @@ import static com.googlecode.propidle.search.Query.query;
 import static com.googlecode.propidle.search.SearchResult.searchResult;
 import com.googlecode.propidle.util.TestRecords;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
-import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
-import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
+
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import com.googlecode.propidle.PathType;
-import com.googlecode.totallylazy.*;
+
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import com.googlecode.totallylazy.iterators.ReadOnlyIterator;
-import com.googlecode.totallylazy.records.Record;
+
 import com.googlecode.totallylazy.records.Records;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
@@ -35,9 +34,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class RebuildIndexTest {
     private static final Version VERSION = Version.LUCENE_30;

@@ -1,6 +1,7 @@
-package com.googlecode.propidle.indexing;
+package com.googlecode.propidle.filenames;
 
 import com.googlecode.propidle.PathType;
+import com.googlecode.propidle.filenames.FileNameIndex;
 import com.googlecode.propidle.properties.PropertiesPath;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;

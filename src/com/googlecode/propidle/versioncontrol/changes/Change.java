@@ -1,7 +1,7 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
 import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.diff.PropertyComparison;
+import com.googlecode.propidle.properties.PropertyComparison;
 import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.util.NullArgumentException;

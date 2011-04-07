@@ -2,7 +2,7 @@ package com.googlecode.propidle.search;
 
 import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.indexing.LuceneFileNameIndex;
+import com.googlecode.propidle.filenames.LuceneFileNameIndex;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -13,7 +13,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.indexing.LuceneFileNameIndex.*;
+import static com.googlecode.propidle.filenames.LuceneFileNameIndex.*;
 import static com.googlecode.propidle.search.Query.query;
 import static com.googlecode.totallylazy.Pair.pair;
 

@@ -1,8 +1,7 @@
 package com.googlecode.propidle.properties;
 
-import static com.googlecode.propidle.diff.PropertyDiffTool.propertyValueChanged;
-import com.googlecode.propidle.diff.PropertyDiffTool;
-import com.googlecode.propidle.diff.PropertyComparison;
+import static com.googlecode.propidle.properties.PropertyDiffTool.propertyValueChanged;
+
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.properties;

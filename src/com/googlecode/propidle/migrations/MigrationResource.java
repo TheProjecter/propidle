@@ -1,6 +1,6 @@
 package com.googlecode.propidle.migrations;
 
-import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.propidle.ModelName;
 import com.googlecode.propidle.status.StatusResource;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
@@ -15,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Properties;
 
+import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
@@ -48,11 +49,10 @@ public class MigrationResource {
         } finally {
             container.close();
         }
-        return model()
+        return modelWithName(NAME)
                 .add("runTime", format("%s ms", calculateMilliseconds(start, nanoTime())))
                 .add("statusReport", urlOf(resource(StatusResource.class).reportStatus()))
-                .add("migrations", migrations.map(reportMigration()))
-                .add(PropertiesModule.MODEL_NAME, NAME);
+                .add("migrations", migrations.map(reportMigration()));
     }
 
     private Callable1<MigrationLogItem, String> reportMigration() {

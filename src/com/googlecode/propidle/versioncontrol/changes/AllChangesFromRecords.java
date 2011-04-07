@@ -1,23 +1,25 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
-import static com.googlecode.propidle.diff.PropertyComparison.changedProperty;
 import com.googlecode.propidle.properties.PropertiesPath;
-import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import com.googlecode.propidle.properties.PropertyValue;
-import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.totallylazy.records.Record;
+import com.googlecode.totallylazy.records.Records;
+
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertyComparison.changedProperty;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
+import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
-import com.googlecode.totallylazy.records.Keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
 
 public class AllChangesFromRecords implements AllChanges {
     public static final Keyword CHANGES = Keyword.keyword("changes");
@@ -45,7 +47,7 @@ public class AllChangesFromRecords implements AllChanges {
                 get(CHANGES).
                 filter(
                         where(PROPERTIES_PATH, is(propertiesPath.toString())).
-                                and(where(REVISION_NUMBER, is((Number)revisionNumber.value())))).
+                                and(where(REVISION_NUMBER, is((Number) revisionNumber.value())))).
                 map(deserialise());
     }
 
@@ -81,7 +83,7 @@ public class AllChangesFromRecords implements AllChanges {
             public Change call(Record record) throws Exception {
                 return new Change(
                         revisionNumber(record.get(REVISION_NUMBER)),
-                        PropertiesPath.propertiesPath(record.get(PROPERTIES_PATH)),
+                        propertiesPath(record.get(PROPERTIES_PATH)),
                         changedProperty(
                                 propertyName(record.get(PROPERTY_NAME)),
                                 propertyValue(record.get(PREVIOUS_VALUE)),

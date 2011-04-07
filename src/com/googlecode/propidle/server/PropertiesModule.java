@@ -1,15 +1,9 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.propidle.aliases.Aliases;
-import com.googlecode.propidle.aliases.AliasesFromRecords;
-import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.client.DynamicPropertiesActivator;
 import com.googlecode.propidle.client.SnapshotPropertiesActivator;
-import com.googlecode.propidle.compositeproperties.CompositePropertiesResource;
-import com.googlecode.propidle.diff.DiffResource;
-import com.googlecode.propidle.diff.PropertyDiffTool;
-import com.googlecode.propidle.filenames.FileNamesResource;
+import com.googlecode.propidle.properties.PropertyDiffTool;
 import com.googlecode.propidle.indexing.*;
 import com.googlecode.propidle.migrations.MigrationResource;
 import com.googlecode.propidle.properties.*;
@@ -30,13 +24,10 @@ import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
 import com.googlecode.propidle.versioncontrol.revisions.*;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Predicate;
-import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
-import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.modules.AbstractModule;
 import com.googlecode.utterlyidle.modules.ArgumentScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
@@ -57,6 +48,8 @@ import java.lang.reflect.Type;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.propidle.ModelName.nameIs;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
@@ -67,80 +60,10 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @SuppressWarnings("unchecked")
 public class PropertiesModule extends AbstractModule implements ArgumentScopedModule{
-    public static final String MODEL_NAME = "MODEL_NAME";
     public static final String TITLE = "title";
 
-    private final Directory directory;
-    private final Callable<Properties> propertyLoader;
-
-
-    public PropertiesModule(Callable<Properties> propertyLoader, Directory directory) {
-        this.propertyLoader = propertyLoader;
-        if (directory == null) throw new NullArgumentException("directory");
-        this.directory = directory;
-    }
-
-    public Module addPerApplicationObjects(Container container) {
-        container.addInstance(Version.class, Version.LUCENE_30);
-        container.addInstance(Directory.class, directory);
-        container.addInstance(Analyzer.class, new StandardAnalyzer(Version.LUCENE_30));
-        container.addActivator(IndexWriter.class, IndexWriterActivator.class);
-        container.addActivator(DynamicProperties.class, new DynamicPropertiesActivator(propertyLoader));
-        container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
-        return this;
-    }
-
-    public Module addPerRequestObjects(Container container) {
-        container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
-        container.addInstance(ConvertExtensionToAcceptHeader.Replacements.class,
-                              replacements(pair("properties", TEXT_PLAIN), pair("html", TEXT_HTML)));
-        container.decorate(HttpHandler.class, ConvertExtensionToAcceptHeader.class);
-        container.decorate(HttpHandler.class, ConvertRevisionNumberQueryParameterToHeader.class);
-        container.decorate(HttpHandler.class, TransactionDecorator.class);
-        container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
-        container.decorate(HttpHandler.class, SiteMeshHandler.class);
-
-        container.add(Decorators.class, DecorateHtml.class);
-
-        container.add(Clock.class, SystemClock.class);
-        container.add(PropertyDiffTool.class, PropertyDiffTool.class);
-        container.add(UrlResolver.class, UtterlyIdleUrlResolver.class);
-        container.addActivator(HighestExistingRevisionNumber.class, HighestExistingRevisionNumberActivator.class);
-        container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
-        container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
-
-        container.add(PropertiesIndex.class, LucenePropertiesIndex.class);
-        container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
-        container.add(FileNameIndex.class, LuceneFileNameIndex.class);
-        container.add(FileNameSearcher.class, LuceneFileNameSearcher.class);
-
-        container.add(AllProperties.class, AllPropertiesFromChanges.class);
-        container.decorate(AllProperties.class, PropertiesIndexingDecorator.class);
-        container.decorate(AllProperties.class, FileNameIndexingDecorator.class);
-
-        container.add(Aliases.class, AliasesFromRecords.class);
-        container.add(HighestRevisionNumbers.class, HighestRevisionNumbersFromRecords.class);
-        container.decorate(HighestRevisionNumbers.class, LockHighestRevisionNumbersDecorator.class);
-        container.add(AllChanges.class, AllChangesFromRecords.class);
-
-        container.add(UriGetter.class, SimpleUriGetter.class);
-        container.decorate(UriGetter.class, RelativeUriGetter.class);
-
-        return this;
-    }
-
     public Module addResources(Resources resources) {
-        resources.add(RootResource.class);
         resources.add(PropertiesResource.class);
-        resources.add(FileNamesResource.class);
-        resources.add(CompositePropertiesResource.class);
-        resources.add(AliasesResource.class);
-        resources.add(ChangesResource.class);
-        resources.add(DiffResource.class);
-        resources.add(SearchResource.class);
-        resources.add(StaticContentResource.class);
-        resources.add(FavIconResource.class);
-        resources.add(MigrationResource.class);
         return this;
     }
 
@@ -149,25 +72,7 @@ public class PropertiesModule extends AbstractModule implements ArgumentScopedMo
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_EDITABLE)), renderer(new ModelTemplateRenderer("EditablePropertiesResource_html", PropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.HTML_READ_ONLY)), renderer(new ModelTemplateRenderer("PropertiesResource_html", PropertiesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(PropertiesResource.PLAIN_NAME)), renderer(new ModelTemplateRenderer("PropertiesResource_properties", PropertiesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(FileNamesResource.NAME)), renderer(new ModelTemplateRenderer("FileNamesResource_search_html", FileNamesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(FileNamesResource.DIRECTORY_VIEW_NAME)), renderer(new ModelTemplateRenderer("FileNamesResource_directories_html", FileNamesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(AliasesResource.ALIAS)), renderer(new ModelTemplateRenderer("AliasResource_html", AliasesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(AliasesResource.ALL_ALIASES)), renderer(new ModelTemplateRenderer("AliasesResource_html", AliasesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(ChangesResource.NAME)), renderer(new ModelTemplateRenderer("ChangesResource_html", ChangesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(DiffResource.NAME)), renderer(new ModelTemplateRenderer("DiffResource_html", DiffResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(CompositePropertiesResource.NAME)), renderer(new ModelTemplateRenderer("CompositePropertiesResource_html", CompositePropertiesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(MigrationResource.NAME)), renderer(new ModelTemplateRenderer("MigrationResource_html", MigrationResource.class)));
         return this;
-    }
-
-    public static LogicalPredicate<Model> nameIs(final String name) {
-        Predicate<Model> nameMatcher = new Predicate<Model>() {
-            public boolean matches(Model model) {
-                return model != null && model.containsKey(PropertiesModule.MODEL_NAME) && name.equals(model.first(PropertiesModule.MODEL_NAME));
-            }
-        };
-        return notNullValue(Model.class).and(nameMatcher);
     }
 
     public Module addPerArgumentObjects(final Container container) {
@@ -183,7 +88,7 @@ public class PropertiesModule extends AbstractModule implements ArgumentScopedMo
         }
 
         public PropertiesPath resolve(Type type) throws Exception {
-             return PropertiesPath.propertiesPath(theValue);
+             return propertiesPath(theValue);
         }
     }
 }

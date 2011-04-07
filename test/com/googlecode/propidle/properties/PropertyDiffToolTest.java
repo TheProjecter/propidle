@@ -1,12 +1,12 @@
-package com.googlecode.propidle.diff;
+package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.diff.PropertyDiffTool;
+import com.googlecode.propidle.properties.PropertyDiffTool;
 import org.junit.Test;
 
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.propidle.diff.PropertyComparison.*;
+import static com.googlecode.propidle.properties.PropertyComparison.*;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;

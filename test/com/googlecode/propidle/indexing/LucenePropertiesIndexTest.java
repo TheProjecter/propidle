@@ -3,6 +3,8 @@ package com.googlecode.propidle.indexing;
 import static com.googlecode.propidle.indexing.IndexWriterActivator.indexWriter;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+
+import com.googlecode.propidle.search.LucenePropertiesIndex;
 import com.googlecode.propidle.search.LucenePropertiesSearcher;
 import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.search.SearchResult;

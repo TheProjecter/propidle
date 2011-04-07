@@ -1,15 +1,13 @@
 package com.googlecode.propidle.diff;
 
-import com.googlecode.propidle.diff.PropertyComparison;
-import com.googlecode.propidle.diff.PropertyDiffTool;
-import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.propidle.properties.PropertyComparison;
+import com.googlecode.propidle.properties.PropertyDiffTool;
 import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Left;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.utterlyidle.Priority;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -21,6 +19,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Properties;
 
+import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
@@ -52,8 +51,7 @@ public class DiffResource {
         Either<String, Properties> rightResult = tryToGetProperties(rightUrl);
 
         Sequence<PropertyComparison> diffs = sequence(propertyDiffTool.diffs(safeRight(leftResult), safeRight(rightResult)));
-        Model urls = model().
-                add(PropertiesModule.MODEL_NAME, NAME).
+        Model urls = modelWithName(NAME).
                 add("left", model().
                         add("url", leftUrl.value()).
                         add("status", leftResult.isRight() ? "ok" : "bad").

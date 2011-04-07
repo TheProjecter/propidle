@@ -1,6 +1,6 @@
 package com.googlecode.propidle.client.changenotification;
 
-import com.googlecode.propidle.diff.PropertyComparison;
+import com.googlecode.propidle.properties.PropertyComparison;
 import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.totallylazy.Predicate;
 

@@ -1,7 +1,7 @@
 package com.googlecode.propidle.status;
 
 
-import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.propidle.ModelName;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.utterlyidle.HeaderParameters.headerParameters;
 import static com.googlecode.utterlyidle.Responses.response;
 import static com.googlecode.utterlyidle.rendering.Model.model;
@@ -33,7 +34,7 @@ public class StatusResource {
 
     private Model modelOf(StatusChecks checkList) {
         Iterable<StatusCheckResult> statusCheckResults = checkList.checks();
-        return model().add("checks", statusCheckResults).add(PropertiesModule.MODEL_NAME, NAME);
+        return modelWithName(NAME).add("checks", statusCheckResults);
     }
 
 }

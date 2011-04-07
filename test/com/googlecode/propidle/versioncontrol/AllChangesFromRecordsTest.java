@@ -1,6 +1,7 @@
 package com.googlecode.propidle.versioncontrol;
 
-import static com.googlecode.propidle.diff.PropertyComparison.*;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertyComparison.*;
 import com.googlecode.propidle.properties.PropertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
@@ -21,7 +22,7 @@ public class AllChangesFromRecordsTest {
 
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPath() {
-        PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");
+        PropertiesPath propertiesPath = propertiesPath("/properties/production");
 
         Sequence<Change> firstSetOfExpectedChanges = sequence(
                 change(
@@ -65,7 +66,7 @@ public class AllChangesFromRecordsTest {
 
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPathAndRevisionNumber() {
-        PropertiesPath propertiesPath = PropertiesPath.propertiesPath("/properties/production");
+        PropertiesPath propertiesPath = propertiesPath("/properties/production");
 
         Sequence<Change> revision0 = sequence(
                 change(

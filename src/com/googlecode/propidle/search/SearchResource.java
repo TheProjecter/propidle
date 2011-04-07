@@ -1,9 +1,6 @@
 package com.googlecode.propidle.search;
 
-import com.googlecode.propidle.search.PropertiesSearcher;
-import com.googlecode.propidle.search.Query;
-import com.googlecode.propidle.search.SearchResult;
-import com.googlecode.propidle.server.PropertiesModule;
+import com.googlecode.propidle.ModelName;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -12,6 +9,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import static com.googlecode.propidle.ModelName.modelWithName;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
@@ -33,8 +32,7 @@ public class SearchResource {
 
     @GET
     public Model get(@QueryParam("q") Option<Query> query) {
-        Model model = model().
-                add(PropertiesModule.MODEL_NAME, NAME).
+        Model model = modelWithName(NAME).
                 add(TITLE, "Search \"" + query.getOrNull() + "\"");
         if (!query.isEmpty()) {
             Iterable<SearchResult> results = searcher.search(query.get());

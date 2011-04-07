@@ -1,8 +1,6 @@
-package com.googlecode.propidle.diff;
+package com.googlecode.propidle.properties;
 
 import com.googlecode.propidle.util.NullArgumentException;
-import com.googlecode.propidle.properties.PropertyName;
-import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.totallylazy.Option;
 
 import static com.googlecode.totallylazy.Option.none;

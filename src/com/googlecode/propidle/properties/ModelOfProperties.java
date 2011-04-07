@@ -1,6 +1,5 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.utterlyidle.rendering.Model;
 
@@ -20,9 +19,14 @@ public class ModelOfProperties {
     }
 
     public static Model modelOfProperties(Properties properties) {
+        Model baseModel = model();
+        return modelOfProperties(baseModel, properties);
+    }
+
+    public static Model modelOfProperties(Model baseModel, Properties properties) {
         return sequence(properties.entrySet()).
                 sortBy(key()).
-                foldLeft(model(), propertyToModel());
+                foldLeft(baseModel, propertyToModel());
     }
 
     public static Callable2<? super Model, ? super Map.Entry<Object, Object>, Model> propertyToModel() {

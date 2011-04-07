@@ -1,10 +1,11 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.propidle.indexing.FileNameIndex;
-import com.googlecode.propidle.indexing.PropertiesIndex;
+import com.googlecode.propidle.filenames.FileNameIndex;
+import com.googlecode.propidle.search.PropertiesIndex;
 import static com.googlecode.propidle.properties.Properties.properties;
 import com.googlecode.propidle.properties.PropertiesPath;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
