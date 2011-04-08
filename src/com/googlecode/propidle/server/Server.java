@@ -1,17 +1,11 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.MigrationsModules.migrationsModules;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
-import static com.googlecode.propidle.util.Callables.chain;
-
-import com.googlecode.propidle.migrations.PropidleMigrationsModule;
-import com.googlecode.propidle.monitoring.MonitoringModule;
 import com.googlecode.totallylazy.*;
 
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 
 import com.googlecode.utterlyidle.BasePath;
