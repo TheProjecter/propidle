@@ -61,6 +61,18 @@ public class AliasesTest extends PropertiesApplicationTestCase {
     }
 
     @Test
+    public void propertiesFileExtensionIsRetainedInRedirectUrl() throws Exception {
+        when(a(RequestIsMade.class).to(post("/aliases/alias?edit=").
+                withForm("to", "/redirect")));
+
+        when(a(RequestIsMade.class).to(get("/aliases/alias.properties").
+                withHeader(ACCEPT, TEXT_PLAIN)));
+
+        then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
+        then(theHeader("location"), the(LastResponse.class), is("/redirect.properties"));
+    }
+
+    @Test
     public void weCanSeeAListOfAllAvailableAliases() throws Exception {
         given(that(AliasExists.class).from(aliasPath("redirect_1")).to(aliasDestination("/properties/1")));
         given(that(AliasExists.class).from(aliasPath("redirect_2")).to(aliasDestination("/properties/2")));
