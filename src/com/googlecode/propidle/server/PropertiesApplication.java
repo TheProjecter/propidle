@@ -35,9 +35,9 @@ public class PropertiesApplication extends RestApplication {
     public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) throws Exception {
         super();
         add(asRequestScopeModule().call(new MigrationQueriesModule()));
-        add(new LuceneModule(directory));
 
         add(new BasicModule());
+        add(new LuceneModule(directory));
         add(new ApplicationPropertiesModule(propertyLoader));
 
         add(new AliasesModule());
