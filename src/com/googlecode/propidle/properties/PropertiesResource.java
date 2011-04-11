@@ -7,6 +7,7 @@ import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.Priority;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
@@ -55,6 +56,7 @@ public class PropertiesResource {
 
     @GET
     @Path("{path:.+$}")
+    @Priority(Priority.High)
     public Model getHtml(@PathParam("path") PropertiesPath path) {
         Model model = modelOf(path).add("changesUrl", basePath + urlOf(resource(ChangesResource.class).get(path, none(RevisionNumber.class))));
         return name(model, modelName());
