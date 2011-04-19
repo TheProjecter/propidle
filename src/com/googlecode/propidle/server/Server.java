@@ -8,11 +8,14 @@ import com.googlecode.totallylazy.*;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 
+import com.googlecode.utterlyidle.Application;
 import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.CloseableCallable;
 import com.googlecode.utterlyidle.io.Url;
 
 import static com.googlecode.utterlyidle.io.Url.url;
 
+import com.googlecode.utterlyidle.jetty.RestApplicationActivator;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.simpleframework.RestServer;
 import org.apache.lucene.store.RAMDirectory;
@@ -21,6 +24,7 @@ import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
 
+import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -81,12 +85,12 @@ public class Server {
     }
 
     public void stop() throws Exception {
-        server.stop();
+        server.close();
     }
 
-    private static void startServer(int port, PropertiesApplication application) throws Exception {
+    private static void startServer(int port, final PropertiesApplication application) throws Exception {
         long start = nanoTime();
-        server = new RestServer(port, BasePath.basePath("/"), application);
+        server = new RestServer(port, BasePath.basePath("/"), new RestApplicationActivator(application));
 
         application.call(RegisterCountingMBeans.class);
 
