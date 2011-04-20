@@ -110,5 +110,10 @@ public class DiffResource {
         public UrlWrapper(String value) {
             this.url = Url.url(value);
         }
+
+        @Override
+        public String toString() {
+            return url.toString();
+        }
     }
 }
