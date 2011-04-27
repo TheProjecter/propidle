@@ -19,6 +19,14 @@ public class CachingDynamicProperties {
                 }
             }
 
+            private synchronized Properties toCache(File cache, final Properties properties) throws IOException {
+                return using(new FileWriter(cache), new Callable1<FileWriter, Properties>() {
+                    public Properties call(FileWriter fileWriter) throws Exception {
+                        properties.store(fileWriter, null);
+                        return properties;
+                    }
+                });
+            }
         };
     }
 
@@ -32,12 +40,4 @@ public class CachingDynamicProperties {
         });
     }
 
-    private static Properties toCache(File cache, final Properties properties) throws IOException {
-        return using(new FileWriter(cache), new Callable1<FileWriter, Properties>() {
-            public Properties call(FileWriter fileWriter) throws Exception {
-                properties.store(fileWriter, null);
-                return properties;
-            }
-        });
-    }
 }
