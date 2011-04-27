@@ -92,7 +92,7 @@ public class Server {
         long start = nanoTime();
         server = new RestServer(port, BasePath.basePath("/"), new RestApplicationActivator(application));
 
-        application.call(RegisterCountingMBeans.class);
+        application.applicationScope().get(RegisterCountingMBeans.class).call();
 
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
         System.out.println(format("Running on port %s", port));
