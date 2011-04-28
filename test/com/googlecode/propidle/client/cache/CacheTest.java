@@ -1,7 +1,6 @@
 package com.googlecode.propidle.client.cache;
 
 import com.googlecode.propidle.client.DynamicProperties;
-import com.googlecode.propidle.client.PlainTextDynamicProperties;
 import com.googlecode.propidle.server.Server;
 import com.googlecode.propidle.server.TestServer;
 import com.googlecode.totallylazy.Pair;
@@ -48,7 +47,7 @@ public class CacheTest {
         assertThat(post.first(), is(OK.code()));
 
         URL url = propertiesUrl.toURL();
-        DynamicProperties dynamicProperties = new PlainTextDynamicProperties(caching(cacheFile(url),propertiesAtUrl(url)));
+        DynamicProperties dynamicProperties = new DynamicProperties(caching(cacheFile(url),propertiesAtUrl(url)));
         dynamicProperties.reload();
 
         assertThat(dynamicProperties.snapshot().get("test").toString(), is(equalTo("hello")));

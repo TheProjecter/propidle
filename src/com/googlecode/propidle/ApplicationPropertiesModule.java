@@ -1,7 +1,7 @@
 package com.googlecode.propidle;
 
 import com.googlecode.propidle.client.DynamicProperties;
-import com.googlecode.propidle.client.PlainTextDynamicPropertiesActivator;
+import com.googlecode.propidle.client.DynamicPropertiesActivator;
 import com.googlecode.propidle.client.SnapshotPropertiesActivator;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
@@ -19,7 +19,7 @@ public class ApplicationPropertiesModule implements ApplicationScopedModule, Req
     }
 
     public Module addPerApplicationObjects(Container container) {
-        container.addActivator(DynamicProperties.class, new PlainTextDynamicPropertiesActivator(propertyLoader));
+        container.addActivator(DynamicProperties.class, new DynamicPropertiesActivator(propertyLoader));
         container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
         return this;
     }
