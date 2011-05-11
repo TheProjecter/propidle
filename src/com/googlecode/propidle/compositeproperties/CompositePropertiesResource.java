@@ -57,7 +57,7 @@ public class CompositePropertiesResource {
     public Model getHtml(@QueryParam("url") String url, QueryParameters parameters) {
         Sequence<Url> urls = sequence(parameters.getValues("url")).filter(Predicates.nonEmpty()).map(com.googlecode.propidle.util.Callables.toUrl()).memorise();
 
-        Sequence<Pair<Url, Either<Status, Properties>>> urlGetResults = urls.zip(urls.map(toProperties()));
+        Sequence<Pair<Url, Either<Status, Properties>>> urlGetResults = urls.zip(urls.mapConcurrently(toProperties()));
 
         Sequence<Properties> sourceProperties = urlGetResults.
                 map(Callables.<Either<Status, Properties>>second()).
