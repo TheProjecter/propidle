@@ -3,12 +3,12 @@ package com.googlecode.propidle.compositeproperties;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.propidle.util.Predicates;
 import com.googlecode.propidle.util.collections.MultiMap;
 import com.googlecode.totallylazy.*;
-import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.QueryParameters;
+import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
@@ -16,6 +16,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import java.io.ByteArrayInputStream;
 import java.util.Properties;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
@@ -23,8 +25,11 @@ import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProper
 import static com.googlecode.propidle.properties.Properties.*;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Callables.second;
+import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.isLeft;
+import static com.googlecode.totallylazy.Predicates.isRight;
+import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
@@ -39,45 +44,61 @@ public class CompositePropertiesResource {
     private final UriGetter uriGetter;
     private final BasePath basePath;
     private final Option<RequestedRevisionNumber> requestedRevisionNumber;
+    private final Application application;
 
-    public CompositePropertiesResource(UriGetter uriGetter, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber) {
+    public CompositePropertiesResource(UriGetter uriGetter, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, Application application) {
         this.uriGetter = uriGetter;
         this.basePath = basePath;
         this.requestedRevisionNumber = requestedRevisionNumber;
+        this.application = application;
     }
 
     @GET
     public Model getHtml(@QueryParam("url") String url, QueryParameters parameters) {
         Sequence<Url> urls = sequence(parameters.getValues("url")).filter(Predicates.nonEmpty()).map(com.googlecode.propidle.util.Callables.toUrl()).memorise();
 
-        Sequence<Pair<Url, Either<String, Exception>>> urlGetResults = urls.
-                zip(urls.map(com.googlecode.propidle.util.Callables.eitherExceptionOr(com.googlecode.propidle.util.Callables.urlGet(uriGetter))));
+        Sequence<Pair<Url, Either<Status, Properties>>> urlGetResults = urls.zip(urls.map(toProperties()));
 
         Sequence<Properties> sourceProperties = urlGetResults.
-                map(contentsOrException()).
-                filter(isLeft()).
-                map(Callables.left(String.class)).
-                map(propertiesFromString()).
+                map(Callables.<Either<Status, Properties>>second()).
+                filter(isRight()).
+                map(Callables.right(Properties.class)).
                 memorise();
 
-        Properties compositeProperties = sourceProperties.fold(new Properties(), compose());
+        Sequence<Pair<Url, Properties>> zip = urls.
+                zip(sourceProperties);
+        MultiMap<String, Pair<Url, String>> overrides = zip.
+               reverse().
+               fold(new MultiMap<String, Pair<Url, String>>(), collectOverrides());
 
-        MultiMap<String, Pair<Url, String>> overrides = urls.
-                zip(sourceProperties).
-                reverse().
-                fold(new MultiMap<String, Pair<Url, String>>(), collectOverrides());
+       Properties compositeProperties = sourceProperties.fold(new Properties(), compose());
 
-        Model propertiesAndOverrides = sequence(compositeProperties.entrySet()).
-                sortBy(key()).
-                map(toPair()).
-                fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
-                add("revision", requestedRevisionNumber.getOrNull()).
-                add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
-                add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, parameters))).
-                add(TITLE, title(urls));
+       Model propertiesAndOverrides = sequence(compositeProperties.entrySet()).
+               sortBy(key()).
+               map(toPair()).
+               fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
+               add("revision", requestedRevisionNumber.getOrNull()).
+               add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
+               add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, parameters))).
+               add(TITLE, title(urls));
 
-        return urlGetResults.fold(propertiesAndOverrides, urlIntoModel());
+       return urlGetResults.fold(propertiesAndOverrides, urlIntoModel());
     }
+
+    private Callable1<Url, Either<Status, Properties>> toProperties() {
+        return new Callable1<Url, Either<Status, Properties>>() {
+            public Either<Status, Properties> call(Url url) throws Exception {
+                Response response = application.handle(RequestBuilder.get(url.toString()).accepting(TEXT_PLAIN).build());
+                if( response.status() == Status.OK) {
+                    Properties properties = new Properties();
+                    properties.load(new ByteArrayInputStream(response.bytes()));
+                    return right(properties);
+                }
+                return left(response.status());
+            }
+        };
+    }
+
 
     @GET
     @Produces(TEXT_PLAIN)
@@ -92,7 +113,7 @@ public class CompositePropertiesResource {
         return modelOfProperties(modelWithName(PropertiesResource.PLAIN_NAME), compositeProperties);
     }
 
-    private String title(Sequence<Url> urls) {
+    private String title(Sequence<?> urls) {
         return "Composite of: " + urls.toString(" & ");
     }
 
@@ -131,6 +152,7 @@ public class CompositePropertiesResource {
         };
     }
 
+
     private Callable2<? super MultiMap<String, Pair<Url, String>>, ? super Pair<String, String>, MultiMap<String, Pair<Url, String>>> collectOverride(final Url propertyFileUrl) {
         return new Callable2<MultiMap<String, Pair<Url, String>>, Pair<String, String>, MultiMap<String, Pair<Url, String>>>() {
             public MultiMap<String, Pair<Url, String>> call(MultiMap<String, Pair<Url, String>> map, Pair<String, String> property) throws Exception {
@@ -139,18 +161,15 @@ public class CompositePropertiesResource {
         };
     }
 
-    private Callable2<? super Model, ? super Pair<Url, Either<String, Exception>>, Model> urlIntoModel() {
-        return new Callable2<Model, Pair<Url, Either<String, Exception>>, Model>() {
-            public Model call(Model model, Pair<Url, Either<String, Exception>> urlAndResult) throws Exception {
+    private Callable2<? super Model, ? super Pair<Url, Either<Status, Properties>>, Model> urlIntoModel() {
+        return new Callable2<Model, Pair<Url, Either<Status, Properties>>, Model>() {
+            public Model call(Model model, Pair<Url, Either<Status, Properties>> urlAndResult) throws Exception {
                 return model.
                         add("urls", model().
                                 add("url", urlAndResult.first()).
-                                add("status", urlAndResult.second().isLeft() ? "ok" : "bad"));
+                                add("status", urlAndResult.second().isRight() ? "ok" : "bad"));
             }
         };
     }
 
-    private static Callable1<? super Pair<Url, Either<String, Exception>>, Either<String, Exception>> contentsOrException() {
-        return second();
-    }
 }
