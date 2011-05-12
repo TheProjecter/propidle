@@ -3,6 +3,7 @@ package com.googlecode.propidle.server;
 import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
 import static com.googlecode.totallylazy.Runnables.write;
 import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.utterlyidle.ServerConfiguration.PORT_NUMBER;
 import static com.googlecode.utterlyidle.Status.OK;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
@@ -12,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import com.googlecode.propidle.util.TestRecords;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.utterlyidle.ServerConfiguration;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.modules.Module;
 
@@ -48,7 +50,7 @@ public class TestServer extends Server {
 
     private static Properties propertiesFor(int port) {
         Properties properties = hsqlConfiguration();
-        properties.setProperty(PORT, String.valueOf(port));
+        properties.setProperty(PORT_NUMBER, String.valueOf(port));
         return properties;
     }
 }

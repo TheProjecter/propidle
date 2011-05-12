@@ -8,11 +8,10 @@ import com.googlecode.totallylazy.*;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 
-import com.googlecode.utterlyidle.Application;
-import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.CloseableCallable;
+import com.googlecode.utterlyidle.ServerConfiguration;
 import com.googlecode.utterlyidle.io.Url;
 
+import static com.googlecode.utterlyidle.ServerConfiguration.serverConfiguration;
 import static com.googlecode.utterlyidle.io.Url.url;
 
 import com.googlecode.utterlyidle.jetty.RestApplicationActivator;
@@ -24,12 +23,10 @@ import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
 
-import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
 public class Server {
-    public static final String PORT = "port";
     public static final String JDBC_URL = "jdbc.url";
     public static final String JDBC_USER = "jdbc.user";
     public static final String JDBC_PASSWORD = "jdbc.password";
@@ -66,14 +63,13 @@ public class Server {
                 new RAMDirectory(),
                 persistenceModules(properties).join(extraModules));
 
-        int port = parseInt(propertyLoader.call().getProperty(PORT));
 
         Integer schemaVersion = schemaVersion(application.inTransaction(ReportSchemaVersion.class));
         System.out.println(format("Running with database schema version %s", schemaVersion));
         if (schemaVersion > 0) {
             rebuildLuceneIndexes(application);
         }
-        startServer(port, application);
+        startServer(application, serverConfiguration(properties));
 
     }
 
@@ -88,14 +84,14 @@ public class Server {
         server.close();
     }
 
-    private static void startServer(int port, final PropertiesApplication application) throws Exception {
+    private static void startServer(final PropertiesApplication application, final ServerConfiguration serverConfig) throws Exception {
         long start = nanoTime();
-        server = new RestServer(port, BasePath.basePath("/"), new RestApplicationActivator(application));
+        server = new RestServer(new RestApplicationActivator(application), serverConfig);
 
         application.applicationScope().get(RegisterCountingMBeans.class).call();
 
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
-        System.out.println(format("Running on port %s", port));
+        System.out.println(format("Running on port %s", serverConfig.portNumber()));
     }
 
     private static void rebuildLuceneIndexes(PropertiesApplication application) throws Exception {
