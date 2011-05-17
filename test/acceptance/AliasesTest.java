@@ -26,7 +26,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(get("/aliases/production/myApplication/v123")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theHeader("location"), the(LastResponse.class), is("/aliases/production/myApplication/v123?edit="));
+        then(theLocationOf(), the(LastResponse.class), is("/aliases/production/myApplication/v123?edit="));
     }
 
     @Test
@@ -35,7 +35,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
                 withForm("to", "/some_other_url")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theHeader("Location"), the(LastResponse.class), is("/aliases/production/myApplication/v123?edit="));
+        then(theLocationOf(), the(LastResponse.class), is("/aliases/production/myApplication/v123?edit="));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
                 withHeader(ACCEPT, TEXT_PLAIN)));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theHeader("location"), the(LastResponse.class), is("/some_other_url"));
+        then(theLocationOf(), the(LastResponse.class), is("/some_other_url"));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
                 withHeader(ACCEPT, TEXT_PLAIN)));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theHeader("location"), the(LastResponse.class), is("/redirect.properties"));
+        then(theLocationOf(), the(LastResponse.class), is("/redirect.properties"));
     }
 
     @Test

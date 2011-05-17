@@ -11,7 +11,7 @@ import static com.googlecode.utterlyidle.ServerConfiguration.serverConfiguration
 public class DemoServer {
     public static void main(String[] args) throws Exception {
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
-        new RestServer(new RestApplicationActivator(new TestPropertiesApplication()), serverConfiguration().withPortNumber(port));
+        new RestServer(new RestApplicationActivator(new TestPropertiesApplication()), serverConfiguration().port(port));
     }
 
 }

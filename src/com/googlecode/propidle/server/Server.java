@@ -91,7 +91,7 @@ public class Server {
         application.applicationScope().get(RegisterCountingMBeans.class).call();
 
         System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
-        System.out.println(format("Running on port %s", serverConfig.portNumber()));
+        System.out.println(format("Running on port %s", serverConfig.serverUrl().port()));
     }
 
     private static void rebuildLuceneIndexes(PropertiesApplication application) throws Exception {

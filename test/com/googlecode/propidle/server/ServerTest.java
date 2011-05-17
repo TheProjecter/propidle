@@ -21,10 +21,11 @@ import java.io.InputStream;
 
 public class ServerTest {
     private Server server;
+    private final String serverUrl = "http://localhost:8000/";
 
     @Before
     public void startServer() throws Exception {
-        server = new TestServer(8000);
+        server = new TestServer(serverUrl);
     }
 
     @After
@@ -34,7 +35,7 @@ public class ServerTest {
 
     @Test
     public void shouldPassSmokeTest() throws Exception {
-        Url propertiesUrl = url("http://localhost:8000/properties/test");
+        Url propertiesUrl = url(serverUrl + "properties/test");
 
         Pair<Integer, String> post = propertiesUrl.post(APPLICATION_FORM_URLENCODED, write("properties=test:hello".getBytes()));
         assertThat(post.first(), is(OK.code()));
