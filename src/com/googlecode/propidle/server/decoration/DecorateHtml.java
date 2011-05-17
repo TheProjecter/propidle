@@ -4,14 +4,15 @@ import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.HttpHeaders;
 import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.sitemesh.StringTemplateDecorators;
 import com.googlecode.utterlyidle.sitemesh.TemplateName;
 
-import javax.ws.rs.core.HttpHeaders;
 
 import static com.googlecode.totallylazy.Predicates.and;
+import static com.googlecode.utterlyidle.HttpHeaders.*;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.sitemesh.StaticDecoratorRule.staticRule;
 
@@ -32,7 +33,7 @@ public class DecorateHtml extends StringTemplateDecorators {
     private Predicate<? super Pair<Request, Response>> acceptsHtml() {
         return new Predicate<Pair<Request, Response>>() {
             public boolean matches(Pair<Request, Response> requestResponse) {
-                String contentTypeHeader = requestResponse.second().headers().getValue(HttpHeaders.CONTENT_TYPE);
+                String contentTypeHeader = requestResponse.second().headers().getValue(CONTENT_TYPE);
                 return contentTypeHeader != null && contentTypeHeader.contains(MimeType.TEXT_HTML.value());
             }
         };

@@ -18,7 +18,7 @@ import static com.googlecode.propidle.util.Sha1.sha1;
 import static com.googlecode.totallylazy.Runnables.write;
 import static com.googlecode.utterlyidle.Status.OK;
 import static com.googlecode.utterlyidle.io.Url.url;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -5,14 +5,14 @@ import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import com.googlecode.utterlyidle.annotations.GET;
+import com.googlecode.utterlyidle.annotations.Path;
+import com.googlecode.utterlyidle.annotations.Produces;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.utterlyidle.HeaderParameters.headerParameters;
 import static com.googlecode.utterlyidle.Responses.response;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 @Path(StatusResource.NAME)
 @Produces(TEXT_HTML)

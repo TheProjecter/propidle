@@ -16,8 +16,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
-import static javax.ws.rs.core.HttpHeaders.ACCEPT;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static java.util.regex.Pattern.quote;
 
 public class AliasesTest extends PropertiesApplicationTestCase {
@@ -54,7 +53,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
                 withForm("to", "/some_other_url")));
 
         when(a(RequestIsMade.class).to(get("/aliases/production/myApplication/v123").
-                withHeader(ACCEPT, TEXT_PLAIN)));
+                accepting(TEXT_PLAIN)));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
         then(theLocationOf(), the(LastResponse.class), is("/some_other_url"));
@@ -66,7 +65,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
                 withForm("to", "/redirect")));
 
         when(a(RequestIsMade.class).to(get("/aliases/alias.properties").
-                withHeader(ACCEPT, TEXT_PLAIN)));
+                accepting(TEXT_PLAIN)));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
         then(theLocationOf(), the(LastResponse.class), is("/redirect.properties"));

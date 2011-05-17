@@ -2,7 +2,7 @@ package com.googlecode.propidle.urls;
 
 import com.googlecode.propidle.util.tinytype.StringTinyType;
 
-import javax.ws.rs.core.MediaType;
+import com.googlecode.utterlyidle.MediaType;
 
 public class MimeType extends StringTinyType<MimeType> {
     public static MimeType TEXT_PLAIN = mimeType(MediaType.TEXT_PLAIN);

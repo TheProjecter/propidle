@@ -15,8 +15,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import java.io.InputStream;
 
 public class ServerTest {

@@ -2,8 +2,8 @@ package com.googlecode.propidle.server.staticcontent;
 
 import com.googlecode.utterlyidle.Response;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import com.googlecode.utterlyidle.annotations.GET;
+import com.googlecode.utterlyidle.annotations.Path;
 
 import static com.googlecode.utterlyidle.proxy.Resource.redirect;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;

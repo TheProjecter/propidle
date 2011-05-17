@@ -6,8 +6,7 @@ import com.googlecode.utterlyidle.Response;
 
 import java.util.concurrent.Callable;
 
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 public class RequestIsMade implements Callable<Response> {
     private final WebClient webClient;
@@ -18,7 +17,7 @@ public class RequestIsMade implements Callable<Response> {
     }
 
     public Response call() throws Exception {
-        return webClient.handle(request.withHeader(HttpHeaders.ACCEPT, MediaType.TEXT_HTML));
+        return webClient.handle(request.accepting(TEXT_HTML));
     }
 
     public RequestIsMade to(RequestBuilder request) {

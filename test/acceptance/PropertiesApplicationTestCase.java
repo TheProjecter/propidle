@@ -2,8 +2,6 @@ package acceptance;
 
 import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.propidle.WrapCallableInTransaction;
-import com.googlecode.propidle.migrations.MigrationResource;
-import com.googlecode.propidle.migrations.MigrationsContainer;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Strings;
@@ -17,15 +15,12 @@ import com.googlecode.yatspec.rendering.WithCustomRendering;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.hamcrest.Matcher;
 import org.junit.runner.RunWith;
-import sun.net.www.http.HttpClient;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.totallylazy.Maps.map;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.utterlyidle.proxy.Resource.resource;
-import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 

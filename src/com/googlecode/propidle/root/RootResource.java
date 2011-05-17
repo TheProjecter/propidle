@@ -7,10 +7,10 @@ import com.googlecode.utterlyidle.Response;
 
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import com.googlecode.utterlyidle.annotations.Path;
+import com.googlecode.utterlyidle.annotations.GET;
+import com.googlecode.utterlyidle.annotations.Produces;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 @Path("/")
 @Produces(TEXT_HTML)

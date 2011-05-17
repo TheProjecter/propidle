@@ -29,8 +29,8 @@ import com.googlecode.yadic.resolvers.OptionResolver;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 
 public class BasicModule implements RequestScopedModule {
     public Module addPerRequestObjects(Container container) {

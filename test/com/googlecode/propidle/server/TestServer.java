@@ -6,7 +6,7 @@ import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.utterlyidle.ServerConfiguration.SERVER_URL;
 import static com.googlecode.utterlyidle.Status.OK;
 import static com.googlecode.utterlyidle.io.Url.url;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
