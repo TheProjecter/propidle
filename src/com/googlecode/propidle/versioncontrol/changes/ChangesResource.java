@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import javax.ws.rs.*;
+import com.googlecode.utterlyidle.annotations.*;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
@@ -18,7 +18,7 @@ import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static com.googlecode.utterlyidle.rendering.Model.model;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 @Path(ChangesResource.NAME)
 @Produces(TEXT_HTML)

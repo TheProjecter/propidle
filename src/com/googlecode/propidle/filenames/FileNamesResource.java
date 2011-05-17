@@ -13,14 +13,14 @@ import com.googlecode.totallylazy.Pair;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import javax.ws.rs.*;
+import com.googlecode.utterlyidle.annotations.*;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.rendering.Model.model;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 @Path(FileNamesResource.NAME)
 @Produces(TEXT_HTML)

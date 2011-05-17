@@ -11,7 +11,7 @@ import com.googlecode.utterlyidle.Priority;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import javax.ws.rs.*;
+import com.googlecode.utterlyidle.annotations.*;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.propidle.ModelName.name;
@@ -22,8 +22,8 @@ import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRe
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.utterlyidle.proxy.Resource.*;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 
 @Path(PropertiesResource.NAME)
 @Produces(TEXT_HTML)

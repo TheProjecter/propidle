@@ -5,13 +5,13 @@ import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import com.googlecode.utterlyidle.annotations.GET;
+import com.googlecode.utterlyidle.annotations.Path;
+import com.googlecode.utterlyidle.annotations.Produces;
+import com.googlecode.utterlyidle.annotations.QueryParam;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import com.googlecode.propidle.urls.UrlResolver;

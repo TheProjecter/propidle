@@ -3,7 +3,6 @@ package com.googlecode.propidle.urls;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.utterlyidle.*;
 
-import javax.ws.rs.core.HttpHeaders;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

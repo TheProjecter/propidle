@@ -10,9 +10,9 @@ import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.Resolver;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import com.googlecode.utterlyidle.annotations.POST;
+import com.googlecode.utterlyidle.annotations.Path;
+import com.googlecode.utterlyidle.annotations.Produces;
 import java.util.Properties;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
@@ -24,7 +24,7 @@ import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 @Path(MigrationResource.NAME)
 @Produces(TEXT_HTML)

@@ -1,30 +1,24 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
-
-import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
-import com.googlecode.totallylazy.*;
-
-import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
-
+import com.googlecode.totallylazy.Callers;
+import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Sequences;
+import com.googlecode.utterlyidle.ServerActivator;
 import com.googlecode.utterlyidle.ServerConfiguration;
 import com.googlecode.utterlyidle.io.Url;
-
-import static com.googlecode.utterlyidle.ServerConfiguration.serverConfiguration;
-import static com.googlecode.utterlyidle.io.Url.url;
-
-import com.googlecode.utterlyidle.jetty.RestApplicationActivator;
 import com.googlecode.utterlyidle.modules.Module;
-import com.googlecode.utterlyidle.simpleframework.RestServer;
 import org.apache.lucene.store.RAMDirectory;
-
-import static java.lang.Integer.parseInt;
-import static java.lang.String.format;
-import static java.lang.System.nanoTime;
 
 import java.util.Properties;
 import java.util.concurrent.Callable;
+
+import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
+import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
+import static com.googlecode.totallylazy.Callables.returns;
+import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
+import static com.googlecode.utterlyidle.io.Url.url;
+import static java.lang.String.format;
+import static java.lang.System.nanoTime;
 
 public class Server {
     public static final String JDBC_URL = "jdbc.url";
@@ -33,7 +27,8 @@ public class Server {
     public static final String MIGRATION_JDBC_USER = "migration.jdbc.user";
     public static final String MIGRATION_JDBC_PASSWORD = "migration.jdbc.password";
 
-    private static RestServer server;
+    private static com.googlecode.utterlyidle.Server server;
+    private PropertiesApplication application;
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
@@ -58,7 +53,7 @@ public class Server {
 
     public Server(Callable<Properties> propertyLoader, Iterable<Module> extraModules) throws Exception {
         Properties properties = propertyLoader.call();
-        PropertiesApplication application = new PropertiesApplication(
+        application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
                 persistenceModules(properties).join(extraModules));
@@ -69,7 +64,7 @@ public class Server {
         if (schemaVersion > 0) {
             rebuildLuceneIndexes(application);
         }
-        startServer(application, serverConfiguration(properties));
+        startServer(application, new ServerConfiguration(properties));
 
     }
 
@@ -82,11 +77,12 @@ public class Server {
 
     public void stop() throws Exception {
         server.close();
+        application.close();
     }
 
     private static void startServer(final PropertiesApplication application, final ServerConfiguration serverConfig) throws Exception {
         long start = nanoTime();
-        server = new RestServer(new RestApplicationActivator(application), serverConfig);
+        server = Callers.call(new ServerActivator(application, serverConfig));
 
         application.applicationScope().get(RegisterCountingMBeans.class).call();
 

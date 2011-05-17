@@ -1,9 +1,9 @@
 package com.googlecode.propidle.server.staticcontent;
 
-import javax.ws.rs.*;
-import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
-import javax.ws.rs.core.StreamingOutput;
+import com.googlecode.utterlyidle.annotations.*;
+import static com.googlecode.utterlyidle.MediaType.APPLICATION_OCTET_STREAM;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
+import com.googlecode.utterlyidle.StreamingOutput ;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,7 +18,7 @@ public class StaticContentResource {
     @Path("{name}")
     public StreamingOutput get(@PathParam("name") final String filename) {
         return new StreamingOutput() {
-            public void write(OutputStream out) throws IOException, WebApplicationException {
+            public void write(OutputStream out) throws IOException {
                 InputStream in = StaticContentResource.class.getResourceAsStream(filename);
                 try {
                     int length = in.available(); // danger!

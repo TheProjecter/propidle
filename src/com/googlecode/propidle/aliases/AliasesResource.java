@@ -8,7 +8,7 @@ import com.googlecode.utterlyidle.ResourcePath;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import javax.ws.rs.*;
+import com.googlecode.utterlyidle.annotations.*;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.aliases.Alias.alias;
@@ -22,8 +22,8 @@ import static com.googlecode.utterlyidle.Responses.seeOther;
 import static com.googlecode.utterlyidle.proxy.Resource.redirect;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.rendering.Model.model;
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 
 @Path(AliasesResource.ALL_ALIASES)
 @Produces(TEXT_HTML)

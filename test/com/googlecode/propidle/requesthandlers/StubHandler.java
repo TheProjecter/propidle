@@ -3,8 +3,7 @@ package com.googlecode.propidle.requesthandlers;
 import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.io.Url;
 
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import com.googlecode.utterlyidle.MediaType;
 
 import static com.googlecode.utterlyidle.Responses.response;
 
