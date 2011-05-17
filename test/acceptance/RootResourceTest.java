@@ -1,9 +1,10 @@
 package acceptance;
 
-import acceptance.PropertiesApplicationTestCase;
 import acceptance.steps.whens.RequestIsMade;
+
+import static acceptance.steps.thens.LastResponse.theLocationOf;
 import static acceptance.steps.thens.LastResponse.theStatusOf;
-import static acceptance.steps.thens.LastResponse.theHeader;
+
 import acceptance.steps.thens.LastResponse;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
@@ -18,6 +19,6 @@ public class RootResourceTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(get("/")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theHeader("location"), inThe(LastResponse.class), is("/filenames/"));
+        then(theLocationOf(), the(LastResponse.class), is("/filenames/"));
     }
 }

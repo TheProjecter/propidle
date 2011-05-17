@@ -4,7 +4,10 @@ import acceptance.steps.WebClient;
 import static com.googlecode.propidle.properties.Properties.properties;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.ServerUrl;
 import com.googlecode.utterlyidle.Status;
+
+import static com.googlecode.utterlyidle.ServerUrl.serverUrl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -34,6 +37,15 @@ public class LastResponse implements Callable<Response> {
         return new Callable1<Response, String>() {
             public String call(Response response) throws Exception {
                 return response.header(headerName);
+            }
+        };
+    }
+
+    public static Callable1<Response, String> theLocationOf() {
+        return new Callable1<Response, String>() {
+            public String call(Response response) throws Exception {
+                ServerUrl location = serverUrl(theHeader("location").call(response));
+                return location.path().toString() + (location.getQuery() == null ? "" : "?" + location.getQuery());
             }
         };
     }
