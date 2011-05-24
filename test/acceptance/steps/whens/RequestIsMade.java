@@ -17,7 +17,7 @@ public class RequestIsMade implements Callable<Response> {
     }
 
     public Response call() throws Exception {
-        return webClient.handle(request.accepting(TEXT_HTML));
+        return webClient.handle(request);
     }
 
     public RequestIsMade to(RequestBuilder request) {

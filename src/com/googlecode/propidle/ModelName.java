@@ -1,10 +1,15 @@
 package com.googlecode.propidle;
 
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
+import com.googlecode.utterlyidle.Request;
+import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import static com.googlecode.totallylazy.Predicates.notNullValue;
+import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 public class ModelName {
@@ -25,5 +30,9 @@ public class ModelName {
 
     public static Model name(Model model, String name) {
         return model.add(MODEL_NAME, name);
+    }
+
+    public static LogicalPredicate<Pair<Request, Response>> modelNameIs(final String name) {
+        return where(entity(Model.class), nameIs(name));
     }
 }

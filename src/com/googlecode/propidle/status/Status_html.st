@@ -4,12 +4,12 @@
 </head>
 <body>
 <div class="section">
-    <h2>Status Report</h2>
         <table></table>
         $checks:{check |
-            <table>
-                <tr colspan="2" align="left">
-                    <th>$check.name$</th>
+        <div >
+            <table class="compact">
+                <tr>
+                    <th colspan="2">$check.name$</th>
                 </tr>
                 $check.properties:{property |
                     <tr>
@@ -18,6 +18,7 @@
                     </tr>
                 }$
             </table>
+            </div>
             <hr/>
         }$
 </div>
