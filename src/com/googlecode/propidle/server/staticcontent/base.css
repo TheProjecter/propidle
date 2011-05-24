@@ -16,6 +16,7 @@ th {
     margin:0px;
     padding:5px;
 }
+
 table {
     border-collapse:collapse;
     width:100%;
@@ -110,7 +111,7 @@ input[type="submit"] {
     font-family:Tahoma, Geneva, sans-serif;
     font-size:0.9em;
     background:#CCCCCC;
-    color:#black;
+    color:black;
     border-right:3px solid #000000;
 }
 #nav-pane ul {
@@ -181,4 +182,8 @@ input[type="submit"] {
     font-family:Tahoma, Geneva, sans-serif;
     border:hidden;
     font-size:0.8em;
+}
+
+table.compact {
+    width: inherit;
 }

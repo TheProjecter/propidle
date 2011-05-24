@@ -2,22 +2,25 @@ package com.googlecode.propidle.status;
 
 import com.googlecode.propidle.PersistenceMechanism;
 import com.googlecode.propidle.server.ModelTemplateRenderer;
-import com.googlecode.utterlyidle.Renderer;
-import com.googlecode.utterlyidle.Resources;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.utterlyidle.modules.ResourcesModule;
 import com.googlecode.utterlyidle.modules.ResponseHandlersModule;
-import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.yadic.Container;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.ModelName.nameIs;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.propidle.ModelName.*;
+import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
+import static com.googlecode.utterlyidle.sitemesh.ContentTypePredicate.contentType;
 
 public class StatusModule implements RequestScopedModule, ResourcesModule, ResponseHandlersModule {
 
@@ -40,7 +43,8 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
     }
 
     public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(StatusResource.NAME)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
+        handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_HTML)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
+        handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_PLAIN)), renderer(new ModelTemplateRenderer("Status_plain_text", StatusResource.class)));
         return this;
     }
 
