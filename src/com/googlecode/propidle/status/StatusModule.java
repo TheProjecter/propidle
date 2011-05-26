@@ -18,6 +18,7 @@ import static com.googlecode.propidle.ModelName.*;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.WILDCARD;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 import static com.googlecode.utterlyidle.sitemesh.ContentTypePredicate.contentType;
@@ -43,8 +44,7 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
     }
 
     public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_HTML)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
-        handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_PLAIN)), renderer(new ModelTemplateRenderer("Status_plain_text", StatusResource.class)));
+        handlers.add(modelNameIs(StatusResource.NAME), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
         return this;
     }
 
