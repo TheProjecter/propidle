@@ -44,7 +44,7 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
     }
 
     public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(modelNameIs(StatusResource.NAME), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
+        handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_HTML)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
         return this;
     }
 

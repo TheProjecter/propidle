@@ -1,14 +1,14 @@
 package com.googlecode.propidle.util;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Runnables;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 
+import static com.googlecode.totallylazy.Runnables.VOID;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.utterlyidle.modules.Modules.addPerApplicationObjects;
-import static com.googlecode.utterlyidle.modules.Modules.addPerRequestObjects;
 
 public class Modules {
     public static Callable1<? super Module, Callable1<Container, Container>> adaptUtterlyIdleModule() {
@@ -28,7 +28,7 @@ public class Modules {
     public static Callable1<Callable1<Container, Container>, Module> asRequestScopeModule() {
         return new Callable1<Callable1<Container, Container>, Module>() {
             public Module call(final Callable1<Container, Container> containerCallable) throws Exception {
-                return new RequestScopedModule(){
+                return new RequestScopedModule() {
                     public Module addPerRequestObjects(Container container) {
                         try {
                             containerCallable.call(container);
@@ -38,6 +38,25 @@ public class Modules {
                         return this;
                     }
                 };
+            }
+        };
+    }
+
+
+    public static Callable1<ApplicationScopedModule, Void> addPerApplicationObjects(final Container applicationScope) {
+        return new Callable1<ApplicationScopedModule, Void>() {
+            public Void call(ApplicationScopedModule applicationScopedModule) {
+                applicationScopedModule.addPerApplicationObjects(applicationScope);
+                return VOID;
+            }
+        };
+    }
+
+    public static Callable1<RequestScopedModule, Void> addPerRequestObjects(final Container requestScope) {
+        return new Callable1<RequestScopedModule, Void>() {
+            public Void call(RequestScopedModule requestScopedModule) {
+                requestScopedModule.addPerRequestObjects(requestScope);
+                return VOID;
             }
         };
     }

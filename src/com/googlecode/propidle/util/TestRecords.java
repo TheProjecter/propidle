@@ -25,9 +25,9 @@ import static com.googlecode.propidle.migrations.MigrationsContainer.migrationsC
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
+import static com.googlecode.propidle.util.Modules.addPerApplicationObjects;
+import static com.googlecode.propidle.util.Modules.addPerRequestObjects;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.utterlyidle.modules.Modules.addPerApplicationObjects;
-import static com.googlecode.utterlyidle.modules.Modules.addPerRequestObjects;
 import static java.util.UUID.randomUUID;
 
 public class TestRecords {
