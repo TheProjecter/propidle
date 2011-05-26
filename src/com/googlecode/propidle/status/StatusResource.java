@@ -12,10 +12,11 @@ import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.utterlyidle.HeaderParameters.headerParameters;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.MediaType.WILDCARD;
 import static com.googlecode.utterlyidle.Responses.response;
 
 @Path(StatusResource.NAME)
-@Produces({TEXT_HTML, TEXT_PLAIN})
+@Produces(TEXT_HTML)
 public class StatusResource {
 
     public static final String NAME = "status";

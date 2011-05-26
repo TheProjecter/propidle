@@ -25,25 +25,4 @@ public class StatusTest extends PropertiesApplicationTestCase {
         then(theHtmlOf(), the(LastResponse.class), containsString("Can read Lucene Directory"));
     }
 
-    @Test
-    public void canPresentAStatusReportInPlainText() throws Exception {
-        when(a(RequestIsMade.class).to(get("/status").accepting(TEXT_PLAIN)));
-        then(theHeader(CONTENT_TYPE), inThe(LastResponse.class), is(TEXT_PLAIN));
-        then(theContentOf(), the(LastResponse.class), isNotHtml());
-    }
-
-
-    private Matcher<? super String> isNotHtml() {
-        return new TypeSafeMatcher<String>() {
-            @Override
-            protected boolean matchesSafely(String response) {
-                return !response.toLowerCase().contains("<html>");
-            }
-
-            public void describeTo(Description description) {
-                description.appendText("a plain text");
-            }
-        };
-    }
-
 }
