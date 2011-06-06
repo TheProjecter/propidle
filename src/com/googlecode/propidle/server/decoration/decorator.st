@@ -20,7 +20,6 @@
                 <li><a href="/properties/">Properties</a></li>
                 <li><a href="/composite?url=">Compose properties</a></li>
                 <li><a href="/aliases/">Aliases</a></li>
-                <li><a href="/changes">Track changes</a></li>
                 <li><a href="/search?q=">Search</a></li>
                 <li><a href="/diff">Compare properties</a></li>
             </ul>

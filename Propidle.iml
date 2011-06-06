@@ -35,6 +35,7 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/lib/runtime" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-migrations-27-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
       </library>
