@@ -13,6 +13,7 @@ import com.googlecode.yadic.Container;
 
 import static com.googlecode.propidle.ModelName.nameIs;
 import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
@@ -23,7 +24,7 @@ public class PropidleMigrationsModule implements RequestScopedModule, ResourcesM
     }
 
     public Module addResources(Resources resources) {
-        resources.add(MigrationResource.class);
+        resources.add(annotatedClass(MigrationResource.class));
         return this;
     }
 

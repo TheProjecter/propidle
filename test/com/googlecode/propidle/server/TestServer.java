@@ -3,7 +3,6 @@ package com.googlecode.propidle.server;
 import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
 import static com.googlecode.totallylazy.Runnables.write;
 import static com.googlecode.totallylazy.Sequences.empty;
-import static com.googlecode.utterlyidle.ServerConfiguration.SERVER_URL;
 import static com.googlecode.utterlyidle.Status.OK;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
@@ -20,27 +19,32 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 public class TestServer extends Server {
-    public static final String SERVER_URL = "http://localhost:8000/";
 
     public static void main(String[] args) throws Exception {
-        new TestServer(SERVER_URL, true);
+        new TestServer(true);
     }
 
-    public TestServer(String serverUrl) throws Exception {
-        this(serverUrl, true);
+    public TestServer() throws Exception {
+        this(true);
 
     }
 
-    public TestServer(String serverUrl, boolean migrateDatabase) throws Exception {
-        super(propertiesFor(serverUrl), empty(Module.class));
+    public TestServer(boolean migrateDatabase) throws Exception {
+        super(properties(), empty(Module.class));
 
         if (migrateDatabase) {
             migrateDatabase();
         }
     }
 
+    private static Properties properties() {
+        Properties properties = hsqlConfiguration();
+        properties.setProperty(ServerConfiguration.SERVER_PORT, "8000");
+        return properties;
+    }
+
     private void migrateDatabase() {
-        Url propertiesUrl = url(SERVER_URL + "migrations");
+        Url propertiesUrl = url("http://localhost:8000/migrations");
         Pair<Integer, String> callMigrationsResource = propertiesUrl.post(APPLICATION_FORM_URLENCODED, withoutRequestContent());
         assertThat(callMigrationsResource.first(), is(OK.code()));
     }
@@ -49,9 +53,4 @@ public class TestServer extends Server {
         return write("".getBytes());
     }
 
-    private static Properties propertiesFor(String serverUrl) {
-        Properties properties = hsqlConfiguration();
-        properties.setProperty(ServerConfiguration.SERVER_URL, serverUrl);
-        return properties;
-    }
 }

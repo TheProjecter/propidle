@@ -1,24 +1,21 @@
 package acceptance;
 
 import acceptance.steps.WebClient;
+import acceptance.steps.givens.AliasExists;
+import acceptance.steps.givens.CurrentRevision;
+import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
-import acceptance.steps.givens.*;
-import com.googlecode.propidle.server.TestServer;
-import com.googlecode.utterlyidle.ServerUrl;
+import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
-import com.googlecode.utterlyidle.BasePath;
-
-import static com.googlecode.propidle.server.TestServer.*;
-import static com.googlecode.utterlyidle.BasePath.basePath;
-import static com.googlecode.utterlyidle.ServerUrl.serverUrl;
-
 import com.googlecode.yadic.Container;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
+
+import static com.googlecode.utterlyidle.BasePath.basePath;
 
 public class TestSupportModule implements ApplicationScopedModule, RequestScopedModule {
     private final TestLogger logger;
@@ -47,7 +44,6 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
         container.add(LastResponse.class);
         container.add(RequestIsMade.class);
 
-        container.addInstance(ServerUrl.class, serverUrl(SERVER_URL));
         return this;
     }
 

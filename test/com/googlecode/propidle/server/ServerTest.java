@@ -25,7 +25,7 @@ public class ServerTest {
 
     @Before
     public void startServer() throws Exception {
-        server = new TestServer(serverUrl);
+        server = new TestServer();
     }
 
     @After

@@ -81,13 +81,9 @@ public class Server {
     }
 
     private static void startServer(final PropertiesApplication application, final ServerConfiguration serverConfig) throws Exception {
-        long start = nanoTime();
         server = Callers.call(new ServerActivator(application, serverConfig));
 
         application.applicationScope().get(RegisterCountingMBeans.class).call();
-
-        System.out.println(format("Started server in %sms", calculateMilliseconds(start, nanoTime())));
-        System.out.println(format("Running on port %s", serverConfig.serverUrl().port()));
     }
 
     private static void rebuildLuceneIndexes(PropertiesApplication application) throws Exception {

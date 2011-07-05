@@ -19,6 +19,7 @@ import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.MediaType.WILDCARD;
+import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 import static com.googlecode.utterlyidle.sitemesh.ContentTypePredicate.contentType;
@@ -39,7 +40,7 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
     }
 
     public Module addResources(Resources resources) {
-        resources.add(StatusResource.class);
+        resources.add(annotatedClass(StatusResource.class));
         return this;
     }
 
