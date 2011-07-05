@@ -7,7 +7,6 @@ import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.Priority;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
 

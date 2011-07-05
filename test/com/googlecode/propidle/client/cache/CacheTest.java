@@ -29,7 +29,7 @@ public class CacheTest {
 
     @Before
     public void startServer() throws Exception {
-        server = new TestServer(serverUrl);
+        server = new TestServer();
     }
 
     @After

@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import static com.googlecode.propidle.ModelName.nameIs;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
@@ -23,7 +24,7 @@ public class PropertiesModule extends AbstractModule implements ArgumentScopedMo
     public static final String TITLE = "title";
 
     public Module addResources(Resources resources) {
-        resources.add(PropertiesResource.class);
+        resources.add(annotatedClass(PropertiesResource.class));
         return this;
     }
 
