@@ -7,6 +7,7 @@ import com.googlecode.propidle.urls.SimpleUriGetter;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 
@@ -14,7 +15,7 @@ public class DynamicProperties implements PropertyChangeNotifier {
     private final PropertyChangeAnnouncer announcer;
     private final Callable<Properties> propertyLoader;
 
-    private Properties lastSnapshot = new Properties();
+    private AtomicReference<Properties> lastSnapshot = new AtomicReference<Properties>(new Properties());
 
     public static DynamicProperties load(URL url) throws Exception {
         return load(propertiesAtUrl(url, new SimpleUriGetter()));
@@ -32,11 +33,11 @@ public class DynamicProperties implements PropertyChangeNotifier {
     }
 
     public synchronized PropertyChangeEvent reload() throws Exception {
-        Properties previous = lastSnapshot;
+        Properties previous = lastSnapshot.get();
         Properties updated = propertyLoader.call();
 
         PropertyChangeEvent event = announcer.announceChanges(previous, updated);
-        lastSnapshot = updated;
+        lastSnapshot.set(updated);
         return event;
     }
 
@@ -44,7 +45,7 @@ public class DynamicProperties implements PropertyChangeNotifier {
         if(lastSnapshot==null){
             throw new IllegalStateException("Properties have not been loaded. Call reload() first.");
         }
-        return lastSnapshot;
+        return lastSnapshot.get();
     }
 
     public void listen(PropertyChangeListener listener) {
