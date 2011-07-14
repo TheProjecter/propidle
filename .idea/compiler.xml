@@ -5,6 +5,7 @@
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!*.java" />
+      <entry name="*.properties" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>
