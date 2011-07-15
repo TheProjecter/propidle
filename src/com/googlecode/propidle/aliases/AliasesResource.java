@@ -4,8 +4,10 @@ import com.googlecode.propidle.ModelName;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.ResourcePath;
 import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.handlers.ClientHttpHandler;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import com.googlecode.utterlyidle.annotations.*;
@@ -78,8 +80,17 @@ public class AliasesResource {
     @POST
     @Path("{from:.+}")
     public Response update(@PathParam("from") AliasPath from, @FormParam("to") AliasDestination to) {
+        try {
+            Response handle = new ClientHttpHandler().handle(RequestBuilder.get(to.url().toString()).build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         aliases.put(alias(from, to));
         return redirect(resource(AliasesResource.class).edit("", from, none(AliasDestination.class)));
+    }
+
+    private void validate(AliasDestination to) {
+        to.url();
     }
 
     @GET

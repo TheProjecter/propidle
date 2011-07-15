@@ -4,6 +4,7 @@ import com.googlecode.propidle.ApplicationPropertiesModule;
 import com.googlecode.propidle.BasicModule;
 import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.aliases.AliasesModule;
+import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.compositeproperties.CompositePropertiesModule;
 import com.googlecode.propidle.diff.DiffModule;
 import com.googlecode.propidle.filenames.FileNamesModule;
@@ -27,11 +28,21 @@ import org.apache.lucene.store.Directory;
 
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersionModule;
+import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
+import static java.lang.String.format;
+import static java.lang.System.nanoTime;
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class PropertiesApplication extends RestApplication {
+
+    private static final String LUCENE_INDEX_REFRESH_TIME_IN_MINUTES = "lucene.index.refresh.time.in.minutes";
+
     public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) throws Exception {
         super();
         add(asRequestScopeModule().call(new MigrationQueriesModule()));
@@ -61,6 +72,27 @@ public class PropertiesApplication extends RestApplication {
         for (Module module : modules) {
             add(module);
         }
+
+        scheduleLuceneReindexing();
+    }
+
+    private void scheduleLuceneReindexing() {
+        DynamicProperties properties = applicationScope().get(DynamicProperties.class);
+        Long refreshDelay = Long.valueOf(properties.snapshot().getProperty(LUCENE_INDEX_REFRESH_TIME_IN_MINUTES, "1"));
+        newSingleThreadScheduledExecutor().scheduleWithFixedDelay(rebuildLuceneIndexes(), 0, refreshDelay, MINUTES);
+    }
+
+    private Runnable rebuildLuceneIndexes() {
+        return new Runnable() {
+            public void run() {
+                try {
+                    inTransaction(RebuildIndex.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
     }
 
     @SuppressWarnings("unchecked")
