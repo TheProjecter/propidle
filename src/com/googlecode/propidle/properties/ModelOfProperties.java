@@ -1,11 +1,11 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Predicate;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Callables.asString;
