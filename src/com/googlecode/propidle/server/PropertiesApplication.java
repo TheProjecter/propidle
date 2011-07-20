@@ -73,26 +73,6 @@ public class PropertiesApplication extends RestApplication {
             add(module);
         }
 
-        scheduleLuceneReindexing();
-    }
-
-    private void scheduleLuceneReindexing() {
-        DynamicProperties properties = applicationScope().get(DynamicProperties.class);
-        Long refreshDelay = Long.valueOf(properties.snapshot().getProperty(LUCENE_INDEX_REFRESH_TIME_IN_MINUTES, "1"));
-        newSingleThreadScheduledExecutor().scheduleWithFixedDelay(rebuildLuceneIndexes(), 0, refreshDelay, MINUTES);
-    }
-
-    private Runnable rebuildLuceneIndexes() {
-        return new Runnable() {
-            public void run() {
-                try {
-                    inTransaction(RebuildIndex.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
     }
 
     @SuppressWarnings("unchecked")

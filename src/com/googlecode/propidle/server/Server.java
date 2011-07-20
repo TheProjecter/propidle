@@ -61,6 +61,9 @@ public class Server {
 
         Integer schemaVersion = schemaVersion(application.inTransaction(ReportSchemaVersion.class));
         System.out.println(format("Running with database schema version %s", schemaVersion));
+        if (schemaVersion > 0) {
+	            rebuildLuceneIndexes(application);
+        }
         startServer(application, new ServerConfiguration(properties));
 
     }
@@ -81,5 +84,13 @@ public class Server {
         server = Callers.call(new ServerActivator(application, serverConfig));
 
         application.applicationScope().get(RegisterCountingMBeans.class).call();
+    }
+
+
+    private static void rebuildLuceneIndexes(PropertiesApplication application) throws Exception {
+        System.out.println("Re-indexing...");
+        long start = nanoTime();
+        application.inTransaction(RebuildIndex.class);
+        System.out.println(format("Re-indexing finished in %sms", calculateMilliseconds(start, nanoTime())));
     }
 }
