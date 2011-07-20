@@ -18,6 +18,7 @@ import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameter
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.utterlyidle.annotations.Path;
 
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
@@ -89,8 +90,9 @@ public class RelativeUriGetter implements UriGetter {
     }
 
     private String stripBaseBath(String path) {
-        return compile(quote(basePath.toString())).
-                matcher(path).
-                replaceFirst("");
+        if(path.startsWith(basePath.toString())) {
+            return path.replaceFirst(basePath.toString(), "");
+        }
+        return path;
     }
 }

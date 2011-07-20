@@ -43,8 +43,23 @@ public class RelativeUriGetterTest {
 
         RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(lastRequest), BASE_PATH, none(RequestedRevisionNumber.class));
 
-        assertThat(asString(resolver.get(new URI("/someResource"), MimeType.TEXT_HTML)), is("WIN!"));
-        assertThat(lastRequest.url(), is(url("/someResource")));
+        assertThat(asString(resolver.get(new URI("/someResource/path"), MimeType.TEXT_HTML)), is("WIN!"));
+        assertThat(lastRequest.url(), is(url("/someResource/path")));
+
+        verify(decorated, never()).get(any(URI.class), any(MimeType.class));
+    }
+
+    @Test
+    public void shouldNotReplacePartOfPathWhichMatchesBasePath() throws Throwable {
+
+        BasePath basePath = BasePath.basePath("/");
+
+        StubHandler lastRequest = stubHandler("WIN!");
+
+        RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(lastRequest), basePath, none(RequestedRevisionNumber.class));
+
+        assertThat(asString(resolver.get(new URI("some/resource"), MimeType.TEXT_HTML)), is("WIN!"));
+        assertThat(lastRequest.url(), is(url("some/resource")));
 
         verify(decorated, never()).get(any(URI.class), any(MimeType.class));
     }
