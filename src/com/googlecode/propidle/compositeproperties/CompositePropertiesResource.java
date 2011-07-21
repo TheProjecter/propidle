@@ -3,7 +3,6 @@ package com.googlecode.propidle.compositeproperties;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
-import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.propidle.util.Predicates;
 import com.googlecode.propidle.util.collections.MultiMap;
@@ -16,18 +15,18 @@ import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.Produces;
 import com.googlecode.utterlyidle.annotations.QueryParam;
-import com.googlecode.utterlyidle.MediaType;
+
 import java.io.ByteArrayInputStream;
 import java.util.Properties;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
 import static com.googlecode.propidle.properties.Properties.*;
+import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.isLeft;
 import static com.googlecode.totallylazy.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -41,13 +40,11 @@ import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 @Produces(TEXT_HTML)
 public class CompositePropertiesResource {
     public static final String NAME = "composite";
-    private final UriGetter uriGetter;
     private final BasePath basePath;
     private final Option<RequestedRevisionNumber> requestedRevisionNumber;
     private final Application application;
 
-    public CompositePropertiesResource(UriGetter uriGetter, BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, Application application) {
-        this.uriGetter = uriGetter;
+    public CompositePropertiesResource(BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, Application application) {
         this.basePath = basePath;
         this.requestedRevisionNumber = requestedRevisionNumber;
         this.application = application;
@@ -88,7 +85,12 @@ public class CompositePropertiesResource {
     private Callable1<Url, Either<Status, Properties>> toProperties() {
         return new Callable1<Url, Either<Status, Properties>>() {
             public Either<Status, Properties> call(Url url) throws Exception {
-                Response response = application.handle(RequestBuilder.get(url.toString()).accepting(TEXT_PLAIN).build());
+                RequestBuilder request = RequestBuilder.get(url.toString()).accepting(TEXT_PLAIN);
+                if(!requestedRevisionNumber.isEmpty()){
+                    request.withHeader(REVISION_PARAM, requestedRevisionNumber.get().toString());
+                }
+                Response response = application.handle(request.build());
+
                 if( response.status() == Status.OK) {
                     Properties properties = new Properties();
                     properties.load(new ByteArrayInputStream(response.bytes()));
@@ -106,8 +108,8 @@ public class CompositePropertiesResource {
         Properties compositeProperties = sequence(parameters.getValues("url")).
                 filter(Predicates.nonEmpty()).
                 map(com.googlecode.propidle.util.Callables.toUrl()).
-                map(com.googlecode.propidle.util.Callables.urlGet(uriGetter)).
-                map(propertiesFromString()).
+                map(toProperties()).
+                map(Callables.<Properties>right()).
                 fold(new Properties(), compose());
 
         return modelOfProperties(modelWithName(PropertiesResource.PLAIN_NAME), compositeProperties);
