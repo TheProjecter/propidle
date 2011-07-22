@@ -1,10 +1,8 @@
 package com.googlecode.propidle.properties;
 
-import com.sun.codemodel.internal.JAnnotationValue;
 import org.junit.Test;
 
 import static com.googlecode.propidle.properties.Properties.properties;
-import com.googlecode.propidle.properties.Properties;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
