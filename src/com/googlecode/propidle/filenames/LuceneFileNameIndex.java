@@ -20,7 +20,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class LuceneFileNameIndex implements FileNameIndex {
     public static final String PATH = "path";
-    public static final String PATH_TYPE = "path.type";
+    public static final String PATH_TYPE = "path.tyxpe";
     public static final String PARENT = "parent";
     public static final String SEARCHABLE_PATH = "searchable.path";
     public static final Iterable<String> ALL_FIELDS = sequence(PATH, PARENT, SEARCHABLE_PATH);

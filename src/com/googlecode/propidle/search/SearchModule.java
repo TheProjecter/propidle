@@ -18,10 +18,14 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class SearchModule extends AbstractModule{
-    public Module addPerRequestObjects(Container container){
+    @Override
+    public Module addPerApplicationObjects(Container container) {
         container.add(PropertiesIndex.class, LucenePropertiesIndex.class);
         container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
+        return this;
+    }
 
+    public Module addPerRequestObjects(Container container){
         container.decorate(AllProperties.class, PropertiesIndexingDecorator.class);
         return this;
     }

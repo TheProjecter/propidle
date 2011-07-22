@@ -15,10 +15,8 @@ import java.util.concurrent.Callable;
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.totallylazy.Callables.returns;
-import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static java.lang.String.format;
-import static java.lang.System.nanoTime;
 
 public class Server {
     public static final String JDBC_URL = "jdbc.url";
@@ -58,12 +56,8 @@ public class Server {
                 new RAMDirectory(),
                 persistenceModules(properties).join(extraModules));
 
-
         Integer schemaVersion = schemaVersion(application.inTransaction(ReportSchemaVersion.class));
         System.out.println(format("Running with database schema version %s", schemaVersion));
-        if (schemaVersion > 0) {
-	            rebuildLuceneIndexes(application);
-        }
         startServer(application, new ServerConfiguration(properties));
 
     }
@@ -81,16 +75,9 @@ public class Server {
     }
 
     private static void startServer(final PropertiesApplication application, final ServerConfiguration serverConfig) throws Exception {
-        server = Callers.call(new ServerActivator(application, serverConfig));
-
+        server = Callers.call(new PropidleServerActivator(application, serverConfig));
         application.applicationScope().get(RegisterCountingMBeans.class).call();
     }
 
 
-    private static void rebuildLuceneIndexes(PropertiesApplication application) throws Exception {
-        System.out.println("Re-indexing...");
-        long start = nanoTime();
-        application.inTransaction(RebuildIndex.class);
-        System.out.println(format("Re-indexing finished in %sms", calculateMilliseconds(start, nanoTime())));
-    }
 }
