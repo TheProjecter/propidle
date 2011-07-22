@@ -1,5 +1,6 @@
 package com.googlecode.propidle.properties;
 
+import com.sun.codemodel.internal.JAnnotationValue;
 import org.junit.Test;
 
 import static com.googlecode.propidle.properties.Properties.properties;
@@ -25,5 +26,18 @@ public class PropertiesTest {
         assertThat(result.getProperty("a"), is("1"));
         assertThat(result.getProperty("b"), is("2"));
         assertThat(result.getProperty("c"), is("3"));
+    }
+
+    @Test
+    public void shouldNotBlowIfThePropertyValueIsVeryLong(){
+        java.util.Properties result = Properties.compose(properties(String.format("a=1\nb=%s",veryLongString())));
+        assertThat(result.getProperty("b"),is(veryLongString()));
+    }
+
+    private String veryLongString() {
+        String value="";
+        for(int i=0;i<2000;i++)
+            value+="x";
+        return value;
     }
 }

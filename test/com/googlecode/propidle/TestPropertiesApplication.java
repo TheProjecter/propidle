@@ -14,6 +14,7 @@ import java.util.Properties;
 public class TestPropertiesApplication extends PropertiesApplication {
     public TestPropertiesApplication(Module... extraModules) throws Exception {
         this(sequence(extraModules));
+
     }
 
     private TestPropertiesApplication(Iterable<Module> extraModules) throws Exception {

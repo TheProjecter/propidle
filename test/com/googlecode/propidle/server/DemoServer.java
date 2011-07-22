@@ -8,7 +8,6 @@ import static com.googlecode.utterlyidle.ServerConfiguration.defaultConfiguratio
 public class DemoServer {
     public static void main(String[] args) throws Exception {
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
-        new ServerActivator(new TestPropertiesApplication(), defaultConfiguration().port(port)).call();
+        new PropidleServerActivator(new TestPropertiesApplication(), defaultConfiguration().port(port)).call();
     }
-
 }

@@ -6,6 +6,7 @@ import acceptance.steps.givens.CurrentRevision;
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import com.googlecode.propidle.indexing.ConfigurableDelayScheduler;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
@@ -33,6 +34,7 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
         container.addInstance(InterestingGivens.class, interestingGivens);
         container.addInstance(CapturedInputAndOutputs.class, capturedInputAndOutputs);
         container.addInstance(TestLogger.class, logger);
+
         return this;
     }
 
