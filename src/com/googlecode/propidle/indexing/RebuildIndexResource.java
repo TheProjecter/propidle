@@ -21,10 +21,9 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.properties.PropertyName.propertyName;
-import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.*;
+import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
+import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
 import static com.googlecode.propidle.versioncontrol.changes.Change.applyChange;
-import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
@@ -32,7 +31,7 @@ import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 @Path(RebuildIndexResource.NAME)
 @Produces(TEXT_HTML)
 public class RebuildIndexResource {
-    public static final String NAME = "rebuildIndex";
+    public static final String NAME = "/rebuildIndex";
     private final IndexRebuilder rebuildIndex;
     private final Records records;
 

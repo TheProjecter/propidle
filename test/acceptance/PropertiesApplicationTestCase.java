@@ -2,11 +2,15 @@ package acceptance;
 
 import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.propidle.WrapCallableInTransaction;
+import com.googlecode.propidle.scheduling.RunnableRequest;
+import com.googlecode.propidle.scheduling.StubScheduledExecutorService;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.utterlyidle.MemoryResponse;
+import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.io.HierarchicalPath;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -27,10 +31,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpecRunner.class)
 public abstract class PropertiesApplicationTestCase extends TestState implements WithCustomRendering {
     protected TestPropertiesApplication application;
+    protected final StubScheduledExecutorService executorService = new StubScheduledExecutorService();
 
     private TestPropertiesApplication application() throws Exception {
         if (application == null) {
-            application = new TestPropertiesApplication(new TestSupportModule(this, interestingGivens, capturedInputAndOutputs));
+            application = new TestPropertiesApplication(new TestSupportModule(this, interestingGivens, capturedInputAndOutputs, executorService));
         }
         return application;
     }
@@ -100,4 +105,5 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
             return Strings.escapeXml(format("%s\n\n%s", response.toString(), Strings.toString(response.bytes())));
         }
     }
+
 }
