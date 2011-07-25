@@ -1,10 +1,12 @@
 package com.googlecode.propidle.server;
 
+import com.googlecode.propidle.scheduling.ScheduleResource;
+import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.utterlyidle.ServerActivator;
-import com.googlecode.utterlyidle.ServerConfiguration;
+import com.googlecode.utterlyidle.*;
+import com.googlecode.utterlyidle.handlers.ClientHttpHandler;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.modules.Module;
 import org.apache.lucene.store.RAMDirectory;
@@ -75,8 +77,15 @@ public class Server {
     }
 
     private static void startServer(final PropertiesApplication application, final ServerConfiguration serverConfig) throws Exception {
-        server = Callers.call(new PropidleServerActivator(application, serverConfig));
+        server = Callers.call(new ServerActivator(application, serverConfig));
         application.applicationScope().get(RegisterCountingMBeans.class).call();
+        Response response = application.handle(RequestBuilder.post(ScheduleResource.NAME).withForm("taskName", "rebuildIndex").build());
+        if(response.status() == Status.OK) {
+            System.out.println("Re-indexing successfully scheduled");
+        } else {
+            System.err.println("Scheduling re-indexing failed");
+        }
+
     }
 
 

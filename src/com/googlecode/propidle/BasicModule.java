@@ -4,6 +4,8 @@ import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertyDiffTool;
 import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
+import com.googlecode.propidle.scheduling.SchedulableTasks;
+import com.googlecode.propidle.scheduling.Scheduler;
 import com.googlecode.propidle.server.*;
 import com.googlecode.propidle.server.decoration.DecorateHtml;
 import com.googlecode.propidle.urls.RelativeUriGetter;
@@ -24,7 +26,6 @@ import com.googlecode.yadic.Container;
 import com.googlecode.yadic.generics.TypeFor;
 import com.googlecode.yadic.resolvers.OptionResolver;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static com.googlecode.totallylazy.Pair.pair;
@@ -64,7 +65,8 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
     }
 
     public Module addPerApplicationObjects(Container container) {
-        container.addInstance(ScheduledExecutorService.class, newScheduledThreadPool(2));
+        container.addInstance(ScheduledExecutorService.class, newScheduledThreadPool(5));
+        container.add(SchedulableTasks.class);
         container.add(Scheduler.class);
         return this;
     }
