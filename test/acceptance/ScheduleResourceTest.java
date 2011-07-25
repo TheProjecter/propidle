@@ -17,7 +17,7 @@ import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.Status.*;
 import static org.hamcrest.Matchers.is;
 
-public class SchedulerTest extends PropertiesApplicationTestCase {
+public class ScheduleResourceTest extends PropertiesApplicationTestCase {
 
     private static final String TASK_NAME = TASK_NAME_PARAM_NAME;
 
