@@ -4,12 +4,8 @@ mvn:org.apache.lucene:lucene-core:jar:3.0.3
 mvn:org.objenesis:objenesis:jar:1.2
 mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
-mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar:335
-mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:sources:335
-mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar:340
-mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:sources:340
-mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar:29
-mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:sources:29
-mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar:129
-mvn://repo.bodar.com/com.googlecode.yadic:yadic:sources:129
-http://utterlyidle.googlecode.com/hg/lib/sitemesh-3.0.0-SNAPSHOT.jar?r=30e2a94b6fc99fffb0a1664e7ce062ce0cf78294
+mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:335
+mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:340
+mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:29
+mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:129
+mvn:org.sitemesh:sitemesh:jar:3.0-alpha-2
