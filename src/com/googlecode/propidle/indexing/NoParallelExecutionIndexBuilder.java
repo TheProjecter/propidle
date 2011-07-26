@@ -21,7 +21,7 @@ public class NoParallelExecutionIndexBuilder implements IndexRebuilder {
 
     public void index(final Sequence<Pair<PropertiesPath, Properties>> recordsToIndex, final PrintWriter writer) {
         if(!parallelExecutionGuard.execute(rebuildIndex(recordsToIndex, writer))) {
-            writer.println("Index is already running.");
+            writer.println("Index is already rebuilding.");
         }
     }
 

@@ -25,11 +25,9 @@ public class Scheduler {
         } else {
             SimpleContainer container = new SimpleContainer(applicationContainer);
 
-            container.add(RunnableRequest.class);
-            container.addInstance(Request.class, task.request());
             container.addInstance(PropertyName.class, task.propertyName());
             container.add(ConfigurableDelayScheduler.class);
-            container.get(ConfigurableDelayScheduler.class).schedule();
+            container.get(ConfigurableDelayScheduler.class).schedule(task);
             scheduledTaskNames.add(task.name());
             return true;
         }
