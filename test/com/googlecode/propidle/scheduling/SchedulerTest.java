@@ -15,6 +15,7 @@ import org.mockito.Matchers;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.googlecode.propidle.client.DynamicProperties.*;
@@ -22,14 +23,13 @@ import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class SchedulerTest {
 
     private static final String NAME = "whatever";
-    ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
+    private final ScheduledExecutorService executorService = mock(ScheduledExecutorService.class);
+    private final ScheduledFuture scheduledFuture = mock(ScheduledFuture.class);
     private Scheduler scheduler;
 
     @Before
@@ -39,16 +39,18 @@ public class SchedulerTest {
 
     @Test
     public void shouldScheduleTaskIfNotScheduledYet() throws Exception {
-        assertThat(scheduler.schedule(taskWith(NAME)), is(true));
+        scheduler.schedule(taskWith(NAME));
         verify(executorService).scheduleWithFixedDelay(Matchers.<Runnable>any(), anyLong(), anyLong(), Matchers.<TimeUnit>any());
     }
 
     @Test
-    public void shouldNotScheduleTaskIfAlreadyScheduled() throws Exception {
+    public void shouldCancelTaskIfAlreadyScheduled() throws Exception {
+        when(executorService.scheduleWithFixedDelay(Matchers.<Runnable>any(), anyLong(), anyLong(), Matchers.<TimeUnit>any())).thenReturn(scheduledFuture);
         scheduler.schedule(taskWith(NAME));
 
-        assertThat(scheduler.schedule(taskWith(NAME)), is(false));
-        verify(executorService, times(1)).scheduleWithFixedDelay(Matchers.<Runnable>any(), anyLong(), anyLong(), Matchers.<TimeUnit>any());
+        scheduler.schedule(taskWith(NAME));
+        verify(scheduledFuture).cancel(true);
+        verify(executorService, times(2)).scheduleWithFixedDelay(Matchers.<Runnable>any(), anyLong(), anyLong(), Matchers.<TimeUnit>any());
     }
 
     private Container container() throws Exception {

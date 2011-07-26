@@ -6,31 +6,32 @@ import com.googlecode.utterlyidle.Request;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
 
 
 public class Scheduler {
 
     private final Container applicationContainer;
-    private final Set<String> scheduledTaskNames = new HashSet<String>();
+
+    private final Map<String, ScheduledFuture<?>> scheduledFutures = new HashMap<String, ScheduledFuture<?>>();
 
     public Scheduler(Container applicationContainer) {
         this.applicationContainer = applicationContainer;
     }
 
-    public synchronized boolean schedule(SchedulableTask task) {
-        if (scheduledTaskNames.contains(task.name())) {
-            return false;
-        } else {
-            SimpleContainer container = new SimpleContainer(applicationContainer);
-
-            container.addInstance(PropertyName.class, task.propertyName());
-            container.add(ConfigurableDelayScheduler.class);
-            container.get(ConfigurableDelayScheduler.class).schedule(task);
-            scheduledTaskNames.add(task.name());
-            return true;
+    public synchronized void schedule(SchedulableTask task) {
+        if(scheduledFutures.containsKey(task.name())) {
+            scheduledFutures.get(task.name()).cancel(true);
         }
+
+        SimpleContainer container = new SimpleContainer(applicationContainer);
+        container.addInstance(PropertyName.class, task.propertyName());
+        container.add(ConfigurableDelayScheduler.class);
+        scheduledFutures.put(task.name(), container.get(ConfigurableDelayScheduler.class).schedule(task));
     }
 
 }

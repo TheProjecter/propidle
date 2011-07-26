@@ -36,15 +36,6 @@ public class ScheduleResourceTest extends PropertiesApplicationTestCase {
         then(theScheduledRequestsPath(), is(SCHEDULED_TEST_URL));
     }
 
-    @Test
-    public void doNotScheduleTaskAlreadyScheduled() throws Exception {
-        given(a(TaskIsScheduled.class).withName(SCHEDULED_TEST_TASK_NAME));
-
-        when(a(RequestIsMade.class).to(post("/schedule").withForm(TASK_NAME, SCHEDULED_TEST_TASK_NAME)));
-
-        then(theStatusOf(), the(LastResponse.class), is(CONFLICT));
-    }
-
     private Callable<HierarchicalPath> theScheduledRequestsPath() {
         return new Callable<HierarchicalPath>() {
             public HierarchicalPath call() throws Exception {
