@@ -32,7 +32,8 @@ public class ScheduleResource {
             return response(NOT_FOUND).entity("Could not schedule unknown tasks. Available tasks are: " + sequence(tasks.availableTaskNames()).toString());
         }
 
-        return this.scheduler.schedule(task) ? response(OK).entity("Task has been scheduled") : response(CONFLICT).entity("Task has been already scheduled");
+        scheduler.schedule(task);
+        return response(OK).entity("Task has been scheduled");
     }
 
 }

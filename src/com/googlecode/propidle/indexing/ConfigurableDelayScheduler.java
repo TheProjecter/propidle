@@ -23,7 +23,6 @@ public class ConfigurableDelayScheduler {
     private final ScheduledExecutorService executorService;
     private final Application application;
     private final PropertyName delayPropertyName;
-    private ScheduledFuture<?> scheduledFuture;
 
     public ConfigurableDelayScheduler(ScheduledExecutorService executorService, DynamicProperties dynamicProperties, Application application, PropertyName delayPropertyName) {
         this.dynamicProperties = dynamicProperties;
@@ -32,23 +31,9 @@ public class ConfigurableDelayScheduler {
         this.delayPropertyName = delayPropertyName;
     }
 
-    public ConfigurableDelayScheduler schedule(SchedulableTask task){
+    public ScheduledFuture<?> schedule(SchedulableTask task){
         Long refreshDelay = valueOf(dynamicProperties.snapshot().getProperty(delayPropertyName.value(), "1"));
-        scheduledFuture = executorService.scheduleWithFixedDelay(toRunnable(task), 0, refreshDelay, MINUTES);
-
-        dynamicProperties.listen(new SpecificPropertyChangeListener(delayPropertyName, rescheduleTask(scheduledFuture, executorService, task)));
-        return this;
-    }
-
-    private Callable1<PropertyComparison, Void> rescheduleTask(final ScheduledFuture<?> scheduledFuture, final ScheduledExecutorService executorService, final SchedulableTask task) {
-        return new Callable1<PropertyComparison, Void>() {
-            public Void call(PropertyComparison propertyComparison) throws Exception {
-                scheduledFuture.cancel(true);
-                Long delay = valueOf(propertyComparison.updated().getOrElse(propertyValue("1")).value());
-                executorService.scheduleWithFixedDelay(toRunnable(task), delay, delay, MINUTES);
-                return null;
-            }
-        };
+        return executorService.scheduleWithFixedDelay(toRunnable(task), 0, refreshDelay, MINUTES);
     }
 
     private RunnableRequest toRunnable(SchedulableTask task) {

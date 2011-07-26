@@ -25,4 +25,5 @@ public class SchedulableTask {
     public PropertyName propertyName() {
         return propertyName;
     }
+
 }
