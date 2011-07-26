@@ -43,8 +43,7 @@ public class RebuildIndexResource {
     @POST
     public String rebuildIndex() {
         final StringWriter stringWriter = new StringWriter();
-        Sequence<Record> changesSortedByPropertiesFile = records.get(CHANGES).sortBy(PROPERTIES_PATH).realise();
-        Sequence<Sequence<Record>> changesByProperties = changesByProperties(changesSortedByPropertiesFile);
+        Sequence<Sequence<Record>> changesByProperties = changesByProperties(records.get(CHANGES).sortBy(PROPERTIES_PATH).realise());
 
         Sequence<Pair<PropertiesPath, Properties>> properties = changesByProperties.map(deserialise()).map(toProperties());
 
