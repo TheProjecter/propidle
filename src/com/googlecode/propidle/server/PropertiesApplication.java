@@ -2,15 +2,20 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.ApplicationPropertiesModule;
 import com.googlecode.propidle.BasicModule;
+import com.googlecode.propidle.PropertyTriggeredExecutor;
 import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.aliases.AliasesModule;
+import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.compositeproperties.CompositePropertiesModule;
 import com.googlecode.propidle.diff.DiffModule;
 import com.googlecode.propidle.filenames.FileNamesModule;
 import com.googlecode.propidle.indexing.LuceneModule;
 import com.googlecode.propidle.migrations.PropidleMigrationsModule;
 import com.googlecode.propidle.monitoring.MonitoringModule;
+import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.root.RootModule;
+import com.googlecode.propidle.scheduling.RebuildIndexScheduler;
+import com.googlecode.propidle.scheduling.ScheduleTaskRequest;
 import com.googlecode.propidle.scheduling.SchedulingModule;
 import com.googlecode.propidle.search.SearchModule;
 import com.googlecode.propidle.server.staticcontent.StaticContentModule;
@@ -26,11 +31,15 @@ import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.Directory;
 
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.propidle.ApplicationPropertiesModule.RELOAD_PROPERTIES_TASK_NAME;
+import static com.googlecode.propidle.indexing.LuceneModule.REBUILD_INDEX_TASK_NAME;
 import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersionModule;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
 import static java.lang.Long.valueOf;
@@ -99,4 +108,27 @@ public class PropertiesApplication extends RestApplication {
         return (T) container.get(Callable.class).call();
     }
 
+    public void startPropertyDependentTasks() {
+        PropertyTriggeredExecutor executor = applicationScope().get(PropertyTriggeredExecutor.class);
+        executor.register(propertyName("lucene.index.refresh.time.in.seconds"), scheduleIndexRebuild(applicationScope().get(ScheduleTaskRequest.class)), propertyValue("60"));
+        executor.register(propertyName("properties.refresh.time.in.seconds"), reloadProperties(applicationScope().get(ScheduleTaskRequest.class)), propertyValue("60"));
+    }
+
+    public Callable1<PropertyValue, Void> reloadProperties(final ScheduleTaskRequest scheduleTaskRequest) {
+        return new Callable1<PropertyValue, Void>() {
+            public Void call(PropertyValue propertyValue) throws Exception {
+                scheduleTaskRequest.send(RELOAD_PROPERTIES_TASK_NAME, valueOf(propertyValue.value()), valueOf(propertyValue.value()));
+                return null;
+            }
+        };
+    }
+
+    private Callable1<PropertyValue, Void> scheduleIndexRebuild(final ScheduleTaskRequest scheduleTaskRequest) {
+        return new Callable1<PropertyValue, Void>() {
+            public Void call(PropertyValue propertyValue) throws Exception {
+                scheduleTaskRequest.send(REBUILD_INDEX_TASK_NAME, valueOf(propertyValue.value()));
+                return null;
+            }
+        };
+    }
 }

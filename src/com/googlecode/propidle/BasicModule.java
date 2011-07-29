@@ -65,9 +65,7 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
     }
 
     public Module addPerApplicationObjects(Container container) {
-        container.addInstance(ScheduledExecutorService.class, newScheduledThreadPool(5));
-        container.add(SchedulableTasks.class);
-        container.add(Scheduler.class);
+        container.add(PropertyTriggeredExecutor.class);
         return this;
     }
 }

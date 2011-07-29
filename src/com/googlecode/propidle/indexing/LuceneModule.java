@@ -1,6 +1,7 @@
 package com.googlecode.propidle.indexing;
 
 import com.googlecode.propidle.properties.PropertyName;
+import com.googlecode.propidle.scheduling.RebuildIndexScheduler;
 import com.googlecode.propidle.scheduling.SchedulableTask;
 import com.googlecode.propidle.scheduling.SchedulableTaskModule;
 import com.googlecode.propidle.scheduling.SchedulableTasks;
@@ -27,7 +28,7 @@ import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 
 public class LuceneModule implements ApplicationScopedModule, RequestScopedModule, ResourcesModule, SchedulableTaskModule {
-    private static final PropertyName LUCENE_INDEX_REFRESH_TIME_PROPERTY_NAME = propertyName("lucene.index.refresh.time.in.minutes");
+    public static final String REBUILD_INDEX_TASK_NAME = "rebuildIndex";
     private final Directory directory;
 
     public LuceneModule(Directory directory) {
@@ -43,6 +44,7 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
         container.add(ParallelExecutionGuard.class);
         container.add(IndexRebuilder.class, FileAndPropertiesIndexRebuilder.class);
         container.decorate(IndexRebuilder.class, NoParallelExecutionIndexBuilder.class);
+        container.add(RebuildIndexScheduler.class);
         return this;
     }
 
@@ -57,6 +59,6 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
     }
 
     public void addTask(SchedulableTasks tasks) {
-        tasks.addTask(new SchedulableTask("rebuildIndex", RequestBuilder.post(RebuildIndexResource.NAME).build(), LUCENE_INDEX_REFRESH_TIME_PROPERTY_NAME));
+        tasks.addTask(new SchedulableTask(REBUILD_INDEX_TASK_NAME, RequestBuilder.post(RebuildIndexResource.NAME).build()));
     }
 }

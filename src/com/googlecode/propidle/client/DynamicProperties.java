@@ -53,6 +53,6 @@ public class DynamicProperties implements PropertyChangeNotifier {
     }
 
     public void stopListening(PropertyChangeListener listener) {
-        announcer.listen(listener);
+        announcer.stopListening(listener);
     }
 }

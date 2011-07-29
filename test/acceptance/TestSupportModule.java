@@ -4,7 +4,6 @@ import acceptance.steps.WebClient;
 import acceptance.steps.givens.*;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
-import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.propidle.scheduling.SchedulableTask;
 import com.googlecode.propidle.scheduling.SchedulableTaskModule;
 import com.googlecode.propidle.scheduling.SchedulableTasks;
@@ -63,6 +62,6 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
     }
 
     public void addTask(SchedulableTasks tasks) {
-        tasks.addTask(new SchedulableTask(SCHEDULED_TEST_TASK_NAME, RequestBuilder.post(SCHEDULED_TEST_URL.toString()).build(), PropertyName.propertyName("whatever")));
+        tasks.addTask(new SchedulableTask(SCHEDULED_TEST_TASK_NAME, RequestBuilder.post(SCHEDULED_TEST_URL.toString()).build()));
     }
 }

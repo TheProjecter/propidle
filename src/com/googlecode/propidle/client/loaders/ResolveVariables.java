@@ -37,7 +37,7 @@ public final class ResolveVariables implements Callable<Properties> {
                     if(property.second().contains(resolvablePropertyName(propertyName))){
                         properties.setProperty(property.first(), resolveProperty(properties, property.second(), propertyName));
                     }
-                }
+                }   
                 return properties;
             }
         };
