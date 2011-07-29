@@ -1,6 +1,5 @@
 package com.googlecode.propidle.urls;
 
-import com.googlecode.propidle.requesthandlers.StubHandler;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
@@ -16,7 +15,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URI;
 
-import static com.googlecode.propidle.requesthandlers.StubHandler.stubHandler;
+import static com.googlecode.propidle.urls.StubHandler.stubHandler;
 import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
 import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
 import static com.googlecode.totallylazy.Option.none;
