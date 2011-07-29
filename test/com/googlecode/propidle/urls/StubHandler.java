@@ -1,4 +1,4 @@
-package com.googlecode.propidle.requesthandlers;
+package com.googlecode.propidle.urls;
 
 import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.io.Url;
