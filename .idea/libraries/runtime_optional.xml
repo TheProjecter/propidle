@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="runtime-optional">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/runtime-optional" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/runtime/utterlyidle-migrations-dev.build-sources.jar!/" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib/runtime-optional" recursive="false" />
+  </library>
+</component>

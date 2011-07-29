@@ -1,0 +1,9 @@
+syntax: glob
+out
+*.iws
+build/artifacts
+.idea/workspace.xml
+*.orig
+.DS_Store
+twig.properties
+lib
