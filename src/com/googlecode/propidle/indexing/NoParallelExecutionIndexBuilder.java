@@ -19,13 +19,13 @@ public class NoParallelExecutionIndexBuilder implements IndexRebuilder {
         this.indexRebuilder = indexRebuilder;
     }
 
-    public void index(final Sequence<Pair<PropertiesPath, Properties>> recordsToIndex, final PrintWriter writer) {
+    public void index(final Iterable<Pair<PropertiesPath, Properties>> recordsToIndex, final PrintWriter writer) {
         if(!parallelExecutionGuard.execute(rebuildIndex(recordsToIndex, writer))) {
             writer.println("Index is already rebuilding.");
         }
     }
 
-    private Callable<Void> rebuildIndex(final Sequence<Pair<PropertiesPath, Properties>> recordsToIndex, final PrintWriter writer) {
+    private Callable<Void> rebuildIndex(final Iterable<Pair<PropertiesPath, Properties>> recordsToIndex, final PrintWriter writer) {
         return new Callable<Void>() {
             public Void call() throws Exception {
                 indexRebuilder.index(recordsToIndex, writer);

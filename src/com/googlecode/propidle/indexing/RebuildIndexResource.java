@@ -4,6 +4,7 @@ import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.server.IndexRebuilder;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.changes.Changes;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -25,6 +26,7 @@ import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
 import static com.googlecode.propidle.versioncontrol.changes.Change.applyChange;
+import static com.googlecode.propidle.versioncontrol.changes.Changes.revisionNumberOfChange;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
@@ -83,7 +85,7 @@ public class RebuildIndexResource {
             public Pair<PropertiesPath, Properties> call(Sequence<Change> changes) throws Exception {
                 return pair(
                         propertiesPath(changes.first().propertiesPath().toString()),
-                        changes.fold(properties(), applyChange()));
+                        changes.sortBy(revisionNumberOfChange()).fold(properties(), applyChange()));
             }
         };
     }

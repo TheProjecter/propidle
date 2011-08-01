@@ -9,5 +9,5 @@ import java.io.PrintWriter;
 import java.util.Properties;
 
 public interface IndexRebuilder {
-    public void index(Sequence<Pair<PropertiesPath,Properties>> recordsToIndex, PrintWriter writer);
+    public void index(Iterable<Pair<PropertiesPath,Properties>> recordsToIndex, PrintWriter writer);
 }
