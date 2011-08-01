@@ -10,6 +10,7 @@ import com.googlecode.totallylazy.Sequence;
 import java.io.PrintWriter;
 import java.util.Properties;
 
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.callables.TimeCallable.calculateMilliseconds;
 import static java.lang.System.nanoTime;
 
@@ -22,10 +23,10 @@ public class FileAndPropertiesIndexRebuilder implements IndexRebuilder {
         this.propertiesIndexer = propertiesIndexer;
     }
 
-    public void index(Sequence<Pair<PropertiesPath, Properties>> properties, PrintWriter writer) {
+    public void index(Iterable<Pair<PropertiesPath, Properties>> properties, PrintWriter writer) {
         long start = nanoTime();
-        properties.fold(fileNameIndexer, indexFileName());
-        properties.fold(propertiesIndexer, indexProperties());
+        sequence(properties).fold(fileNameIndexer, indexFileName());
+        sequence(properties).fold(propertiesIndexer, indexProperties());
         writer.println(String.format("Indexing finished in %s milliseconds \n", (calculateMilliseconds(start, nanoTime()))));
     }
 
