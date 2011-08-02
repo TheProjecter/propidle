@@ -10,35 +10,39 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.totallylazy.Sequences.sequence;
+
 import com.googlecode.propidle.client.PropertyLoadingException;
 
 public class PropertiesAtUrl implements Callable<Properties> {
-    private final URL url;
+    private final com.googlecode.totallylazy.Sequence<URL> urls;
     private final UriGetter uriGetter;
 
-    public static PropertiesAtUrl propertiesAtUrl(URL url) {
-        return new PropertiesAtUrl(url);
+    public static PropertiesAtUrl propertiesAtUrl(UriGetter uriGetter, URL... url) {
+        return new PropertiesAtUrl(uriGetter, url);
     }
 
-    public static PropertiesAtUrl propertiesAtUrl(URL url, UriGetter uriGetter) {
-        return new PropertiesAtUrl(url, uriGetter);
+    public static PropertiesAtUrl propertiesAtUrl(URL... urls) {
+        return new PropertiesAtUrl(new SimpleUriGetter(), urls);
     }
 
-    protected PropertiesAtUrl(URL url) {
-        this(url, new SimpleUriGetter());
-    }
+    protected PropertiesAtUrl(UriGetter uriGetter, URL... urls) {
 
-    protected PropertiesAtUrl(URL url, UriGetter uriGetter) {
-        this.url = url;
+        this.urls = sequence(urls);
         this.uriGetter = uriGetter;
     }
 
-    public Properties call() throws Exception {
-        try {
-            InputStream stream = uriGetter.get(url.toURI(), MimeType.TEXT_PLAIN);
-            return properties(stream);
-        } catch (Throwable e) {
-            throw new PropertyLoadingException(String.format("Could not load properties %s", url), e);
+    public Properties call() throws RuntimeException {
+
+        for (URL url : urls) {
+            try {
+                InputStream stream = uriGetter.get(url.toURI(), MimeType.TEXT_PLAIN);
+                return properties(stream);
+            } catch (Throwable e) {
+                System.err.println(String.format("Could not load properties at %s", url));
+                e.printStackTrace();
+            }
         }
+        throw new PropertyLoadingException(String.format("Could not load properties %s ", urls.toString()));
     }
 }
