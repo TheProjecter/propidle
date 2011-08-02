@@ -2,7 +2,6 @@ package com.googlecode.propidle.client;
 
 import com.googlecode.propidle.client.changenotification.PropertyChangeAnnouncer;
 import com.googlecode.propidle.client.changenotification.PropertyChangeEvent;
-import com.googlecode.propidle.urls.SimpleUriGetter;
 
 import java.net.URL;
 import java.util.Properties;
@@ -17,8 +16,8 @@ public class DynamicProperties implements PropertyChangeNotifier {
 
     private AtomicReference<Properties> lastSnapshot = new AtomicReference<Properties>(new Properties());
 
-    public static DynamicProperties load(URL url) throws Exception {
-        return load(propertiesAtUrl(url, new SimpleUriGetter()));
+    public static DynamicProperties load(URL... url) throws Exception {
+        return load(propertiesAtUrl(url));
     }
 
     public static DynamicProperties load(Callable<Properties> propertyLoader) throws Exception {

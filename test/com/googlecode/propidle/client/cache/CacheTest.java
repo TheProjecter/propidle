@@ -16,9 +16,9 @@ import static com.googlecode.propidle.client.cache.CachingDynamicProperties.cach
 import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesAtUrl;
 import static com.googlecode.propidle.util.Sha1.sha1;
 import static com.googlecode.totallylazy.Runnables.write;
+import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
 import static com.googlecode.utterlyidle.Status.OK;
 import static com.googlecode.utterlyidle.io.Url.url;
-import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,7 +48,7 @@ public class CacheTest {
         assertThat(post.first(), is(OK.code()));
 
         URL url = propertiesUrl.toURL();
-        DynamicProperties dynamicProperties = new DynamicProperties(caching(cacheFile(url),propertiesAtUrl(url)));
+        DynamicProperties dynamicProperties = new DynamicProperties(caching(cacheFile(url), propertiesAtUrl(url)));
         dynamicProperties.reload();
 
         assertThat(dynamicProperties.snapshot().get("test").toString(), is(equalTo("hello")));

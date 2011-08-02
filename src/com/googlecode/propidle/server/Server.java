@@ -15,6 +15,7 @@ import static com.googlecode.propidle.client.loaders.PropertiesAtUrl.propertiesA
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
+import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static java.lang.String.format;
 
@@ -38,7 +39,7 @@ public class Server {
     }
 
     public Server(Url propertiesUrl) throws Exception {
-        this(propertiesUrl, Sequences.<Module>sequence());
+        this(propertiesUrl, empty(Module.class));
     }
 
     public Server(Url propertiesUrl, Iterable<Module> extraModules) throws Exception {
