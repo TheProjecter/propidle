@@ -4,8 +4,6 @@ import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertyDiffTool;
 import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
-import com.googlecode.propidle.scheduling.SchedulableTasks;
-import com.googlecode.propidle.scheduling.Scheduler;
 import com.googlecode.propidle.server.*;
 import com.googlecode.propidle.server.decoration.DecorateHtml;
 import com.googlecode.propidle.urls.RelativeUriGetter;
@@ -26,14 +24,11 @@ import com.googlecode.yadic.Container;
 import com.googlecode.yadic.generics.TypeFor;
 import com.googlecode.yadic.resolvers.OptionResolver;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
-import static java.util.concurrent.Executors.*;
 
 public class BasicModule implements RequestScopedModule, ApplicationScopedModule {
     public Module addPerRequestObjects(Container container) {

@@ -5,7 +5,6 @@ import com.googlecode.propidle.BasicModule;
 import com.googlecode.propidle.PropertyTriggeredExecutor;
 import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.aliases.AliasesModule;
-import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.compositeproperties.CompositePropertiesModule;
 import com.googlecode.propidle.diff.DiffModule;
 import com.googlecode.propidle.filenames.FileNamesModule;
@@ -14,7 +13,6 @@ import com.googlecode.propidle.migrations.PropidleMigrationsModule;
 import com.googlecode.propidle.monitoring.MonitoringModule;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.root.RootModule;
-import com.googlecode.propidle.scheduling.RebuildIndexScheduler;
 import com.googlecode.propidle.scheduling.ScheduleTaskRequest;
 import com.googlecode.propidle.scheduling.SchedulingModule;
 import com.googlecode.propidle.search.SearchModule;
@@ -31,7 +29,6 @@ import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.Directory;
 
-import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -40,11 +37,8 @@ import static com.googlecode.propidle.indexing.LuceneModule.REBUILD_INDEX_TASK_N
 import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersionModule;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
 import static java.lang.Long.valueOf;
-import static java.lang.String.format;
-import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public class PropertiesApplication extends RestApplication {
 
