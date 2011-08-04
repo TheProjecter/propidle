@@ -16,14 +16,14 @@ public class SchedulingModule implements ResourcesModule, ModuleDefiner, Applica
     }
 
     public Module defineModules(ModuleDefinitions moduleDefinitions) {
-        moduleDefinitions.addApplicationModule(SchedulableTaskModule.class);
+        moduleDefinitions.addApplicationModule(SchedulableRequestModule.class);
         return this;
     }
 
     public Module addPerApplicationObjects(Container container) {
         container.add(ScheduleTaskRequest.class);
         container.addInstance(ScheduledExecutorService.class, newScheduledThreadPool(5));
-        container.add(SchedulableTasks.class);
+        container.add(SchedulableRequests.class);
         container.add(Scheduler.class);
         return this;
     }

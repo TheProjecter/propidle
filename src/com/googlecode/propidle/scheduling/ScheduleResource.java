@@ -22,21 +22,21 @@ public class ScheduleResource {
     public static final String DELAY_IN_SECONDS_PARAM_NAME = "delayInSeconds";
     public static final String INITIAL_DELAY_IN_SECONDS_PARAM_NAME = "initialDelayInSeconds";
     private final Scheduler scheduler;
-    private final SchedulableTasks tasks;
+    private final SchedulableRequests requests;
     public static final String NAME = "/schedule";
 
-    public ScheduleResource(Scheduler scheduler, SchedulableTasks tasks) {
+    public ScheduleResource(Scheduler scheduler, SchedulableRequests requests) {
         this.scheduler = scheduler;
-        this.tasks = tasks;
+        this.requests = requests;
     }
 
     @POST
     public Response schedule(@FormParam(TASK_NAME_PARAM_NAME) String taskName, @FormParam(DELAY_IN_SECONDS_PARAM_NAME) Long delayInSeconds, @FormParam(INITIAL_DELAY_IN_SECONDS_PARAM_NAME) Option<Long> initialDelayInSecondsOption) {
-        SchedulableTask task = tasks.getTask(taskName);
-        if(task == null) {
-            return response(NOT_FOUND).entity("Could not schedule unknown tasks. Available tasks are: " + sequence(tasks.availableTaskNames()).toString());
+        RunnableRequest runnableRequest = requests.runnableRequest(taskName);
+        if(runnableRequest == null) {
+            return response(NOT_FOUND).entity("Could not schedule unknown tasks. Available tasks are: " + sequence(requests.availableTaskNames()).toString());
         }
-        scheduler.schedule(task, initialDelayInSecondsOption.getOrElse(0L), delayInSeconds, SECONDS);
+        scheduler.schedule(runnableRequest, initialDelayInSecondsOption.getOrElse(0L), delayInSeconds, SECONDS);
 
         return response(OK).entity("Task has been scheduled");
 

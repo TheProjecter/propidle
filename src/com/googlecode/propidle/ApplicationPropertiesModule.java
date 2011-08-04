@@ -4,10 +4,8 @@ import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.client.DynamicPropertiesActivator;
 import com.googlecode.propidle.client.SnapshotPropertiesActivator;
 import com.googlecode.propidle.properties.ReloadPropertiesResource;
-import com.googlecode.propidle.scheduling.SchedulableTask;
-import com.googlecode.propidle.scheduling.SchedulableTaskModule;
-import com.googlecode.propidle.scheduling.SchedulableTasks;
-import com.googlecode.utterlyidle.RequestBuilder;
+import com.googlecode.propidle.scheduling.SchedulableRequestModule;
+import com.googlecode.propidle.scheduling.SchedulableRequests;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
@@ -21,7 +19,7 @@ import java.util.concurrent.Callable;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 
-public class ApplicationPropertiesModule implements ApplicationScopedModule, RequestScopedModule, SchedulableTaskModule, ResourcesModule {
+public class ApplicationPropertiesModule implements ApplicationScopedModule, RequestScopedModule, SchedulableRequestModule, ResourcesModule {
     public static final String RELOAD_PROPERTIES_TASK_NAME = "reloadProperties";
     private final Callable<Properties> propertyLoader;
 
@@ -40,8 +38,8 @@ public class ApplicationPropertiesModule implements ApplicationScopedModule, Req
         return this;
     }
 
-    public void addTask(SchedulableTasks tasks) {
-        tasks.addTask(new SchedulableTask(RELOAD_PROPERTIES_TASK_NAME, post(ReloadPropertiesResource.NAME).build()));
+    public void addTask(SchedulableRequests schedulableRequests) {
+        schedulableRequests.addTask(RELOAD_PROPERTIES_TASK_NAME, post(ReloadPropertiesResource.NAME).build());
 
     }
 

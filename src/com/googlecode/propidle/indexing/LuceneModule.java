@@ -1,17 +1,13 @@
 package com.googlecode.propidle.indexing;
 
-import com.googlecode.propidle.properties.PropertyName;
-import com.googlecode.propidle.scheduling.RebuildIndexScheduler;
-import com.googlecode.propidle.scheduling.SchedulableTask;
-import com.googlecode.propidle.scheduling.SchedulableTaskModule;
-import com.googlecode.propidle.scheduling.SchedulableTasks;
+import com.googlecode.propidle.scheduling.SchedulableRequestModule;
+import com.googlecode.propidle.scheduling.SchedulableRequests;
 import com.googlecode.propidle.search.LuceneIndexWriterTransaction;
 import com.googlecode.propidle.server.FileAndPropertiesIndexRebuilder;
 import com.googlecode.propidle.server.IndexRebuilder;
 import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.util.ParallelExecutionGuard;
 import com.googlecode.utterlyidle.HttpHandler;
-import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
@@ -24,10 +20,10 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
-import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 
-public class LuceneModule implements ApplicationScopedModule, RequestScopedModule, ResourcesModule, SchedulableTaskModule {
+public class LuceneModule implements ApplicationScopedModule, RequestScopedModule, ResourcesModule, SchedulableRequestModule {
     public static final String REBUILD_INDEX_TASK_NAME = "rebuildIndex";
     private final Directory directory;
 
@@ -44,7 +40,6 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
         container.add(ParallelExecutionGuard.class);
         container.add(IndexRebuilder.class, FileAndPropertiesIndexRebuilder.class);
         container.decorate(IndexRebuilder.class, NoParallelExecutionIndexBuilder.class);
-        container.add(RebuildIndexScheduler.class);
         return this;
     }
 
@@ -58,7 +53,7 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
         return this;
     }
 
-    public void addTask(SchedulableTasks tasks) {
-        tasks.addTask(new SchedulableTask(REBUILD_INDEX_TASK_NAME, RequestBuilder.post(RebuildIndexResource.NAME).build()));
+    public void addTask(SchedulableRequests schedulableRequests) {
+        schedulableRequests.addTask(REBUILD_INDEX_TASK_NAME, post(RebuildIndexResource.NAME).build());
     }
 }

@@ -4,9 +4,8 @@ import acceptance.steps.WebClient;
 import acceptance.steps.givens.*;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
-import com.googlecode.propidle.scheduling.SchedulableTask;
-import com.googlecode.propidle.scheduling.SchedulableTaskModule;
-import com.googlecode.propidle.scheduling.SchedulableTasks;
+import com.googlecode.propidle.scheduling.SchedulableRequestModule;
+import com.googlecode.propidle.scheduling.SchedulableRequests;
 import com.googlecode.propidle.scheduling.StubScheduledExecutorService;
 import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.io.HierarchicalPath;
@@ -22,7 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static com.googlecode.utterlyidle.io.HierarchicalPath.hierarchicalPath;
 
-public class TestSupportModule implements ApplicationScopedModule, RequestScopedModule, SchedulableTaskModule {
+public class TestSupportModule implements ApplicationScopedModule, RequestScopedModule, SchedulableRequestModule {
     public static final String SCHEDULED_TEST_TASK_NAME = "scheduledTestTask";
     public static final HierarchicalPath SCHEDULED_TEST_URL = hierarchicalPath("scheduledTestUrl");
 
@@ -61,7 +60,7 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
         return this;
     }
 
-    public void addTask(SchedulableTasks tasks) {
-        tasks.addTask(new SchedulableTask(SCHEDULED_TEST_TASK_NAME, RequestBuilder.post(SCHEDULED_TEST_URL.toString()).build()));
+    public void addTask(SchedulableRequests schedulableRequests) {
+        schedulableRequests.addTask(SCHEDULED_TEST_TASK_NAME, RequestBuilder.post(SCHEDULED_TEST_URL.toString()).build());
     }
 }
