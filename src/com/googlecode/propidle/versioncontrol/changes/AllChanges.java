@@ -3,7 +3,6 @@ package com.googlecode.propidle.versioncontrol.changes;
 import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.sun.tools.javac.util.Pair;
 
 public interface AllChanges {
     Iterable<Change> get(PropertiesPath propertiesPath);
