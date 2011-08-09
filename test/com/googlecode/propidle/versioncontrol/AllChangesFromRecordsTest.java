@@ -1,25 +1,32 @@
 package com.googlecode.propidle.versioncontrol;
 
+import com.googlecode.propidle.PathType;
+import com.googlecode.propidle.properties.PropertiesPath;
+import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
+import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
+import org.junit.Test;
+
+import static com.googlecode.propidle.PathType.DIRECTORY;
+import static com.googlecode.propidle.PathType.FILE;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.properties.PropertyComparison.*;
-import com.googlecode.propidle.properties.PropertiesPath;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import static com.googlecode.propidle.util.matchers.HasInAnyOrder.hasInAnyOrder;
-import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.changes.Change;
 import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
-import com.googlecode.totallylazy.Sequence;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.Test;
+import static org.hamcrest.Matchers.is;
 
 public class AllChangesFromRecordsTest {
     private final AllChangesFromRecords changes = new AllChangesFromRecords(testRecordsWithAllMigrationsRun());
-
+    private final RevisionNumber someRevisionNumber = revisionNumber(3242);
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPath() {
         PropertiesPath propertiesPath = propertiesPath("/properties/production");
@@ -92,5 +99,54 @@ public class AllChangesFromRecordsTest {
         changes.put(revision1);
 
         assertThat(changes.get(propertiesPath, revisionNumber(0)), hasInAnyOrder(revision0));
+    }
+
+    @Test
+    public void shouldBeAbleToGetChildrenOfPath() {
+
+        changes.put(createChangesWith(propertiesPath("/myapp/production")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test/test")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test/my/apps1/properties")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test/my/apps2/properties")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test/my")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test/aaaa")));
+        changes.put(createChangesWith(propertiesPath("/myapp/test/easy/like/what")));
+        changes.put(createChangesWith(propertiesPath("/myapp")));
+
+        Sequence<Pair<PropertiesPath, PathType>> children = sequence(changes.childrenOf(propertiesPath("/myapp/test")));
+        
+        assertThat(children, is(hasInAnyOrder(
+                pair(propertiesPath("/myapp/test/my"), DIRECTORY),
+                pair(propertiesPath("/myapp/test/my"), FILE),
+                pair(propertiesPath("/myapp/test/test"), FILE),
+                pair(propertiesPath("/myapp/test/aaaa"), FILE),
+                pair(propertiesPath("/myapp/test/easy"), DIRECTORY))));
+
+    }
+
+    private Sequence<Change> createChangesWith(PropertiesPath propertiesPath) {
+        return sequence(
+                    change(
+                            someRevisionNumber,
+                            propertiesPath,
+                            createdProperty(
+                                    propertyName("number.of.pigs"),
+                                    propertyValue("42")
+                            )),
+                       change(
+                            someRevisionNumber,
+                            propertiesPath,
+                            createdProperty(
+                                    propertyName("number.of.sausages"),
+                                    propertyValue("11554")
+                            )),
+                change(
+                            someRevisionNumber,
+                            propertiesPath,
+                            createdProperty(
+                                    propertyName("number.of.sausage.candidates"),
+                                    propertyValue("42")
+                            )));
     }
 }

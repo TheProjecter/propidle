@@ -12,8 +12,6 @@ import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
-import com.googlecode.yadic.Containers;
-import com.googlecode.yadic.Resolver;
 import com.googlecode.yadic.SimpleContainer;
 
 import java.util.Properties;

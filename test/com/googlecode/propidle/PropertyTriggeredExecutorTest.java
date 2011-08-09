@@ -4,8 +4,6 @@ import com.googlecode.propidle.client.DynamicProperties;
 import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,8 +12,6 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.mockito.Mockito.*;
 
 public class PropertyTriggeredExecutorTest {

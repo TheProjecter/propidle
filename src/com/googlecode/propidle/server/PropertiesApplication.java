@@ -16,6 +16,7 @@ import com.googlecode.propidle.root.RootModule;
 import com.googlecode.propidle.scheduling.ScheduleTaskRequest;
 import com.googlecode.propidle.scheduling.SchedulingModule;
 import com.googlecode.propidle.search.SearchModule;
+import com.googlecode.propidle.server.decoration.Decorators;
 import com.googlecode.propidle.server.staticcontent.StaticContentModule;
 import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.propidle.versioncontrol.changes.ChangesModule;
@@ -37,6 +38,7 @@ import static com.googlecode.propidle.indexing.LuceneModule.REBUILD_INDEX_TASK_N
 import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersionModule;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
+import static com.googlecode.propidle.server.decoration.Decorators.decoratorsModule;
 import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
 import static java.lang.Long.valueOf;
 
@@ -51,6 +53,7 @@ public class PropertiesApplication extends RestApplication {
 
         add(new ApplicationPropertiesModule(propertyLoader));
         add(new BasicModule());
+        add(decoratorsModule());
         add(new LuceneModule(directory));
 
         add(new AliasesModule());
@@ -71,6 +74,8 @@ public class PropertiesApplication extends RestApplication {
 
         add(new ChangesModule());
         add(new RevisionsModule());
+
+
         for (Module module : modules) {
             add(module);
         }

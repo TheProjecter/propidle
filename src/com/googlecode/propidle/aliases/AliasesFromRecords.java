@@ -11,7 +11,7 @@ import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
 import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.records.Keyword.keyword;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 import static com.googlecode.utterlyidle.io.Url.url;
 
@@ -24,6 +24,7 @@ public class AliasesFromRecords implements Aliases{
 
     public AliasesFromRecords(Records records) {
         this.records = records;
+        records.define(ALIASES, FROM, TO);
     }
 
     public Aliases put(Alias alias) {

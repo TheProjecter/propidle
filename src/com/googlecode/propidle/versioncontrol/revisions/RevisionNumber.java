@@ -7,8 +7,8 @@ public class RevisionNumber extends IntegerTinyType<RevisionNumber> {
         return new RevisionNumber(value);
     }
 
-    public static RevisionNumber revisionNumber(Number value) {
-        return new RevisionNumber(value.intValue());
+    public static RevisionNumber revisionNumber(Integer value) {
+        return new RevisionNumber(value);
     }
 
     protected RevisionNumber(String value) {

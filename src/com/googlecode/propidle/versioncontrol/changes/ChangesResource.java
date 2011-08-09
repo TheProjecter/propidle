@@ -36,7 +36,6 @@ public class ChangesResource {
     @Path("{path:.+$}")
     public Model get(@PathParam("path") PropertiesPath path, @QueryParam("forRevision") Option<RevisionNumber> revisionNumber) {
         Iterable<Change> changesForProperties = revisionNumber.isEmpty() ? changes.get(path) : changes.get(path, revisionNumber.get());
-
         String propertiesUrl = basePath + urlOf(resource(PropertiesResource.class).getProperties(path));
         Model model = sequence(changesForProperties).
                 sortBy(method(on(Change.class).revisionNumber())).
@@ -45,7 +44,6 @@ public class ChangesResource {
                 add(TITLE, "Changes to \"" + path + "\"");
         if (!revisionNumber.isEmpty()) {
             model.add("revisionNumber", revisionNumber.getOrNull());
-
         }
         return model;
     }

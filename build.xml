@@ -87,6 +87,7 @@
         <generate.pom artifact.uri="mvn:com.googlecode.${ant.project.name}:${ant.project.name}:jar:${release.version}"
                          dependencies="build/runtime.dependencies"
                          directory="${artifacts}"/>
+
         <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
             <filterset>
                 <filter token="VERSION" value="${build.number}"/>

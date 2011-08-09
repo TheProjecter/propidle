@@ -1,5 +1,6 @@
 package com.googlecode.propidle.properties;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.io.HierarchicalPath;
 import com.googlecode.propidle.NormalisedHierarchicalPath;
 
@@ -14,6 +15,14 @@ public class PropertiesPath extends NormalisedHierarchicalPath {
 
     protected PropertiesPath(String value) {
         super(value);
+    }
+
+    public static Callable1<String, PropertiesPath> toPropertiesPath() {
+        return new Callable1<String, PropertiesPath>() {
+            public PropertiesPath call(String value) throws Exception {
+                return PropertiesPath.propertiesPath(value);
+            }
+        };
     }
 
 }
