@@ -7,16 +7,22 @@ import com.googlecode.propidle.search.FileNameSearcher;
 import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.server.PropertiesModule;
 import com.googlecode.propidle.urls.UrlResolver;
+import com.googlecode.propidle.versioncontrol.changes.AllChanges;
+import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.utterlyidle.io.HierarchicalPath;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import com.googlecode.utterlyidle.annotations.*;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
+import static com.googlecode.propidle.PathType.*;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.add;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.rendering.Model.model;
@@ -29,10 +35,12 @@ public class FileNamesResource {
     public static final String DIRECTORY_VIEW_NAME = "directory_view";
     private final FileNameSearcher searcher;
     private final UrlResolver urlResolver;
+    private final AllChanges allChanges;
 
-    public FileNamesResource(FileNameSearcher searcher, UrlResolver urlResolver) {
+    public FileNamesResource(FileNameSearcher searcher, UrlResolver urlResolver, AllChanges allChanges) {
         this.searcher = searcher;
         this.urlResolver = urlResolver;
+        this.allChanges = allChanges;
     }
 
     @GET
@@ -59,7 +67,7 @@ public class FileNamesResource {
     @GET
     @Path("{path:.*$}")
     public Model getChildrenOf(@PathParam("path") PropertiesPath path) {
-        Iterable<Pair<PropertiesPath, PathType>> paths = searcher.childrenOf(path);
+        Iterable<Pair<PropertiesPath, PathType>> paths = sequence(allChanges.childrenOf(path));
         Model model = modelWithName(DIRECTORY_VIEW_NAME).
                 add("searchUrl", searchUrl()).
                 add("createPropertiesUrl", createPropertiesUrl()).
@@ -92,7 +100,7 @@ public class FileNamesResource {
     }
 
     private Url urlOf(Pair<PropertiesPath, PathType> pathAndTypes) {
-        if (pathAndTypes.second().equals(PathType.FILE)) {
+        if (pathAndTypes.second().equals(FILE)) {
             return urlResolver.resolvePropertiesUrl(pathAndTypes.first());
         } else {
             return urlResolver.resolveFileNameUrl(pathAndTypes.first());

@@ -5,7 +5,7 @@ import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertyDiffTool;
 import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
 import com.googlecode.propidle.server.*;
-import com.googlecode.propidle.server.decoration.DecorateHtml;
+import com.googlecode.propidle.server.decoration.Decorators;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
@@ -13,16 +13,19 @@ import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.records.sql.mappings.Mapping;
+import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
-import com.googlecode.utterlyidle.sitemesh.Decorators;
 import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.generics.TypeFor;
 import com.googlecode.yadic.resolvers.OptionResolver;
+
+import java.io.PrintStream;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
@@ -42,9 +45,6 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
         container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
 
         container.decorate(HttpHandler.class, TransactionDecorator.class);
-
-        container.add(Decorators.class, DecorateHtml.class);
-        container.decorate(HttpHandler.class, SiteMeshHandler.class);
 
         // Shared tools
         container.add(Clock.class, SystemClock.class);

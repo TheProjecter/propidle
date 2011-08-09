@@ -42,6 +42,8 @@
           <root url="jar://$MODULE_DIR$/lib/runtime/totallylazy-335-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/yadic-129-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-356-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-363-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/totallylazy-419-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
       </library>

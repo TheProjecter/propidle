@@ -3,15 +3,14 @@ package com.googlecode.propidle.aliases;
 import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
-import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import static com.googlecode.propidle.aliases.Alias.alias;
-import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
+import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
-import static com.googlecode.utterlyidle.io.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

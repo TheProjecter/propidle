@@ -4,8 +4,8 @@ mvn:org.apache.lucene:lucene-core:jar:3.0.3
 mvn:org.objenesis:objenesis:jar:1.2
 mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
-mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:335
-mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:340
-mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:29
+mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:419
+mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:363
+mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:30
 mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:129
 mvn:org.sitemesh:sitemesh:jar:3.0-alpha-2

@@ -1,38 +1,48 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
+import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Keyword;
 import com.googlecode.totallylazy.records.Record;
 import com.googlecode.totallylazy.records.Records;
+import com.googlecode.utterlyidle.io.HierarchicalPath;
 
+import static com.googlecode.propidle.PathType.DIRECTORY;
+import static com.googlecode.propidle.PathType.FILE;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertiesPath.toPropertiesPath;
 import static com.googlecode.propidle.properties.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
+import static com.googlecode.totallylazy.records.Keywords.keyword;
 import static com.googlecode.totallylazy.records.MapRecord.record;
 
 public class AllChangesFromRecords implements AllChanges {
-    public static final Keyword CHANGES = Keyword.keyword("changes");
-    public static final Keyword<String> PROPERTIES_PATH = Keyword.keyword("properties_path", String.class);
-    public static final Keyword<Number> REVISION_NUMBER = Keyword.keyword("revision_number", Number.class);
-    public static final Keyword<String> PROPERTY_NAME = Keyword.keyword("property_name", String.class);
-    public static final Keyword<String> PREVIOUS_VALUE = Keyword.keyword("previous_value", String.class);
-    public static final Keyword<String> UPDATED_VALUE = Keyword.keyword("updated_value", String.class);
+    public static final Keyword CHANGES = keyword("changes");
+    public static final Keyword<String> PROPERTIES_PATH = keyword("properties_path", String.class);
+    public static final Keyword<Integer> REVISION_NUMBER = keyword("revision_number", Integer.class);
+    public static final Keyword<String> PROPERTY_NAME = keyword("property_name", String.class);
+    public static final Keyword<String> PREVIOUS_VALUE = keyword("previous_value", String.class);
+    public static final Keyword<String> UPDATED_VALUE = keyword("updated_value", String.class);
 
     public final Records records;
 
     public AllChangesFromRecords(Records records) {
         this.records = records;
+        records.define(CHANGES, PROPERTIES_PATH, REVISION_NUMBER, PROPERTY_NAME, PREVIOUS_VALUE, UPDATED_VALUE);
     }
 
     public Iterable<Change> get(PropertiesPath propertiesPath) {
@@ -41,6 +51,35 @@ public class AllChangesFromRecords implements AllChanges {
                 filter(where(PROPERTIES_PATH, is(propertiesPath.toString()))).
                 map(deserialise());
     }
+
+    public Iterable<Pair<PropertiesPath, PathType>> childrenOf(PropertiesPath parent) {
+        Sequence<String> propertiesPaths = records.
+                get(CHANGES).
+                filter(where(PROPERTIES_PATH, startsWith(parent.toString())).
+                        and(where(PROPERTIES_PATH, not(equalTo(parent.toString()))))).
+                map(PROPERTIES_PATH).
+                unique();
+        return propertiesPaths.map(toPropertiesPath()).map(toPairs(parent)).unique();
+    }
+
+    private Callable1<? super PropertiesPath, Pair<PropertiesPath, PathType>> toPairs(final PropertiesPath parent) {
+        return new Callable1<PropertiesPath, Pair<PropertiesPath, PathType>>() {
+            public Pair<PropertiesPath, PathType> call(PropertiesPath propertiesPath) throws Exception {
+                return pair(childPath(propertiesPath, parent), type(propertiesPath, parent));
+            }
+        };
+    }
+
+    private PropertiesPath childPath(HierarchicalPath propertiesPath, HierarchicalPath parent) {
+        return propertiesPath(parent.subDirectory(propertiesPath.remove(parent).segments().headOption().getOrElse("")));
+    }
+
+    private PathType type(PropertiesPath propertiesPath, PropertiesPath parent) {
+        HierarchicalPath path = propertiesPath.remove(parent);
+        return path.segments().size().intValue() > 1 ? DIRECTORY : FILE;
+    }
+
+
 
     public Iterable<Change> get(PropertiesPath propertiesPath, RevisionNumber revisionNumber) {
         return records.
