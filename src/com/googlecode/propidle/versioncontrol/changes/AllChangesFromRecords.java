@@ -33,7 +33,7 @@ import static com.googlecode.totallylazy.records.MapRecord.record;
 public class AllChangesFromRecords implements AllChanges {
     public static final Keyword CHANGES = keyword("changes");
     public static final Keyword<String> PROPERTIES_PATH = keyword("properties_path", String.class);
-    public static final Keyword<Integer> REVISION_NUMBER = keyword("revision_number", Integer.class);
+    public static final Keyword<Number> REVISION_NUMBER = keyword("revision_number", Number.class);
     public static final Keyword<String> PROPERTY_NAME = keyword("property_name", String.class);
     public static final Keyword<String> PREVIOUS_VALUE = keyword("previous_value", String.class);
     public static final Keyword<String> UPDATED_VALUE = keyword("updated_value", String.class);
@@ -42,7 +42,6 @@ public class AllChangesFromRecords implements AllChanges {
 
     public AllChangesFromRecords(Records records) {
         this.records = records;
-        records.define(CHANGES, PROPERTIES_PATH, REVISION_NUMBER, PROPERTY_NAME, PREVIOUS_VALUE, UPDATED_VALUE);
     }
 
     public Iterable<Change> get(PropertiesPath propertiesPath) {
@@ -121,7 +120,7 @@ public class AllChangesFromRecords implements AllChanges {
         return new Callable1<Record, Change>() {
             public Change call(Record record) throws Exception {
                 return new Change(
-                        revisionNumber(record.get(REVISION_NUMBER)),
+                        revisionNumber(record.get(REVISION_NUMBER).intValue()),
                         propertiesPath(record.get(PROPERTIES_PATH)),
                         changedProperty(
                                 propertyName(record.get(PROPERTY_NAME)),
