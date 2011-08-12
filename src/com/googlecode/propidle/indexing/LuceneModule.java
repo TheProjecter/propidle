@@ -38,12 +38,12 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
         container.addInstance(Analyzer.class, new StandardAnalyzer(Version.LUCENE_30));
         container.addActivator(IndexWriter.class, IndexWriterActivator.class);
         container.add(ParallelExecutionGuard.class);
-        container.add(IndexRebuilder.class, FileAndPropertiesIndexRebuilder.class);
-        container.decorate(IndexRebuilder.class, NoParallelExecutionIndexBuilder.class);
         return this;
     }
 
     public Module addPerRequestObjects(Container container) {
+        container.add(IndexRebuilder.class, FileAndPropertiesIndexRebuilder.class);
+        container.decorate(IndexRebuilder.class, NoParallelExecutionIndexBuilder.class);
         container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
         return this;
     }
