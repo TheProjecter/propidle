@@ -20,12 +20,12 @@ import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.rende
 public class SearchModule extends AbstractModule{
     @Override
     public Module addPerApplicationObjects(Container container) {
-        container.add(PropertiesIndex.class, LucenePropertiesIndex.class);
         container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
         return this;
     }
 
     public Module addPerRequestObjects(Container container){
+        container.add(PropertiesIndex.class, LucenePropertiesIndex.class);
         container.decorate(AllProperties.class, PropertiesIndexingDecorator.class);
         return this;
     }

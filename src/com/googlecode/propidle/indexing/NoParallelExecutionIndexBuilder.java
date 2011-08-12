@@ -12,10 +12,11 @@ import java.util.concurrent.Callable;
 
 public class NoParallelExecutionIndexBuilder implements IndexRebuilder {
 
-    private final ParallelExecutionGuard parallelExecutionGuard = new ParallelExecutionGuard();
+    private final ParallelExecutionGuard parallelExecutionGuard;
     private final IndexRebuilder indexRebuilder;
 
-    public NoParallelExecutionIndexBuilder(IndexRebuilder indexRebuilder) {
+    public NoParallelExecutionIndexBuilder(ParallelExecutionGuard parallelExecutionGuard, IndexRebuilder indexRebuilder) {
+        this.parallelExecutionGuard = parallelExecutionGuard;
         this.indexRebuilder = indexRebuilder;
     }
 
