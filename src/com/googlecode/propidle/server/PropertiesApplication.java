@@ -7,6 +7,7 @@ import com.googlecode.propidle.WrapCallableInTransaction;
 import com.googlecode.propidle.aliases.AliasesModule;
 import com.googlecode.propidle.compositeproperties.CompositePropertiesModule;
 import com.googlecode.propidle.diff.DiffModule;
+import com.googlecode.propidle.exceptions.ExceptionFormattingModule;
 import com.googlecode.propidle.filenames.FileNamesModule;
 import com.googlecode.propidle.indexing.LuceneModule;
 import com.googlecode.propidle.migrations.PropidleMigrationsModule;
@@ -16,16 +17,15 @@ import com.googlecode.propidle.root.RootModule;
 import com.googlecode.propidle.scheduling.ScheduleTaskRequest;
 import com.googlecode.propidle.scheduling.SchedulingModule;
 import com.googlecode.propidle.search.SearchModule;
-import com.googlecode.propidle.server.decoration.Decorators;
 import com.googlecode.propidle.server.staticcontent.StaticContentModule;
 import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.propidle.versioncontrol.changes.ChangesModule;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionsModule;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.utterlyidle.RestApplication;
+import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
 import com.googlecode.utterlyidle.migrations.modules.MigrationRegistrationModule;
-import com.googlecode.utterlyidle.modules.Module;
+import com.googlecode.utterlyidle.modules.*;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import org.apache.lucene.store.Directory;
@@ -53,7 +53,6 @@ public class PropertiesApplication extends RestApplication {
 
         add(new ApplicationPropertiesModule(propertyLoader));
         add(new BasicModule());
-        add(decoratorsModule());
         add(new LuceneModule(directory));
 
         add(new AliasesModule());
@@ -79,6 +78,10 @@ public class PropertiesApplication extends RestApplication {
         for (Module module : modules) {
             add(module);
         }
+
+        add(new ExceptionFormattingModule());
+
+        add(decoratorsModule());
     }
 
     @SuppressWarnings("unchecked")
@@ -130,4 +133,5 @@ public class PropertiesApplication extends RestApplication {
             }
         };
     }
+
 }

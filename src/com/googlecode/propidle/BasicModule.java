@@ -5,7 +5,6 @@ import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertyDiffTool;
 import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
 import com.googlecode.propidle.server.*;
-import com.googlecode.propidle.server.decoration.Decorators;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
@@ -13,19 +12,17 @@ import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.records.sql.mappings.Mapping;
-import com.googlecode.totallylazy.records.sql.mappings.Mappings;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
+import com.googlecode.utterlyidle.handlers.ResponseHandlers;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
-import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
+import com.googlecode.utterlyidle.modules.ResponseHandlersModule;
+import com.googlecode.utterlyidle.rendering.ExceptionRenderer;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.generics.TypeFor;
 import com.googlecode.yadic.resolvers.OptionResolver;
-
-import java.io.PrintStream;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
@@ -63,4 +60,5 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
         container.add(PropertyTriggeredExecutor.class);
         return this;
     }
+
 }
