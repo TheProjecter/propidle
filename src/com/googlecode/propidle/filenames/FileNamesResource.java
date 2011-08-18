@@ -8,28 +8,24 @@ import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.server.PropertiesModule;
 import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
-import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.utterlyidle.io.HierarchicalPath;
+import com.googlecode.utterlyidle.annotations.*;
 import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import com.googlecode.utterlyidle.annotations.*;
-
 import static com.googlecode.propidle.ModelName.modelWithName;
-import static com.googlecode.propidle.PathType.*;
+import static com.googlecode.propidle.PathType.FILE;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.add;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.rendering.Model.model;
-import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 @Path(FileNamesResource.NAME)
-@Produces(TEXT_HTML)
+@Produces({TEXT_PLAIN, TEXT_HTML})
 public class FileNamesResource {
     public static final String NAME = "filenames";
     public static final String DIRECTORY_VIEW_NAME = "directory_view";

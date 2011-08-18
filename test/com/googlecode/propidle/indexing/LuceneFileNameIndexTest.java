@@ -19,12 +19,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.indexing.IndexWriterActivator.indexWriter;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.TemporaryIndex.emptyFileSystemDirectory;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasSize;
 import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;

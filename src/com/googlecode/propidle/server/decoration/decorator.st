@@ -4,6 +4,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link type="text/css" rel="stylesheet" href="/static/base.css"/>
     <title>$title$</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+    <script src="/static/propidle.js" type="text/javascript"></script>
     $head$
 </head>
 

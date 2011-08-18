@@ -1,37 +1,11 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.properties.Properties.properties;
-import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;
-
+import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.filenames.LuceneFileNameIndex;
-import com.googlecode.propidle.properties.Properties;
 import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.propidle.properties.PropertyComparison;
-import com.googlecode.propidle.search.LucenePropertiesIndex;
-
-import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.properties.PropertyName.propertyName;
-import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-
-import com.googlecode.propidle.search.FileNameSearcher;
-import com.googlecode.propidle.search.LuceneFileNameSearcher;
-import com.googlecode.propidle.search.LucenePropertiesSearcher;
-import com.googlecode.propidle.search.PropertiesSearcher;
-
-import static com.googlecode.propidle.search.Query.query;
-import static com.googlecode.propidle.search.SearchResult.searchResult;
-
+import com.googlecode.propidle.search.*;
 import com.googlecode.propidle.util.TestRecords;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
-
-import static com.googlecode.propidle.versioncontrol.changes.Change.change;
-import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
-
-import com.googlecode.propidle.PathType;
-
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Sequences.sequence;
-
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.records.Records;
@@ -39,16 +13,23 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.propidle.properties.PropertyName.propertyName;
+import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
+import static com.googlecode.propidle.search.Query.query;
+import static com.googlecode.propidle.search.SearchResult.searchResult;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class FileAndPropertiesIndexRebuilderTest {
     private static final Version VERSION = Version.LUCENE_30;

@@ -2,6 +2,7 @@ package com.googlecode.propidle.server.staticcontent;
 
 import com.googlecode.utterlyidle.Response;
 
+import com.googlecode.utterlyidle.Responses;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
 
@@ -12,6 +13,6 @@ import static com.googlecode.utterlyidle.proxy.Resource.resource;
 public class FavIconResource {
     @GET
     public Response get(){
-        return redirect(resource(StaticContentResource.class).get("favicon.ico"));
+        return Responses.seeOther("static/favicon.ico");
     }
 }
