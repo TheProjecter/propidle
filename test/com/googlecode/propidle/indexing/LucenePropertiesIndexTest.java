@@ -1,17 +1,10 @@
 package com.googlecode.propidle.indexing;
 
-import static com.googlecode.propidle.indexing.IndexWriterActivator.indexWriter;
-import static com.googlecode.propidle.properties.Properties.properties;
-import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-
 import com.googlecode.propidle.search.LucenePropertiesIndex;
 import com.googlecode.propidle.search.LucenePropertiesSearcher;
 import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.search.SearchResult;
-import static com.googlecode.totallylazy.Pair.pair;
 import com.googlecode.totallylazy.Sequence;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
@@ -19,10 +12,17 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 import java.io.IOException;
+
+import static com.googlecode.propidle.indexing.IndexWriterActivator.indexWriter;
+import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.matchers.NumberMatcher.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LucenePropertiesIndexTest {
     private final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);

@@ -1,18 +1,18 @@
 package acceptance.steps.thens;
 
 import acceptance.steps.WebClient;
-import static com.googlecode.propidle.properties.Properties.properties;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import com.googlecode.utterlyidle.io.Url;
 
+import java.util.Properties;
+import java.util.concurrent.Callable;
+
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.utterlyidle.io.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
-import java.util.Properties;
-import java.util.concurrent.Callable;
 
 public class LastResponse implements Callable<Response> {
     private final WebClient webClient;

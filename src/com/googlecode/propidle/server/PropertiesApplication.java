@@ -23,6 +23,7 @@ import com.googlecode.propidle.versioncontrol.changes.ChangesModule;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionsModule;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.*;
+import com.googlecode.utterlyidle.dsl.StaticResources;
 import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
 import com.googlecode.utterlyidle.migrations.modules.MigrationRegistrationModule;
 import com.googlecode.utterlyidle.modules.*;
@@ -39,6 +40,9 @@ import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersi
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.server.decoration.Decorators.decoratorsModule;
+import static com.googlecode.totallylazy.URLs.packageUrl;
+import static com.googlecode.utterlyidle.dsl.DslBindings.bindings;
+import static com.googlecode.utterlyidle.dsl.StaticBindingBuilder.in;
 import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
 import static java.lang.Long.valueOf;
 
@@ -74,14 +78,14 @@ public class PropertiesApplication extends RestApplication {
         add(new ChangesModule());
         add(new RevisionsModule());
 
+        add(new ExceptionFormattingModule());
+        add(decoratorsModule());
 
         for (Module module : modules) {
             add(module);
         }
 
-        add(new ExceptionFormattingModule());
 
-        add(decoratorsModule());
     }
 
     @SuppressWarnings("unchecked")
