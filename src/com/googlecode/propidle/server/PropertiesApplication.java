@@ -17,13 +17,14 @@ import com.googlecode.propidle.root.RootModule;
 import com.googlecode.propidle.scheduling.ScheduleTaskRequest;
 import com.googlecode.propidle.scheduling.SchedulingModule;
 import com.googlecode.propidle.search.SearchModule;
+import com.googlecode.propidle.server.sitemesh.SiteMashDecoratorModule;
+import com.googlecode.propidle.server.sitemesh.SiteMashHandlerModule;
 import com.googlecode.propidle.server.staticcontent.StaticContentModule;
 import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.propidle.versioncontrol.changes.ChangesModule;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionsModule;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.*;
-import com.googlecode.utterlyidle.dsl.StaticResources;
 import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
 import com.googlecode.utterlyidle.migrations.modules.MigrationRegistrationModule;
 import com.googlecode.utterlyidle.modules.*;
@@ -39,10 +40,6 @@ import static com.googlecode.propidle.indexing.LuceneModule.REBUILD_INDEX_TASK_N
 import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersionModule;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.propidle.server.decoration.Decorators.decoratorsModule;
-import static com.googlecode.totallylazy.URLs.packageUrl;
-import static com.googlecode.utterlyidle.dsl.DslBindings.bindings;
-import static com.googlecode.utterlyidle.dsl.StaticBindingBuilder.in;
 import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
 import static java.lang.Long.valueOf;
 
@@ -78,14 +75,14 @@ public class PropertiesApplication extends RestApplication {
         add(new ChangesModule());
         add(new RevisionsModule());
 
-        add(new ExceptionFormattingModule());
-        add(decoratorsModule());
+        add(new SiteMashDecoratorModule());
 
         for (Module module : modules) {
             add(module);
         }
 
-
+        add(new ExceptionFormattingModule());
+        add(new SiteMashHandlerModule());
     }
 
     @SuppressWarnings("unchecked")
