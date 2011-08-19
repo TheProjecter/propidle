@@ -1,7 +1,9 @@
 package com.googlecode.propidle.exceptions;
 
 import com.googlecode.propidle.server.ModelTemplateRenderer;
+import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 import com.googlecode.utterlyidle.*;
@@ -13,11 +15,10 @@ import com.googlecode.utterlyidle.modules.ResponseHandlersModule;
 import com.googlecode.utterlyidle.rendering.ExceptionRenderer;
 import com.googlecode.yadic.Container;
 
-import static com.googlecode.propidle.server.decoration.Decorators.acceptsHtml;
-import static com.googlecode.propidle.server.decoration.Decorators.returnsHtml;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.utterlyidle.HeaderParameters.headerParameters;
+import static com.googlecode.utterlyidle.HttpHeaders.ACCEPT;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.Status.INTERNAL_SERVER_ERROR;
@@ -50,4 +51,14 @@ public class ExceptionFormattingModule implements RequestScopedModule, ResponseH
             }
         };
     }
+
+    public static Predicate<? super Pair<Request, Response>> acceptsHtml() {
+        return new Predicate<Pair<Request, Response>>() {
+            public boolean matches(Pair<Request, Response> requestResponsePair) {
+                String acceptsString = requestResponsePair.first().headers().getValue(ACCEPT);
+                return acceptsString != null && (acceptsString.contains(MediaType.WILDCARD) || acceptsString.contains(MimeType.TEXT_HTML.value()));
+            }
+        };
+    }
+
 }
