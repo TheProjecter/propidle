@@ -25,7 +25,7 @@ import static com.googlecode.utterlyidle.io.Url.url;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(FileNamesResource.NAME)
-@Produces({TEXT_PLAIN, TEXT_HTML})
+@Produces({TEXT_HTML})
 public class FileNamesResource {
     public static final String NAME = "filenames";
     public static final String DIRECTORY_VIEW_NAME = "directory_view";
@@ -40,6 +40,7 @@ public class FileNamesResource {
     }
 
     @GET
+    @Produces({TEXT_HTML, TEXT_PLAIN})
     public Model get(@QueryParam("q") Query query) {
         Model model = modelWithName(NAME).
                 add(PropertiesModule.TITLE, "Filenames \"" + query + "\"").
