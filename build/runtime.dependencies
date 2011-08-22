@@ -6,6 +6,6 @@ mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
 mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:442
 mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:368
-mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:31
+mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:34
 mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:129
 mvn:org.sitemesh:sitemesh:jar:3.0-alpha-2
