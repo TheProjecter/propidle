@@ -1,6 +1,7 @@
 package com.googlecode.propidle.status;
 
 
+import com.googlecode.totallylazy.Predicate;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
 import com.googlecode.utterlyidle.annotations.GET;
@@ -9,6 +10,7 @@ import com.googlecode.utterlyidle.annotations.Produces;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
+import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.HeaderParameters.headerParameters;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
@@ -28,12 +30,20 @@ public class StatusResource {
 
     @GET
     public Response reportStatus() {
-        return response(Status.OK, headerParameters(), modelOf(statusChecks));
+        Iterable<StatusCheckResult> statusCheckResults = statusChecks.checks();
+        Status status = Status.OK;
+        if ( sequence(statusCheckResults).exists(fatalStatusCheckResult()) ){
+            status = status.SERVICE_UNAVAILABLE;
+        }
+        return response(status, headerParameters(),modelWithName(NAME).add("checks", statusCheckResults));
     }
 
-    private Model modelOf(StatusChecks checkList) {
-        Iterable<StatusCheckResult> statusCheckResults = checkList.checks();
-        return modelWithName(NAME).add("checks", statusCheckResults);
+    private Predicate<StatusCheckResult> fatalStatusCheckResult() {
+        return new Predicate<StatusCheckResult>() {
+            public boolean matches(StatusCheckResult statusCheckResult) {
+                return statusCheckResult.isFatal();
+            }
+        };
     }
 
 }

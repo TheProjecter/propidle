@@ -53,6 +53,10 @@ public class DatabaseVersionCheck implements StatusCheck {
         }
         addResult(migrationRequired,result);
 
+        if (migrationRequired) {
+            result.setFatal(true);
+        }
+
         return result;
     }
 

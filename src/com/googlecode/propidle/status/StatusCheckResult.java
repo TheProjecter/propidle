@@ -7,6 +7,7 @@ import java.util.Set;
 public class StatusCheckResult {
     private final StatusCheckName name;
     private final Map<String, Object> properties = new LinkedHashMap<String,Object>();
+    private boolean fatal = false;
 
     public static StatusCheckResult statusCheckResult(StatusCheckName name) {
         return new StatusCheckResult(name);
@@ -31,5 +32,13 @@ public class StatusCheckResult {
 
     public Object getProperty(String name) {
         return properties.get(name);
+    }
+
+    public boolean isFatal() {
+        return fatal;
+    }
+
+    public void setFatal(boolean fatal) {
+        this.fatal = fatal;
     }
 }
