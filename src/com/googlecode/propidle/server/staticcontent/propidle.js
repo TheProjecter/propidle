@@ -15,9 +15,15 @@
             $this.after(loader);
             loader.after(suggestionsContainer);
 
+            $this.keydown(function(event) {
+              if (event.keyCode == 13 && suggestionsContainer.css("visibility") == "visible") {
+                  event.preventDefault();
+              }
+            });
+
             $this.keyup(function (event) {
                 if (selected && event.keyCode == 38 ) {
-                    selectASuggestion(selected.prev())
+                    selectASuggestion(selected.prev());
                 } else if (event.keyCode == 40 ) {
                     if (selected) {
                         selectASuggestion(selected.next())
@@ -100,3 +106,7 @@
         });
     };
 })(jQuery);
+
+jQuery(document).ready(function() {
+   jQuery('.property-autocomplete').propertyAutoComplete({autoSubmit: false});
+});

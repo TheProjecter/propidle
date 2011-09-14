@@ -1,12 +1,6 @@
 <html>
     <head>
         <title>$title$</title>
-
-        <script>
-                 jQuery(document).ready(function() {
-                    jQuery('.property-autocomplete').propertyAutoComplete({autoSubmit: true});
-                 });
-        </script>
     </head>
     <body>
         <div>
