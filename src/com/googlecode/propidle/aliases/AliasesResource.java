@@ -3,10 +3,7 @@ package com.googlecode.propidle.aliases;
 import com.googlecode.propidle.ModelName;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.RequestBuilder;
-import com.googlecode.utterlyidle.ResourcePath;
-import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.handlers.ClientHttpHandler;
 import com.googlecode.utterlyidle.rendering.Model;
 
@@ -65,10 +62,16 @@ public class AliasesResource {
             alias = alias(aliasPath(""), aliasDestination(""));
         }
 
+        AliasDestination redirectTo = overrideDestination.isEmpty() ? alias.to() : overrideDestination.get();
+
         Model model = modelWithName(ALIAS).
                 add(TITLE, "Alias \"" + from + "\"").
                 add("aliasUrl", basePath + "" + resourcePath).
-                add("redirectTo", overrideDestination.isEmpty() ? alias.to() : overrideDestination.get());
+                add("redirectTo", redirectTo);
+
+        if (redirectTo.url().toString().startsWith("/composite?")) {
+            model.add("editUrl", redirectTo.url().toString()+"&alias="+UrlEncodedMessage.encode(alias.from().toString()));
+        }
 
         if (!"".equals(alias.to().toString())) {
             model.add("currentRedirectTo", alias.to());

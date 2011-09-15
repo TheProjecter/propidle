@@ -29,6 +29,7 @@ import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;
+import static com.googlecode.totallylazy.Sequences.add;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
@@ -51,7 +52,7 @@ public class CompositePropertiesResource {
     }
 
     @GET
-    public Model getHtml(@QueryParam("url") String url, QueryParameters parameters) {
+    public Model getHtml(@QueryParam("url") String url, @QueryParam("alias") Option<String> alias, QueryParameters parameters) {
         Sequence<Url> urls = sequence(parameters.getValues("url")).filter(Predicates.nonEmpty()).map(com.googlecode.propidle.util.Callables.toUrl()).memorise();
 
         Sequence<Pair<Url, Either<Status, Properties>>> urlGetResults = urls.zip(urls.mapConcurrently(toProperties()));
@@ -76,10 +77,20 @@ public class CompositePropertiesResource {
                fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
                add("revision", requestedRevisionNumber.getOrNull()).
                add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
-               add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, parameters))).
+               add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, alias, parameters))).
                add(TITLE, title(urls));
 
+        alias.fold(propertiesAndOverrides, intoModel());
+
        return urlGetResults.fold(propertiesAndOverrides, urlIntoModel());
+    }
+
+    private Callable2<Model, String, Model> intoModel() {
+        return new Callable2<Model, String, Model>() {
+            public Model call(Model model, String value) throws Exception {
+                return model.add("alias", value);
+            }
+        };
     }
 
     private Callable1<Url, Either<Status, Properties>> toProperties() {
