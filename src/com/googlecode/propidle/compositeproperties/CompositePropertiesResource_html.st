@@ -10,6 +10,7 @@
                     the list will override values in files above them.
                 </p>
                 <form name="pathSearchForm" method="GET">
+                    <input name="alias" type="hidden" value="$alias$"/>
                     <p>Revision:</p>
                     <p>
                         <input name="revision" size="20" type="text" value="$revision$" placeholder="latest"/>
@@ -25,6 +26,16 @@
                 </form>
             </div>
             <div class="section">
+            $if(!alias.empty)$
+                <h2> Update the alias </h2>
+                <form method="post" action="$aliasesUrl$$alias$">
+                    <input name="to" size="40" type="hidden" value="$thisUrl$"/>
+                    <p>
+                        $aliasesUrl$$alias$
+                        <input type="submit" value="Update"/>
+                    </p>
+                </form>
+            $else$
                 <h2>Create an alias for this composite</h2>
                 <form method="GET" action="$aliasesUrl$">
                     <input name="to" size="40" type="hidden" value="$thisUrl$"/>
@@ -34,6 +45,7 @@
                         <input type="submit" value="Create"/>
                     </p>
                 </form>
+            $endif$
             </div>
         </div>
         <table>

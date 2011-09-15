@@ -25,6 +25,7 @@
     $if(!currentRedirectTo.empty)$
     <p>Currently <a href="$aliasUrl$">$aliasUrl$</a> redirects to: <a href="$currentRedirectTo$">$currentRedirectTo$</a>
     </p>
+    <p><a href="$editUrl$">Edit this Alias</a>
     <p>Try it out: <a href="$aliasUrl$">$aliasUrl$</a></p>
     $endif$
 </div>
