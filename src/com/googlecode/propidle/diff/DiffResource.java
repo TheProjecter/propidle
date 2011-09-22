@@ -41,8 +41,17 @@ public class DiffResource {
     }
 
     @GET
-    public Response get() throws Throwable {
-        return redirect(resource(DiffResource.class).get(Left.<String,UrlWrapper>left(""), Left.<String,UrlWrapper>left("")));
+    public Model get() throws Throwable {
+         Model urls = modelWithName(NAME).
+                add("left", model().
+                        add("url", "").
+                        add("status", "ok").
+                        add("message", "")).
+                add("right", model().
+                        add("url", "").
+                        add("status", "ok" ).
+                        add("message", ""));
+        return urls;
     }
 
     @GET

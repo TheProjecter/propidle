@@ -89,6 +89,10 @@ input[type="submit"] {
     border:1px solid #CCCCCC;
     background-color:#FFDDDD;
 }
+
+.error-text.ok {
+    display: none;
+}
 .section {
     margin:10px;
     padding:10px;

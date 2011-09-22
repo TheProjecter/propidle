@@ -11,13 +11,13 @@
                 <tr>
                     <td>
                         <p>Left</p>
-                        <p><input name="left"  autocomplete="off" class="property-autocomplete"   value="$left:{$it.url$}$"  class="$left:{$it.status$}$" size="40"/></p>
-                        <p><span class="error-text">$left:{$it.message$}$</span></p>
+                        <p><input name="left" autocomplete="off" class="property-autocomplete $left:{$it.status$}$" value="$left:{$it.url$}$" size="40"/></p>
+                        <p><span class="error-text $left:{$it.status$}$">$left:{$it.message$}$</span></p>
                     </td>
                     <td>
                         <p>Right</p>
-                        <p><input name="right"  autocomplete="off"  class="property-autocomplete"  value="$right:{$it.url$}$" class="$right:{$it.status$}$" size="40"/></p>
-                        <p><span class="error-text">$right:{$it.message$}$</span></p>
+                        <p><input name="right" autocomplete="off" class="property-autocomplete $right:{$it.status$}$" value="$right:{$it.url$}$" size="40"/></p>
+                        <p><span class="error-text $right:{$it.status$}$">$right:{$it.message$}$</span></p>
                     </td>
                 </tr>
             </table>
