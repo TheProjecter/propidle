@@ -1,9 +1,7 @@
 (function ($) {
 
     $.fn.propertyAutoComplete = function (type) {
-    console.log(type);
         return this.each(function () {
-
             var $this = $(this);
             var selected;
             var suggestions;
@@ -38,6 +36,8 @@
             });
 
             var showSuggestions = function() {
+                // Clear the container
+                suggestionsContainer.empty();
                 var searchFor = $this.val();
                 suggestions = new Array();
                 jQuery.ajaxSetup({
@@ -102,6 +102,7 @@
                 $this.val(selected.html());
                 suggestionsContainer.find(".suggestion").css("background", "white");
                 selected.css("background", "#E5FFE5");
+
             }
         });
     };
