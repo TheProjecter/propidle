@@ -78,6 +78,12 @@ public class Server {
     private static void startServer(final PropertiesApplication application, final ServerConfiguration serverConfig) throws Exception {
         server = call(new ServerActivator(application, serverConfig));
         application.applicationScope().get(RegisterCountingMBeans.class).call();
-        application.startPropertyDependentTasks();
+        try {
+            application.startPropertyDependentTasks();
+        } catch (Exception e) {
+            application.close();
+            server.close();
+            throw new RuntimeException(e);
+        }
     }
 }

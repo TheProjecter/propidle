@@ -25,7 +25,7 @@ public class ScheduleTaskRequest {
         if(response.status() == Status.OK) {
             System.out.println(taskName + " successfully scheduled");
         } else {
-            System.err.println(format("Scheduling %s failed with code " + response.status().code(), taskName));
+            throw new RuntimeException(format("Scheduling %s failed with code " + response.status().code(), taskName));
         }
     }
     
