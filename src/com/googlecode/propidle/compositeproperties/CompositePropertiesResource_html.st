@@ -10,7 +10,9 @@
                     the list will override values in files above them.
                 </p>
                 <form name="pathSearchForm" method="GET">
-                    <input name="alias" type="hidden" value="$alias$"/>
+                    $if(!alias.empty)$
+                        <input name="alias" type="hidden" value="$alias$"/>
+                    $endif$
                     <p>Revision:</p>
                     <p>
                         <input name="revision" size="20" type="text" value="$revision$" placeholder="latest"/>

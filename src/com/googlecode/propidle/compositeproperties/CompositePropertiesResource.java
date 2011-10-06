@@ -3,7 +3,6 @@ package com.googlecode.propidle.compositeproperties;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
-import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.propidle.util.Predicates;
 import com.googlecode.propidle.util.collections.MultiMap;
 import com.googlecode.totallylazy.*;
@@ -26,10 +25,10 @@ import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameter
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Callables.second;
 import static com.googlecode.totallylazy.Left.left;
+import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.isRight;
 import static com.googlecode.totallylazy.Right.right;
-import static com.googlecode.totallylazy.Sequences.add;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
@@ -71,13 +70,13 @@ public class CompositePropertiesResource {
 
        Properties compositeProperties = sourceProperties.fold(new Properties(), compose());
 
-       Model propertiesAndOverrides = sequence(compositeProperties.entrySet()).
+        Model propertiesAndOverrides = sequence(compositeProperties.entrySet()).
                sortBy(key()).
                map(toPair()).
                fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
                add("revision", requestedRevisionNumber.getOrNull()).
                add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
-               add("thisUrl", basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, alias, parameters))).
+               add("thisUrl", compositeUrlWithAliasRemoved(url, parameters)).
                add(TITLE, title(urls));
 
         alias.fold(propertiesAndOverrides, intoModel());
@@ -85,9 +84,18 @@ public class CompositePropertiesResource {
        return urlGetResults.fold(propertiesAndOverrides, urlIntoModel());
     }
 
+    private String compositeUrlWithAliasRemoved(String url, QueryParameters parameters) {
+        QueryParameters paramsWithOutAlias = QueryParameters.queryParameters(parameters);
+        paramsWithOutAlias.remove("alias");
+        return basePath + urlOf(resource(CompositePropertiesResource.class).getHtml(url, Option.<String>none(), paramsWithOutAlias));
+    }
+
     private Callable2<Model, String, Model> intoModel() {
         return new Callable2<Model, String, Model>() {
             public Model call(Model model, String value) throws Exception {
+                if(value.isEmpty()){
+                    return model;
+                }
                 return model.add("alias", value);
             }
         };
