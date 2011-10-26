@@ -34,6 +34,24 @@ public class ParallelExecutionGuardTest {
         assertThat(executeCounter.get(), is(1));
     }
 
+    @Test
+    public void shouldSignalFinishedExecutionWhenExecutionThrowsException() throws InterruptedException {
+        try {
+            parallelExecutionGuard.execute(serviceThatBlowsUp());
+        } catch (Exception e) {
+        }
+
+        assertThat(parallelExecutionGuard.execute(service()), is(true));
+    }
+
+    private Callable<Void> serviceThatBlowsUp() {
+        return new Callable<Void>() {
+            public Void call() throws Exception {
+                throw new RuntimeException();
+            }
+        };
+    }
+
     private void waitToFinish(Thread slowService) throws InterruptedException {
         stop.countDown();
         slowService.join();
@@ -59,7 +77,7 @@ public class ParallelExecutionGuardTest {
     }
 
     private Callable<Void> service() {
-        return new Callable<Void>(){
+        return new Callable<Void>() {
             public Void call() throws Exception {
                 executeCounter.incrementAndGet();
                 return null;
