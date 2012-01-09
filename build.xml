@@ -36,7 +36,7 @@
     </path>
 
     <target name="update">
-        <install version="40"/>
+        <!--<install version="43"/>-->
         <parallel>
             <update dependencies="build/build.dependencies"
                     directory="${build.dependencies.dir}"/>
@@ -88,11 +88,6 @@
                          dependencies="build/runtime.dependencies"
                          directory="${artifacts}"/>
 
-        <copy file="${build}/pom.xml" tofile="${artifacts}/${release.pom}">
-            <filterset>
-                <filter token="VERSION" value="${build.number}"/>
-            </filterset>
-        </copy>
     </target>
 
     <target name="build" depends="update, clean, compile, test, package" description="build all"/>
