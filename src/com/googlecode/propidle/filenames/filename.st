@@ -1,1 +1,1 @@
-<li><a href="$it.url$"><img border="0" src="/static/$it.pathType$.png" style="margin-right:10px"/>/$it.filename$</a></li>
+<li><a href="$it.url$"><img border="0" src="/static/$it.pathType$.png" style="margin-right:10px"/>$it.filename$</a></li>

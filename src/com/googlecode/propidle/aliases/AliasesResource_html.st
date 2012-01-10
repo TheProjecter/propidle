@@ -14,7 +14,7 @@
     <h2>Create a new alias:</h2>
 
     <form method="GET">
-        <p>$aliasesUrl$/<input name="from" size="40"/></p>
+        <p>$aliasesUrl$<input name="from" size="40"/></p>
         <p><input name="to" size="40" type="hidden" value="$thisUrl$"/></p>
         <p><input type="submit" value="Create alias"/></p>
     </form>

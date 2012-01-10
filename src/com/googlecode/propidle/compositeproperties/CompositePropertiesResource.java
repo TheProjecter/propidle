@@ -89,7 +89,7 @@ public class CompositePropertiesResource {
                 map(toPair()).
                 fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
                 add("revision", requestedRevisionNumber.getOrNull()).
-                add("aliasesUrl", basePath + AliasesResource.ALL_ALIASES).
+                add("aliasesUrl", basePath.subDirectory(AliasesResource.ALL_ALIASES)).
                 add("thisUrl", compositeUrlWithAliasRemoved(url, parameters)).
                 add(TITLE, title(urls));
 
