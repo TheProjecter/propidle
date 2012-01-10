@@ -1,6 +1,9 @@
 package com.googlecode.propidle.aliases;
 
+import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.proxy.Call;
+import com.googlecode.totallylazy.proxy.Invocation;
 import org.junit.Test;
 
 import static com.googlecode.propidle.aliases.Alias.alias;
@@ -50,6 +53,6 @@ public class AliasesFromRecordsTest {
     }
 
     private Sequence<Alias> alphaSorted(Iterable<Alias> aliases) {
-        return sequence(aliases).sortBy(method(on(Alias.class).from()));
+        return sequence(aliases).sortBy(Call.<Alias, Comparable>method(on(Alias.class).from()));
     }
 }

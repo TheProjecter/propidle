@@ -15,6 +15,7 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
+import com.googlecode.utterlyidle.handlers.TransactionHttpHandler;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
@@ -41,7 +42,7 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
         container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
         container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
 
-        container.decorate(HttpHandler.class, TransactionDecorator.class);
+        container.decorate(HttpHandler.class, TransactionHttpHandler.class);
 
         // Shared tools
         container.add(Clock.class, SystemClock.class);

@@ -4,7 +4,6 @@ import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.util.NullArgumentException;
-import com.googlecode.utterlyidle.io.Url;
 
 import static java.lang.String.format;
 

@@ -1,7 +1,7 @@
 package com.googlecode.propidle.migrations;
 
 
-import com.googlecode.totallylazy.records.sql.SqlRecords;
+import com.googlecode.lazyrecords.sql.SqlRecords;
 import com.googlecode.utterlyidle.migrations.Migrations;
 import com.googlecode.utterlyidle.migrations.ModuleMigrations;
 import com.googlecode.utterlyidle.migrations.ModuleName;

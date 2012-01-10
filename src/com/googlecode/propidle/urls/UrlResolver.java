@@ -1,10 +1,14 @@
 package com.googlecode.propidle.urls;
 
 import com.googlecode.propidle.properties.PropertiesPath;
-import com.googlecode.utterlyidle.io.Url;
+import com.googlecode.totallylazy.Uri;
 
 public interface UrlResolver {
-    Url resolvePropertiesUrl(PropertiesPath path);
-    Url resolveFileNameUrl(PropertiesPath path);
-    Url resolve(Url url);
+    Uri resolvePropertiesUrl(PropertiesPath path);
+
+    Uri resolveFileNameUrl(PropertiesPath path);
+
+    Uri searchUrl();
+
+    Uri createPropertiesUrl();
 }

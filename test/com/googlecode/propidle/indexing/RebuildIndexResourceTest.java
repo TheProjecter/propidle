@@ -7,7 +7,7 @@ import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.records.memory.MemoryRecords;
+import com.googlecode.lazyrecords.memory.MemoryRecords;
 import org.junit.Test;
 
 import java.io.PrintWriter;

@@ -8,9 +8,9 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.records.Keyword;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Keyword;
+import com.googlecode.lazyrecords.Record;
+import com.googlecode.lazyrecords.Records;
 import com.googlecode.utterlyidle.io.HierarchicalPath;
 
 import static com.googlecode.propidle.PathType.DIRECTORY;
@@ -27,8 +27,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
-import static com.googlecode.totallylazy.records.Keywords.keyword;
-import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.MapRecord.record;
 
 public class AllChangesFromRecords implements AllChanges {
     public static final Keyword CHANGES = keyword("changes");
@@ -55,7 +55,7 @@ public class AllChangesFromRecords implements AllChanges {
         Sequence<String> propertiesPaths = records.
                 get(CHANGES).
                 filter(where(PROPERTIES_PATH, startsWith(parent.toString())).
-                        and(where(PROPERTIES_PATH, not(equalTo(parent.toString()))))).
+                        and(where(PROPERTIES_PATH, not(parent.toString())))).
                 map(PROPERTIES_PATH).
                 unique();
         return propertiesPaths.map(toPropertiesPath()).map(toPairs(parent)).unique();

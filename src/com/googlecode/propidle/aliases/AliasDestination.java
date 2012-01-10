@@ -1,19 +1,19 @@
 package com.googlecode.propidle.aliases;
 
-import com.googlecode.utterlyidle.io.Url;
+import com.googlecode.totallylazy.Uri;
 
 public class AliasDestination {
-    private final Url url;
+    private final Uri url;
 
     public static AliasDestination aliasDestination(String value) {
         return new AliasDestination(value);
     }
 
     private AliasDestination(String value) {
-        this.url = Url.url(value);
+        this.url = Uri.uri(value);
     }
 
-    public Url url() {
+    public Uri url() {
         return url;
     }
 

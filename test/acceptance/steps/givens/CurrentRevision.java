@@ -1,7 +1,7 @@
 package acceptance.steps.givens;
 
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Records;
 
 import java.util.concurrent.Callable;
 

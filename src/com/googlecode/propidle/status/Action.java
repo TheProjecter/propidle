@@ -1,25 +1,25 @@
 package com.googlecode.propidle.status;
 
-import com.googlecode.utterlyidle.io.Url;
+import com.googlecode.totallylazy.Uri;
 
 public class Action {
     private final ActionName name;
-    private final Url url;
+    private final Uri uri;
 
-    public static Action action(ActionName name, Url url) {
-        return new Action(name, url);
+    public static Action action(ActionName name, Uri uri) {
+        return new Action(name, uri);
     }
 
-    private Action(ActionName name, Url url) {
+    private Action(ActionName name, Uri uri) {
         this.name = name;
-        this.url = url;
+        this.uri = uri;
     }
 
     public ActionName name() {
         return name;
     }
 
-    public Url url() {
-        return url;
+    public Uri url() {
+        return uri;
     }
 }

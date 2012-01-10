@@ -6,10 +6,8 @@ import com.googlecode.propidle.urls.MimeType;
 import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Left;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.io.Url;
+import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import com.googlecode.utterlyidle.annotations.GET;
@@ -24,8 +22,6 @@ import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.utterlyidle.proxy.Resource.redirect;
-import static com.googlecode.utterlyidle.proxy.Resource.resource;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(DiffResource.NAME)
@@ -107,17 +103,17 @@ public class DiffResource {
         return either.isRight() ? either.right() : new Properties();
     }
 
-    private Properties propertiesOrEmpty(Url url) throws Exception {
+    private Properties propertiesOrEmpty(Uri url) throws Exception {
         Properties properties = properties(uriGetter.get(url.toURI(), MimeType.TEXT_PLAIN));
         return properties;
     }
 
     public static class UrlWrapper {
-        public final Url url;
+        public final Uri url;
 
 
         public UrlWrapper(String value) {
-            this.url = Url.url(value);
+            this.url = Uri.uri(value);
         }
 
         @Override

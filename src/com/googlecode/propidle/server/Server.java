@@ -2,9 +2,9 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Sequences;
+import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.ServerActivator;
 import com.googlecode.utterlyidle.ServerConfiguration;
-import com.googlecode.utterlyidle.io.Url;
 import com.googlecode.utterlyidle.modules.Module;
 import org.apache.lucene.store.RAMDirectory;
 
@@ -16,7 +16,7 @@ import static com.googlecode.propidle.server.PersistenceModules.persistenceModul
 import static com.googlecode.totallylazy.Callables.returns;
 import static com.googlecode.totallylazy.Callers.call;
 import static com.googlecode.totallylazy.Sequences.empty;
-import static com.googlecode.utterlyidle.io.Url.url;
+import static com.googlecode.totallylazy.Uri.uri;
 import static java.lang.String.format;
 
 public class Server {
@@ -35,14 +35,14 @@ public class Server {
             return;
         }
 
-        new Server(url(args[0]));
+        new Server(uri(args[0]));
     }
 
-    public Server(Url propertiesUrl) throws Exception {
+    public Server(Uri propertiesUrl) throws Exception {
         this(propertiesUrl, empty(Module.class));
     }
 
-    public Server(Url propertiesUrl, Iterable<Module> extraModules) throws Exception {
+    public Server(Uri propertiesUrl, Iterable<Module> extraModules) throws Exception {
         this(propertiesAtUrl(propertiesUrl.toURL()), extraModules);
     }
 
@@ -52,14 +52,15 @@ public class Server {
 
     public Server(Callable<Properties> propertyLoader, Iterable<Module> extraModules) throws Exception {
         Properties properties = propertyLoader.call();
+        final ServerConfiguration serverConfig = new ServerConfiguration(properties);
         application = new PropertiesApplication(
                 propertyLoader,
                 new RAMDirectory(),
-                persistenceModules(properties).join(extraModules));
+                persistenceModules(properties).join(extraModules), serverConfig.basePath());
 
         Integer schemaVersion = schemaVersion(application.inTransaction(ReportSchemaVersion.class));
         System.out.println(format("Running with database schema version %s", schemaVersion));
-        startServer(application, new ServerConfiguration(properties));
+        startServer(application, serverConfig);
 
     }
 

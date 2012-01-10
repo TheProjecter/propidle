@@ -15,7 +15,7 @@ import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Records;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import org.junit.Before;

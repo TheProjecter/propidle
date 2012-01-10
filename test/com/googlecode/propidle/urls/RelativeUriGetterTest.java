@@ -20,10 +20,10 @@ import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameter
 import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
+import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.utterlyidle.BasePath.basePath;
 import static com.googlecode.utterlyidle.Status.BAD_REQUEST;
 import static com.googlecode.utterlyidle.io.Converter.asString;
-import static com.googlecode.utterlyidle.io.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
@@ -43,7 +43,7 @@ public class RelativeUriGetterTest {
         RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(lastRequest), BASE_PATH, none(RequestedRevisionNumber.class));
 
         assertThat(asString(resolver.get(new URI("/someResource/path"), MimeType.TEXT_HTML)), is("WIN!"));
-        assertThat(lastRequest.url(), is(url("/someResource/path")));
+        assertThat(lastRequest.uri(), is(uri("/someResource/path")));
 
         verify(decorated, never()).get(any(URI.class), any(MimeType.class));
     }
@@ -58,7 +58,7 @@ public class RelativeUriGetterTest {
         RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(lastRequest), basePath, none(RequestedRevisionNumber.class));
 
         assertThat(asString(resolver.get(new URI("some/resource"), MimeType.TEXT_HTML)), is("WIN!"));
-        assertThat(lastRequest.url(), is(url("some/resource")));
+        assertThat(lastRequest.uri(), is(uri("some/resource")));
 
         verify(decorated, never()).get(any(URI.class), any(MimeType.class));
     }
@@ -70,7 +70,7 @@ public class RelativeUriGetterTest {
         RelativeUriGetter resolver = new RelativeUriGetter(decorated, usingRequestHandler(lastRequest), BASE_PATH, none(RequestedRevisionNumber.class));
 
         assertThat(asString(resolver.get(new URI(BASE_PATH.toString() + "someResource"), MimeType.TEXT_HTML)), is("WIN!"));
-        assertThat(lastRequest.url(), is(url("someResource")));
+        assertThat(lastRequest.uri(), is(uri("someResource")));
 
         verify(decorated, never()).get(any(URI.class), any(MimeType.class));
     }

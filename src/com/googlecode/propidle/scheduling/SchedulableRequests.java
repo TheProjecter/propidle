@@ -33,6 +33,10 @@ public class SchedulableRequests {
                 add(RunnableRequest.class);
         tasks.put(taskName, container.get(RunnableRequest.class));
     }
+
+    public void clear() {
+        tasks.clear();
+    }
 }
 
 

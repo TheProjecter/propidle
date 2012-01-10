@@ -44,7 +44,7 @@ public class SiteMashDecoratorModule implements RequestScopedModule, ModuleDefin
     public static Predicate<Pair<Request, Response>> statusPage() {
         return new Predicate<Pair<Request, Response>>() {
             public boolean matches(Pair<Request, Response> other) {
-                return other.first().url().path().equals(NAME);
+                return other.first().uri().path().equals(NAME);
             }
         };
     }

@@ -5,13 +5,12 @@ import com.googlecode.propidle.urls.UriGetter;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Either;
 import com.googlecode.totallylazy.Callable2;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import com.googlecode.utterlyidle.io.Url;
+import com.googlecode.totallylazy.Uri;
 
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
+import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.utterlyidle.io.Converter.asString;
-import static com.googlecode.utterlyidle.io.Url.url;
 
 public class Callables {
     public static <Input, Output> Callable1<? super Input, Either<Output, Exception>> eitherExceptionOr(final Callable1<? super Input, Output> callable) {
@@ -26,18 +25,18 @@ public class Callables {
         };
     }
 
-    public static Callable1<? super Url, String> urlGet(final UriGetter uriGetter) {
-        return new Callable1<Url, String>() {
-            public String call(Url url) throws Exception {
+    public static Callable1<? super Uri, String> urlGet(final UriGetter uriGetter) {
+        return new Callable1<Uri, String>() {
+            public String call(Uri url) throws Exception {
                 return asString(uriGetter.get(url.toURI(), MimeType.TEXT_PLAIN));
             }
         };
     }
 
-    public static Callable1<? super String, Url> toUrl() {
-        return new Callable1<String, Url>() {
-            public Url call(String path) throws Exception {
-                return url(path);
+    public static Callable1<? super String, Uri> toUrl() {
+        return new Callable1<String, Uri>() {
+            public Uri call(String path) throws Exception {
+                return uri(path);
             }
         };
     }

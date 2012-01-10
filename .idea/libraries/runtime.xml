@@ -5,7 +5,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/lib/runtime" />
+      <root url="jar://$PROJECT_DIR$/lib/runtime/lazyrecords-1-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib/runtime" recursive="false" />
   </library>

@@ -1,7 +1,12 @@
 package com.googlecode.propidle.status;
 
 import com.googlecode.propidle.migrations.MigrationResource;
-import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Either;
+import com.googlecode.totallylazy.Exceptions;
+import com.googlecode.totallylazy.LazyException;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.migrations.Migration;
 import com.googlecode.utterlyidle.migrations.ModuleMigrations;
 import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
@@ -16,10 +21,10 @@ import static com.googlecode.propidle.status.StatusCheckResult.statusCheckResult
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.utterlyidle.io.Url.url;
+import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.totallylazy.proxy.Call.method;
+import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.migrations.MigrationNumbers.databaseSchemaVersion;
-import static com.googlecode.utterlyidle.proxy.Resource.resource;
-import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
 import static java.lang.String.format;
 
 public class DatabaseVersionCheck implements StatusCheck {
@@ -30,11 +35,13 @@ public class DatabaseVersionCheck implements StatusCheck {
     private final ModuleMigrationsCollector moduleMigrationsCollector;
     private final MigrationLog migrationLog;
     private final Resolver resolver;
+    private final Redirector redirector;
 
-    public DatabaseVersionCheck(ModuleMigrationsCollector moduleMigrationsCollector, MigrationLog migrationLog, Resolver resolver) {
+    public DatabaseVersionCheck(ModuleMigrationsCollector moduleMigrationsCollector, MigrationLog migrationLog, Resolver resolver, Redirector redirector) {
         this.moduleMigrationsCollector = moduleMigrationsCollector;
         this.migrationLog = migrationLog;
         this.resolver = resolver;
+        this.redirector = redirector;
     }
 
     public StatusCheckResult check() throws Exception {
@@ -46,12 +53,12 @@ public class DatabaseVersionCheck implements StatusCheck {
         for (ModuleMigrations moduleMigrations : allMigrations) {
             Integer required = addRequiredSchemaVersion(result, moduleMigrations);
             Either<Throwable, Integer> actual = actualSchemaVersion(moduleMigrations.moduleName(), migrationLog);
-            if(actual.isLeft() || !required.equals(actual.right())) {
+            if (actual.isLeft() || !required.equals(actual.right())) {
                 migrationRequired = true;
             }
-            result.add(format("%s : %s", moduleMigrations.moduleName(),ACTUAL_VERSION), actual.value());
+            result.add(format("%s : %s", moduleMigrations.moduleName(), ACTUAL_VERSION), actual.value());
         }
-        addResult(migrationRequired,result);
+        addResult(migrationRequired, result);
 
         if (migrationRequired) {
             result.setFatal(true);
@@ -61,13 +68,13 @@ public class DatabaseVersionCheck implements StatusCheck {
     }
 
     private void addResult(boolean migrationRequired, StatusCheckResult result) throws Exception {
-        result.add(ACTION_KEY, migrationRequired ? action(actionName("Migrate"), url("/"+urlOf(resource(MigrationResource.class).perform()))) : "None required" );
+        result.add(ACTION_KEY, migrationRequired ? action(actionName("Migrate"), uri("/" + redirector.uriOf(method(on(MigrationResource.class).perform())))) : "None required");
     }
 
     private Integer addRequiredSchemaVersion(StatusCheckResult result, final ModuleMigrations moduleMigrations) {
         Sequence<Migration> requiredMigrations = sequence(moduleMigrations.migrations()).sortBy(migrationNumber());
         Integer value = requiredMigrations.isEmpty() ? 0 : requiredMigrations.last().number().value();
-        result.add(format("%s : %s", moduleMigrations.moduleName(),REQUIRED_VERSION), value);
+        result.add(format("%s : %s", moduleMigrations.moduleName(), REQUIRED_VERSION), value);
         return value;
     }
 

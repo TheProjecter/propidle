@@ -14,7 +14,7 @@ import com.googlecode.propidle.migrations.PropidleMigrationsModule;
 import com.googlecode.propidle.monitoring.MonitoringModule;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.root.RootModule;
-import com.googlecode.propidle.scheduling.ScheduleTaskRequest;
+import com.googlecode.propidle.scheduling.ScheduleTask;
 import com.googlecode.propidle.scheduling.SchedulingModule;
 import com.googlecode.propidle.search.SearchModule;
 import com.googlecode.propidle.server.sitemesh.SiteMashDecoratorModule;
@@ -45,8 +45,8 @@ import static java.lang.Long.valueOf;
 
 public class PropertiesApplication extends RestApplication {
 
-    public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules) throws Exception {
-        super();
+    public PropertiesApplication(Callable<Properties> propertyLoader, Directory directory, Iterable<Module> modules, BasePath basePath) throws Exception {
+        super(basePath);
 
         add(asRequestScopeModule().call(new MigrationQueriesModule()));
 
@@ -113,23 +113,23 @@ public class PropertiesApplication extends RestApplication {
 
     public void startPropertyDependentTasks() {
         PropertyTriggeredExecutor executor = applicationScope().get(PropertyTriggeredExecutor.class);
-        executor.register(propertyName("lucene.index.refresh.time.in.seconds"), scheduleIndexRebuild(applicationScope().get(ScheduleTaskRequest.class)), propertyValue("60"));
-        executor.register(propertyName("properties.refresh.time.in.seconds"), reloadProperties(applicationScope().get(ScheduleTaskRequest.class)), propertyValue("60"));
+        executor.register(propertyName("lucene.index.refresh.time.in.seconds"), scheduleIndexRebuild(applicationScope().get(ScheduleTask.class)), propertyValue("60"));
+        executor.register(propertyName("properties.refresh.time.in.seconds"), reloadProperties(applicationScope().get(ScheduleTask.class)), propertyValue("60"));
     }
 
-    public Callable1<PropertyValue, Void> reloadProperties(final ScheduleTaskRequest scheduleTaskRequest) {
+    public Callable1<PropertyValue, Void> reloadProperties(final ScheduleTask scheduleTaskRequest) {
         return new Callable1<PropertyValue, Void>() {
             public Void call(PropertyValue propertyValue) throws Exception {
-                scheduleTaskRequest.send(RELOAD_PROPERTIES_TASK_NAME, valueOf(propertyValue.value()), valueOf(propertyValue.value()));
+                scheduleTaskRequest.schedule(RELOAD_PROPERTIES_TASK_NAME, valueOf(propertyValue.value()), valueOf(propertyValue.value()));
                 return null;
             }
         };
     }
 
-    private Callable1<PropertyValue, Void> scheduleIndexRebuild(final ScheduleTaskRequest scheduleTaskRequest) {
+    private Callable1<PropertyValue, Void> scheduleIndexRebuild(final ScheduleTask scheduleTaskRequest) {
         return new Callable1<PropertyValue, Void>() {
             public Void call(PropertyValue propertyValue) throws Exception {
-                scheduleTaskRequest.send(REBUILD_INDEX_TASK_NAME, valueOf(propertyValue.value()));
+                scheduleTaskRequest.schedule(REBUILD_INDEX_TASK_NAME, valueOf(propertyValue.value()));
                 return null;
             }
         };

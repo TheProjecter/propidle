@@ -8,8 +8,8 @@ import com.googlecode.propidle.versioncontrol.changes.Changes;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Record;
+import com.googlecode.lazyrecords.Records;
 import com.googlecode.utterlyidle.annotations.POST;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.Produces;
@@ -25,6 +25,7 @@ import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
+import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.defineChangesRecord;
 import static com.googlecode.propidle.versioncontrol.changes.Change.applyChange;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.revisionNumberOfChange;
 import static com.googlecode.totallylazy.Pair.pair;
@@ -56,7 +57,7 @@ public class RebuildIndexResource {
     }
 
 
-    private Callable1<? super Sequence<Record>, Sequence<Change>> deserialise() {
+    private Callable1<Sequence<Record>, Sequence<Change>> deserialise() {
         return new Callable1<Sequence<Record>, Sequence<Change>>() {
             public Sequence<Change> call(Sequence<Record> recordSequence) throws Exception {
                 return recordSequence.map(AllChangesFromRecords.deserialise());
@@ -81,7 +82,7 @@ public class RebuildIndexResource {
         return sequence(allLists).map(toSequence(Record.class));
     }
 
-    private Callable1<? super Sequence<Change>, Pair<PropertiesPath, Properties>> toProperties() {
+    private Callable1<Sequence<Change>, Pair<PropertiesPath, Properties>> toProperties() {
         return new Callable1<Sequence<Change>, Pair<PropertiesPath, Properties>>() {
             public Pair<PropertiesPath, Properties> call(Sequence<Change> changes) throws Exception {
                 return pair(
@@ -91,12 +92,12 @@ public class RebuildIndexResource {
         };
     }
 
-    private static <T> Callable1<? super List<T>, Sequence<T>> toSequence(Class<T> aClass) {
+    private static <T> Callable1<List<T>, Sequence<T>> toSequence(Class<T> aClass) {
         return toSequence();
     }
 
 
-    private static <T> Callable1<? super List<T>, Sequence<T>> toSequence() {
+    private static <T> Callable1<List<T>, Sequence<T>> toSequence() {
         return new Callable1<List<T>, Sequence<T>>() {
             public Sequence<T> call(List<T> list) throws Exception {
                 return sequence(list);
