@@ -32,7 +32,7 @@ public class RebuildIndexTest extends PropertiesApplicationTestCase {
         
         when(a(RequestIsMade.class).to(get("/filenames?q=pilot")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor("/properties/pilot/myapp", "/pilot/myapp")))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor("/properties/pilot/myapp", "pilot/myapp")))));
 
         when(a(RequestIsMade.class).to(get("/search?q=a*")));
 

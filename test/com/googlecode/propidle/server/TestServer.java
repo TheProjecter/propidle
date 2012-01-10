@@ -1,24 +1,8 @@
 package com.googlecode.propidle.server;
 
-import static com.googlecode.propidle.PersistenceMechanism.HSQL;
-import static com.googlecode.propidle.PersistenceMechanism.PERSISTENCE;
-import static com.googlecode.propidle.properties.Properties.properties;
-import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Runnables.write;
-import static com.googlecode.totallylazy.Sequences.empty;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Uri.uri;
-import static com.googlecode.utterlyidle.Status.OK;
-import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import com.googlecode.propidle.scheduling.IgnoreScheduler;
-import com.googlecode.propidle.scheduling.SchedulableRequests;
 import com.googlecode.propidle.scheduling.ScheduleTask;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.RequestBuilder;
@@ -30,8 +14,15 @@ import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
 
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.Properties;
+
+import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
+import static com.googlecode.totallylazy.Runnables.write;
+import static com.googlecode.totallylazy.Sequences.empty;
+import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.utterlyidle.Status.OK;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestServer extends Server {
 

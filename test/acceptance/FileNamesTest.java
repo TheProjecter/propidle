@@ -29,13 +29,13 @@ public class FileNamesTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "+ONE +pilot")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(li(anchor("/properties/pilot/ONE", img(".*file.png") + "/pilot/ONE"))));
-        then(theHtmlOf(), the(LastResponse.class), not(matches(anchor("/properties/pilot/TWO", img(".*file.png") + "/pilot/TWO"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li(anchor("/properties/pilot/ONE", img(".*file.png") + "pilot/ONE"))));
+        then(theHtmlOf(), the(LastResponse.class), not(matches(anchor("/properties/pilot/TWO", img(".*file.png") + "pilot/TWO"))));
 
         when(a(RequestIsMade.class).to(get("/filenames?q=pilot")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor("/properties/pilot/ONE", "/pilot/ONE")))));
-        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor("/properties/pilot/TWO", "/pilot/TWO")))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor("/properties/pilot/ONE", "pilot/ONE")))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor("/properties/pilot/TWO", "pilot/TWO")))));
     }
 
     @Test
