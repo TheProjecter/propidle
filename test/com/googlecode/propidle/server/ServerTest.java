@@ -1,23 +1,25 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Strings;
-
-import static com.googlecode.totallylazy.Runnables.write;
-import static com.googlecode.utterlyidle.Status.OK;
-import com.googlecode.utterlyidle.io.Url;
-import static com.googlecode.utterlyidle.io.Url.url;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.googlecode.totallylazy.Uri;
+import com.googlecode.utterlyidle.HttpHandler;
+import com.googlecode.utterlyidle.RequestBuilder;
+import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.handlers.ClientHttpHandler;
+import com.googlecode.utterlyidle.handlers.RedirectHttpHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.googlecode.utterlyidle.MediaType.APPLICATION_FORM_URLENCODED;
-import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import java.io.InputStream;
+
+import static com.googlecode.totallylazy.Uri.uri;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.Status.OK;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ServerTest {
     private Server server;
@@ -25,7 +27,7 @@ public class ServerTest {
 
     @Before
     public void startServer() throws Exception {
-        server = new TestServer();
+        server = new TestServer(true, true);
     }
 
     @After
@@ -35,16 +37,17 @@ public class ServerTest {
 
     @Test
     public void shouldPassSmokeTest() throws Exception {
-        Url propertiesUrl = url(serverUrl + "properties/test");
+        HttpHandler clientHttpHandler = new RedirectHttpHandler(new ClientHttpHandler());
+        Uri propertiesUrl = uri(serverUrl + "properties/test");
 
-        Pair<Integer, String> post = propertiesUrl.post(APPLICATION_FORM_URLENCODED, write("properties=test:hello".getBytes()));
-        assertThat(post.first(), is(OK.code()));
+        Response response = clientHttpHandler.handle(RequestBuilder.post(propertiesUrl).withForm("properties", "test:hello").build());
 
-        ResponseAsString getResponse = new ResponseAsString();
-        Pair<Integer, String> get = propertiesUrl.get(TEXT_PLAIN, getResponse);
+        assertThat(response.status(), is(OK));
 
-        assertThat(get.first(), is(OK.code()));
-        assertThat(getResponse.value(), is("# /properties/test?revision=0\ntest=hello\n"));
+        response = clientHttpHandler.handle(RequestBuilder.get(propertiesUrl).accepting(TEXT_PLAIN).build());
+
+        assertThat(response.status(), is(OK));
+        assertThat(new String(response.bytes()), is("# /properties/test?revision=0\ntest=hello\n"));
     }
 
     public static class ResponseAsString implements Callable1<InputStream, Void> {

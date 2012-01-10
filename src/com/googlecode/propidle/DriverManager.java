@@ -11,8 +11,8 @@ import java.sql.Driver;
 
 public class DriverManager {
     private static final Sequence<Pair<Predicate<String>, Runnable>> driverWakerUppers = sequence(
-            pair(startsWith("jdbc:oracle"), registerDriver("oracle.jdbc.driver.OracleDriver")),
-            pair(startsWith("jdbc:hsqldb"), registerDriver("org.hsqldb.jdbcDriver"))
+            pair((Predicate<String>)startsWith("jdbc:oracle"), registerDriver("oracle.jdbc.driver.OracleDriver")),
+            pair((Predicate<String>)startsWith("jdbc:hsqldb"), registerDriver("org.hsqldb.jdbcDriver"))
     );
 
     @SuppressWarnings("unchecked")

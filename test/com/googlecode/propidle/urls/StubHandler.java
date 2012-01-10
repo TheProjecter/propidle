@@ -1,7 +1,7 @@
 package com.googlecode.propidle.urls;
 
+import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.*;
-import com.googlecode.utterlyidle.io.Url;
 
 import com.googlecode.utterlyidle.MediaType;
 
@@ -36,8 +36,8 @@ public class StubHandler implements HttpHandler {
         return response;
     }
 
-    public Url url() {
-        return ensureLastRequest().url();
+    public Uri uri() {
+        return ensureLastRequest().uri();
     }
 
     public HeaderParameters headers() {

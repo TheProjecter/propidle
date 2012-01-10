@@ -23,7 +23,7 @@ import static com.googlecode.utterlyidle.io.HierarchicalPath.hierarchicalPath;
 
 public class TestSupportModule implements ApplicationScopedModule, RequestScopedModule, SchedulableRequestModule {
     public static final String SCHEDULED_TEST_TASK_NAME = "scheduledTestTask";
-    public static final HierarchicalPath SCHEDULED_TEST_URL = hierarchicalPath("scheduledTestUrl");
+    public static final String SCHEDULED_TEST_URL = "scheduledTestUrl";
 
     private final TestLogger logger;
     private final InterestingGivens interestingGivens;

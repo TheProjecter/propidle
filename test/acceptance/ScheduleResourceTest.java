@@ -52,10 +52,10 @@ public class ScheduleResourceTest extends PropertiesApplicationTestCase {
         then(theScheduledRequestsPath(), is(SCHEDULED_TEST_URL));
     }
 
-    private Callable<HierarchicalPath> theScheduledRequestsPath() {
-        return new Callable<HierarchicalPath>() {
-            public HierarchicalPath call() throws Exception {
-                return ((RunnableRequest) executorService.scheduledTask()).request().url().path();
+    private Callable<String> theScheduledRequestsPath() {
+        return new Callable<String>() {
+            public String call() throws Exception {
+                return ((RunnableRequest) executorService.scheduledTask()).request().uri().path();
             }
         };
     }

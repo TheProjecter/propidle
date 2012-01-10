@@ -6,7 +6,10 @@ import com.googlecode.propidle.scheduling.RunnableRequest;
 import com.googlecode.propidle.scheduling.StubScheduledExecutorService;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callables;
+import com.googlecode.totallylazy.Maps;
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Strings;
+import com.googlecode.totallylazy.Xml;
 import com.googlecode.utterlyidle.MemoryResponse;
 import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
@@ -97,12 +100,12 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
     }
 
     public Map<Class, Renderer> getCustomRenderers() {
-        return map(Class.class, Renderer.class, pair(MemoryResponse.class, new ResponseRenderer()));
+        return Maps.map(Pair.<Class, Renderer>pair(MemoryResponse.class, new ResponseRenderer()));
     }
 
     private class ResponseRenderer implements Renderer<Response> {
         public String render(Response response) throws Exception {
-            return Strings.escapeXml(format("%s\n\n%s", response.toString(), Strings.toString(response.bytes())));
+            return Xml.escape(format("%s\n\n%s", response.toString(), Strings.toString(response.bytes())));
         }
     }
 

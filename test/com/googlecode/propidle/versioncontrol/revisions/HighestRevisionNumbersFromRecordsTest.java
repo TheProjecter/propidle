@@ -2,7 +2,7 @@ package com.googlecode.propidle.versioncontrol.revisions;
 
 import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Records;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import org.junit.Test;

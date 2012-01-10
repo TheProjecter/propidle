@@ -4,7 +4,7 @@ import com.googlecode.propidle.server.Server;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Records;
 import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.utterlyidle.migrations.RunMigrations;
 import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;

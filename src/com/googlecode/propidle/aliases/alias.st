@@ -1,1 +1,1 @@
-<tr><td><a href="/aliases$it.from$?edit=">/aliases$it.from$</a></td><td><a href="$it.to$">$it.to$</a></td></tr>
+<tr><td><a href="$it.from$?edit=">$it.from$</a></td><td><a href="$it.to$">$it.to$</a></td></tr>

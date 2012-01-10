@@ -2,15 +2,15 @@ package acceptance.steps.thens;
 
 import acceptance.steps.WebClient;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
-import com.googlecode.utterlyidle.io.Url;
 
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.propidle.properties.Properties.properties;
-import static com.googlecode.utterlyidle.io.Url.url;
+import static com.googlecode.totallylazy.Uri.uri;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -44,8 +44,8 @@ public class LastResponse implements Callable<Response> {
     public static Callable1<Response, String> theLocationOf() {
         return new Callable1<Response, String>() {
             public String call(Response response) throws Exception {
-                Url location = url(theHeader("location").call(response));
-                return location.path().toString() + (location.getQuery() == null ? "" : "?" + location.getQuery());
+                Uri location = uri(theHeader("location").call(response));
+                return location.dropScheme().dropAuthority().toString();
             }
         };
     }
@@ -53,8 +53,9 @@ public class LastResponse implements Callable<Response> {
     public static Callable1<Response, String> theContentOf() {
         return new Callable1<Response, String>() {
             public String call(Response response) throws Exception {
-                assertThat("Expected a successful response but got " + response.output(), response.status().code(), allOf(greaterThanOrEqualTo(200), lessThan(300)));
-                return response.output().toString();
+                final String html = new String(response.bytes());
+                assertThat("Expected a successful response but got " + html, response.status().code(), allOf(greaterThanOrEqualTo(200), lessThan(300)));
+                return html;
             }
         };
     }
@@ -66,7 +67,7 @@ public class LastResponse implements Callable<Response> {
     public static Callable1<Response, Properties> thePropertiesFileFrom() {
         return new Callable1<Response, Properties>() {
             public Properties call(Response response) throws Exception {
-                return properties(response.output().toString());
+                return properties(new String(response.bytes()));
             }
         };
     }

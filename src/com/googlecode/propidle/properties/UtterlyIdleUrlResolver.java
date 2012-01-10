@@ -1,39 +1,33 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.filenames.FileNamesResource;
 import com.googlecode.propidle.urls.UrlResolver;
-import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.io.Url;
+import com.googlecode.totallylazy.Uri;
+import com.googlecode.utterlyidle.Redirector;
 
-import static com.googlecode.utterlyidle.io.HierarchicalPath.hierarchicalPath;
-import static com.googlecode.utterlyidle.io.Url.url;
-import static com.googlecode.utterlyidle.proxy.Resource.resource;
-import static com.googlecode.utterlyidle.proxy.Resource.urlOf;
+import static com.googlecode.totallylazy.proxy.Call.method;
+import static com.googlecode.totallylazy.proxy.Call.on;
 
 public class UtterlyIdleUrlResolver implements UrlResolver {
-    private final BasePath basePath;
+    private final Redirector redirector;
 
-    public UtterlyIdleUrlResolver(BasePath basePath) {
-        this.basePath = basePath;
+    public UtterlyIdleUrlResolver(Redirector redirector) {
+        this.redirector = redirector;
     }
 
-    public Url resolvePropertiesUrl(PropertiesPath path) {
-        return prefixWithBasePath(urlOf(resource(PropertiesResource.class).getProperties(path)));
+    public Uri resolvePropertiesUrl(PropertiesPath path) {
+        return redirector.absoluteUriOf(method(on(PropertiesResource.class).getProperties(path)));
     }
 
-    public Url resolveFileNameUrl(PropertiesPath path) {
-        return prefixWithBasePath(urlOf(resource(FileNamesResource.class).getChildrenOf(path)));
+    public Uri createPropertiesUrl() {
+        return redirector.absoluteUriOf(method(on(PropertiesResource.class).getAll()));
     }
 
-    public Url resolve(Url url) {
-        if(url.toURI().getScheme() == null) {
-            return url.replacePath(hierarchicalPath(basePath.toString() + url.path()));
-        }
-        return url;
+    public Uri resolveFileNameUrl(PropertiesPath path) {
+        return redirector.absoluteUriOf(method(on(FileNamesResource.class).getChildrenOf(path)));
     }
 
-    private Url prefixWithBasePath(String url) {
-        return url(basePath.toString() + url);
+    public Uri searchUrl() {
+        return redirector.absoluteUriOf(method(on(FileNamesResource.class).getBase()));
     }
 }

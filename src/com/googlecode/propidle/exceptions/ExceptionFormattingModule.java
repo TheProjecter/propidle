@@ -42,9 +42,10 @@ public class ExceptionFormattingModule implements RequestScopedModule, ResponseH
     private ResponseHandler exceptionResponseHandler() {
         return new ResponseHandler() {
             public Response handle(Response response) throws Exception {
-                Response htmlResponse = Responses.response(INTERNAL_SERVER_ERROR,
-                        headerParameters(pair(CONTENT_TYPE, TEXT_HTML)),
-                        model().
+
+                Response htmlResponse = Responses.response(INTERNAL_SERVER_ERROR).
+                        header(CONTENT_TYPE, TEXT_HTML).
+                        entity(model().
                                 add("errorMessage", "An error occured in propidle").
                                 add("stackTrace", ExceptionRenderer.toString((Exception) response.entity())));
                 return renderer(new ModelTemplateRenderer("Error_html", ExceptionFormattingModule.class)).handle(htmlResponse);

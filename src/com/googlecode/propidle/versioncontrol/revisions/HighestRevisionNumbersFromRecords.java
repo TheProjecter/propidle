@@ -2,14 +2,14 @@ package com.googlecode.propidle.versioncontrol.revisions;
 
 import static com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber.highestExistingRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
-import com.googlecode.totallylazy.records.Keyword;
+import com.googlecode.lazyrecords.Keyword;
 
-import static com.googlecode.totallylazy.records.Keywords.keyword;
-import static com.googlecode.totallylazy.records.MapRecord.record;
+import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.MapRecord.record;
 
-import com.googlecode.totallylazy.records.Keywords;
-import com.googlecode.totallylazy.records.Record;
-import com.googlecode.totallylazy.records.Records;
+import com.googlecode.lazyrecords.Keywords;
+import com.googlecode.lazyrecords.Record;
+import com.googlecode.lazyrecords.Records;
 
 public class HighestRevisionNumbersFromRecords implements HighestRevisionNumbers {
     public static final Keyword<String> HIGHEST_REVISION = keyword("highest_revision", String.class);

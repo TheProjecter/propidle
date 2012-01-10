@@ -1,6 +1,6 @@
 package com.googlecode.propidle;
 
-import com.googlecode.totallylazy.records.Transaction;
+import com.googlecode.lazyrecords.Transaction;
 import org.apache.lucene.index.IndexWriter;
 
 import java.util.concurrent.Callable;

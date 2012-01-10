@@ -8,14 +8,14 @@ import com.googlecode.utterlyidle.Status;
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
-public class ScheduleTaskRequest {
+public class ScheduleTaskRequest implements ScheduleTask {
     private final Application application;
 
     public ScheduleTaskRequest(Application application) {
         this.application = application;
     }
 
-    public void send(final String taskName, long initialDelay, long delay) throws Exception {
+    public void schedule(final String taskName, long initialDelay, long delay) throws Exception {
         Response response = application.handle(RequestBuilder.post(ScheduleResource.NAME).
                 withForm(ScheduleResource.TASK_NAME_PARAM_NAME, taskName).
                 withForm(ScheduleResource.INITIAL_DELAY_IN_SECONDS_PARAM_NAME, valueOf(initialDelay)).
@@ -29,7 +29,7 @@ public class ScheduleTaskRequest {
         }
     }
     
-    public void send(final String taskName, long delay) throws Exception {
-        send(taskName, 0, delay);
+    public void schedule(final String taskName, long delay) throws Exception {
+        schedule(taskName, 0, delay);
     }
 }

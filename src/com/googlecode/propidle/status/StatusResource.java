@@ -35,7 +35,7 @@ public class StatusResource {
         if ( sequence(statusCheckResults).exists(fatalStatusCheckResult()) ){
             status = status.SERVICE_UNAVAILABLE;
         }
-        return response(status, headerParameters(),modelWithName(NAME).add("checks", statusCheckResults));
+        return response(status).entity(modelWithName(NAME).add("checks", statusCheckResults));
     }
 
     private Predicate<StatusCheckResult> fatalStatusCheckResult() {

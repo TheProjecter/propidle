@@ -63,7 +63,7 @@ public class Properties {
         return sequence(properties.entrySet()).map(toPair());
     }
 
-    private static Callable1<? super java.util.Properties, Iterable<Map.Entry<Object, Object>>> entrySets() {
+    private static Callable1<java.util.Properties, Iterable<Map.Entry<Object, Object>>> entrySets() {
         return new Callable1<java.util.Properties, Iterable<Map.Entry<Object, Object>>>() {
             public Iterable<Map.Entry<Object, Object>> call(java.util.Properties properties) throws Exception {
                 return properties.entrySet();
@@ -71,7 +71,7 @@ public class Properties {
         };
     }
 
-    public static Callable1<? super Map.Entry<Object, Object>, Pair<String, String>> toPair() {
+    public static Callable1<Map.Entry<Object, Object>, Pair<String, String>> toPair() {
         return new Callable1<Map.Entry<Object, Object>, Pair<String, String>>() {
             public Pair<String, String> call(Map.Entry<Object, Object> entry) throws Exception {
                 return pair((String) entry.getKey(), (String) entry.getValue());
@@ -79,7 +79,7 @@ public class Properties {
         };
     }
 
-    public static Callable2<? super java.util.Properties, ? super Map.Entry<Object, Object>, java.util.Properties> setProperty() {
+    public static Callable2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties> setProperty() {
         return new Callable2<java.util.Properties, Map.Entry<Object, Object>, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties properties, Map.Entry<Object, Object> property) throws Exception {
                 properties.put(property.getKey(), property.getValue());
@@ -96,7 +96,7 @@ public class Properties {
         return sequence(propertiesSequence).flatMap(entrySets()).fold(new java.util.Properties(), setProperty());
     }
 
-    public static Callable2<? super java.util.Properties, ? super java.util.Properties, java.util.Properties> compose() {
+    public static Callable2<java.util.Properties, java.util.Properties, java.util.Properties> compose() {
         return new Callable2<java.util.Properties, java.util.Properties, java.util.Properties>() {
             public java.util.Properties call(java.util.Properties soFar, java.util.Properties nextProperties) throws Exception {
                 return compose(soFar, nextProperties);
@@ -114,15 +114,15 @@ public class Properties {
         return out.toString();
     }
 
-    public static Callable1<? super Map.Entry<Object, Object>, ? extends Comparable> key() {
-        return new Callable1<Map.Entry<Object, Object>, Comparable>() {
-            public Comparable call(Map.Entry<Object, Object> entry) throws Exception {
+    public static Callable1<Map.Entry<Object, Object>, String> key() {
+        return new Callable1<Map.Entry<Object, Object>, String>() {
+            public String call(Map.Entry<Object, Object> entry) throws Exception {
                 return (String) entry.getKey();
             }
         };
     }
 
-    public static Callable1<? super String, java.util.Properties> propertiesFromString() {
+    public static Callable1<String, java.util.Properties> propertiesFromString() {
         return new Callable1<String, java.util.Properties>() {
             public java.util.Properties call(String text) throws Exception {
                 return properties(text);
