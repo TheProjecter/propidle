@@ -6,6 +6,7 @@ import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.proxy.Invocation;
 import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -24,6 +25,7 @@ import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Path(PropertiesResource.NAME)
 @Produces(TEXT_HTML)
@@ -58,8 +60,16 @@ public class PropertiesResource {
     @Path("{path:.+$}")
     @Priority(Priority.High)
     public Model getHtml(@PathParam("path") PropertiesPath path) {
-        Model model = modelOf(path).add("changesUrl", redirector.resourceUriOf(method(on(ChangesResource.class).get(path, none(RevisionNumber.class)))));
+        Model model = modelOf(path).add("changesUrl", changeUrlAsModel(path));
         return name(model, modelName());
+    }
+
+    private Model changeUrlAsModel(PropertiesPath path) {
+        return model().add("name", redirector.resourceUriOf(changeResourceInvocation(path))).add("url", redirector.absoluteUriOf(changeResourceInvocation(path)));
+    }
+
+    private Invocation<Object, Model> changeResourceInvocation(PropertiesPath path) {
+        return method(on(ChangesResource.class).get(path, none(RevisionNumber.class)));
     }
 
     @GET

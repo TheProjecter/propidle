@@ -16,15 +16,15 @@ public class UtterlyIdleUrlResolver implements UrlResolver {
     }
 
     public Uri resolvePropertiesUrl(PropertiesPath path) {
-        return redirector.absoluteUriOf(method(on(PropertiesResource.class).getProperties(path)));
+        return redirector.resourceUriOf(method(on(PropertiesResource.class).getProperties(path)));
+    }
+
+    public Uri resolveFileNameUrl(PropertiesPath path) {
+        return redirector.resourceUriOf(method(on(FileNamesResource.class).getChildrenOf(path)));
     }
 
     public Uri createPropertiesUrl() {
         return redirector.absoluteUriOf(method(on(PropertiesResource.class).getAll()));
-    }
-
-    public Uri resolveFileNameUrl(PropertiesPath path) {
-        return redirector.absoluteUriOf(method(on(FileNamesResource.class).getChildrenOf(path)));
     }
 
     public Uri searchUrl() {

@@ -65,7 +65,7 @@ public class CompositePropertiesResource {
     }
 
     @GET
-    public Model getHtml(@QueryParam("url") String url, @QueryParam("alias") Option<String> alias, QueryParameters parameters) {
+    public Model getHtml(@QueryParam("alias") Option<String> alias, QueryParameters parameters) {
         Sequence<Uri> urls = sequence(parameters.getValues("url")).filter(Predicates.nonEmpty()).map(com.googlecode.propidle.util.Callables.toUrl()).memorise();
 
         Sequence<Pair<Uri, Either<Status, Properties>>> urlGetResults = urls.zip(urls.mapConcurrently(toProperties()));
@@ -89,8 +89,8 @@ public class CompositePropertiesResource {
                 map(toPair()).
                 fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
                 add("revision", requestedRevisionNumber.getOrNull()).
-                add("aliasesUrl", basePath.subDirectory(AliasesResource.ALL_ALIASES)).
-                add("thisUrl", compositeUrlWithAliasRemoved(url, parameters)).
+                add("aliasesUrl", model().add("name", redirector.resourceUriOf(method(on(AliasesResource.class).listAllAliases()))).add("url", model().add("name", redirector.absoluteUriOf(method(on(AliasesResource.class).listAllAliases()))))).
+                add("thisUrl", compositeUrlWithAliasRemoved(parameters)).
                 add(TITLE, title(urls));
 
         alias.fold(propertiesAndOverrides, intoModel());
@@ -98,10 +98,10 @@ public class CompositePropertiesResource {
         return urlGetResults.fold(propertiesAndOverrides, urlIntoModel());
     }
 
-    private String compositeUrlWithAliasRemoved(String url, QueryParameters parameters) {
+    private String compositeUrlWithAliasRemoved(QueryParameters parameters) {
         QueryParameters paramsWithOutAlias = QueryParameters.queryParameters(parameters);
         paramsWithOutAlias.remove("alias");
-        return redirector.resourceUriOf(method(on(CompositePropertiesResource.class).getHtml(url, Option.<String>none(), paramsWithOutAlias))).toString();
+        return redirector.resourceUriOf(method(on(CompositePropertiesResource.class).getHtml(Option.<String>none(), paramsWithOutAlias))).toString();
     }
 
     private Callable2<Model, String, Model> intoModel() {

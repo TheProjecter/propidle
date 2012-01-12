@@ -12,6 +12,7 @@ import com.googlecode.propidle.filenames.FileNamesModule;
 import com.googlecode.propidle.indexing.LuceneModule;
 import com.googlecode.propidle.migrations.PropidleMigrationsModule;
 import com.googlecode.propidle.monitoring.MonitoringModule;
+import com.googlecode.propidle.navigation.NavigationModule;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.root.RootModule;
 import com.googlecode.propidle.scheduling.ScheduleTask;
@@ -57,6 +58,7 @@ public class PropertiesApplication extends RestApplication {
         add(new LuceneModule(directory));
 
         add(new AliasesModule());
+        add(new NavigationModule());
         add(new CompositePropertiesModule());
         add(new DiffModule());
         add(new FileNamesModule());

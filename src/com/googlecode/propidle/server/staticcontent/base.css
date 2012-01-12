@@ -144,7 +144,7 @@ input[type="submit"] {
     color:black;
 }
 #corner-pane{
-    background:url('/static/gear.gif');
+    background:url('gear.gif');
     background-color:#FFCC99;
     background-repeat:no-repeat;
     border-right:3px solid #663300;

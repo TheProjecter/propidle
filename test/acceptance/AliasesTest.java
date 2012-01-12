@@ -25,7 +25,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(get("/aliases/production/myApplication/v123")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theLocationOf(), the(LastResponse.class), is("/aliases/production/myApplication/v123?edit="));
+        then(theLocationOf(), the(LastResponse.class), is(absoluteUrl("aliases/production/myApplication/v123?edit=")));
     }
 
     @Test
@@ -34,7 +34,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
                 withForm("to", "/some_other_url")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theLocationOf(), the(LastResponse.class), is("/aliases/production/myApplication/v123?edit="));
+        then(theLocationOf(), the(LastResponse.class), is(absoluteUrl("aliases/production/myApplication/v123?edit=")));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/aliases/production/myApplication/v123?edit")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote("/some_other_url"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("some_other_url"), quote("/some_other_url"))));
         then(theHtmlOf(), the(LastResponse.class), matches(input("to", quote("/some_other_url"))));
     }
 
@@ -78,9 +78,9 @@ public class AliasesTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/aliases/")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote("/aliases/redirect_1?edit="), "/aliases/redirect_1")));
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor("/properties/1")));
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote("/aliases/redirect_2?edit="), "/aliases/redirect_2")));
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor("/properties/2")));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_1?edit=")), "redirect_1")));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("properties/1"), "/properties/1")));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_2?edit=")), "redirect_2")));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("properties/2"),"/properties/2")));
     }
 }
