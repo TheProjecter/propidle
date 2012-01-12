@@ -19,6 +19,6 @@ public class RootResourceTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(get("/")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theLocationOf(), the(LastResponse.class), is("/filenames/"));
+        then(theLocationOf(), the(LastResponse.class), is(absoluteUrl("filenames/")));
     }
 }

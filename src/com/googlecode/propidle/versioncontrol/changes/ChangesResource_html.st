@@ -6,7 +6,7 @@
 <div class="section">
     <h2>List of changes</h2>
     <p>
-        This is a list of all changes to <a href="$propertiesUrl$">$propertiesUrl$</a>
+        This is a list of all changes to <a href="$first(propertiesUrl).url$">$first(propertiesUrl).name$</a>
         $if(!revisionNumber.empty)$
         from revision $revisionNumber$
         $endif$

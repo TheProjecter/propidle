@@ -103,6 +103,10 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
         return Maps.map(Pair.<Class, Renderer>pair(MemoryResponse.class, new ResponseRenderer()));
     }
 
+    protected String absoluteUrl(String s) {
+        return application.basePath + s;
+    }
+
     private class ResponseRenderer implements Renderer<Response> {
         public String render(Response response) throws Exception {
             return Xml.escape(format("%s\n\n%s", response.toString(), Strings.toString(response.bytes())));

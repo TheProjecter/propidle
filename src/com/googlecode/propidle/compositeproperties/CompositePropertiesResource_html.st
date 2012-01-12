@@ -2,7 +2,7 @@
     <head>
         <title>$title$</title>
     </head>
-    <body>
+    <body>$thisUrl$
         <div>
             <div class="section">
                 <h2>Create a composite properties file</h2>
@@ -42,7 +42,7 @@
                 <form method="GET" action="$aliasesUrl$">
                     <input name="to" size="40" type="hidden" value="$thisUrl$"/>
                     <p>
-                        $aliasesUrl$/
+                        $first(aliasesUrl).name$/
                         <input name="from" size="40"/>
                         <input type="submit" value="Create"/>
                     </p>

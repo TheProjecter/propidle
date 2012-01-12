@@ -5,6 +5,7 @@ import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.proxy.Invocation;
 import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
@@ -37,16 +38,23 @@ public class ChangesResource {
     @Path("{path:.+$}")
     public Model get(@PathParam("path") PropertiesPath path, @QueryParam("forRevision") Option<RevisionNumber> revisionNumber) {
         Iterable<Change> changesForProperties = revisionNumber.isEmpty() ? changes.get(path) : changes.get(path, revisionNumber.get());
-        String propertiesUrl = redirector.uriOf(method(on(PropertiesResource.class).getProperties(path))).toString();
         Model model = sequence(changesForProperties).
                 sortBy(method(on(Change.class).revisionNumber())).
                 fold(modelWithName(NAME), addChangesToModel()).
-                add("propertiesUrl", propertiesUrl).
+                add("propertiesUrl", propertiesUrlAsModel(path)).
                 add(TITLE, "Changes to \"" + path + "\"");
         if (!revisionNumber.isEmpty()) {
             model.add("revisionNumber", revisionNumber.getOrNull());
         }
         return model;
+    }
+
+    private Model propertiesUrlAsModel(PropertiesPath path) {
+        return model().add("name", redirector.resourceUriOf(propertiesResourceInvocation(path))).add("url", redirector.absoluteUriOf(propertiesResourceInvocation(path)));
+    }
+
+    private Invocation<Object, Model> propertiesResourceInvocation(PropertiesPath path) {
+        return method(on(PropertiesResource.class).getProperties(path));
     }
 
 

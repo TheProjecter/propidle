@@ -1,8 +1,10 @@
 package com.googlecode.propidle.search;
 
 import com.googlecode.propidle.ModelName;
+import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import com.googlecode.utterlyidle.annotations.GET;
@@ -11,6 +13,8 @@ import com.googlecode.utterlyidle.annotations.Produces;
 import com.googlecode.utterlyidle.annotations.QueryParam;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
+import static com.googlecode.totallylazy.proxy.Call.method;
+import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
@@ -23,11 +27,11 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 public class SearchResource {
     public static final String NAME = "search";
     private final PropertiesSearcher searcher;
-    private final UrlResolver urlResolver;
+    private final Redirector redirector;
 
-    public SearchResource(PropertiesSearcher searcher, UrlResolver urlResolver) {
+    public SearchResource(PropertiesSearcher searcher, Redirector redirector) {
         this.searcher = searcher;
-        this.urlResolver = urlResolver;
+        this.redirector = redirector;
     }
 
     @GET
@@ -46,7 +50,7 @@ public class SearchResource {
         return new Callable2<Model, SearchResult, Model>() {
             public Model call(Model model, SearchResult searchResult) throws Exception {
                 return model.add("matches", model().
-                        add("url", urlResolver.resolvePropertiesUrl(searchResult.path())).
+                        add("url", model().add("name",redirector.resourceUriOf(method(on(PropertiesResource.class).getProperties(searchResult.path())))).add("url", redirector.absoluteUriOf(method(on(PropertiesResource.class).getProperties(searchResult.path()))))).
                         add("propertyName", searchResult.propertyName()).
                         add("propertyValue", searchResult.propertyValue())
                 );

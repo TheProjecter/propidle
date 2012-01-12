@@ -8,7 +8,7 @@
 <div class="section">
     <form method="post" style="height:100%">
         <h2>Edit properties</h2>
-        <p>Previous edits can be seen at <a href="$changesUrl$">$changesUrl$</a></p>
+        <p>Previous edits can be seen at <a href="$first(changesUrl).url$">$first(changesUrl).name$</a></p>
         <input type="submit" value="save"/>
         <input type="hidden" name="baseRevisionNumber" value="$revisionNumber$"/>
         <div height="100%">

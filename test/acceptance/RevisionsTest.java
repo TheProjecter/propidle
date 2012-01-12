@@ -24,7 +24,7 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/properties/properties.one.properties").withQuery("revision", "0")));
 
-        then(theContentOf(), the(LastResponse.class), is("# /properties/properties.one?revision=0\nrevision=0\n"));
+        then(theContentOf(), the(LastResponse.class), is("# "+absoluteUrl("properties/properties.one?revision=0\nrevision=0\n")));
     }
 
     @Test

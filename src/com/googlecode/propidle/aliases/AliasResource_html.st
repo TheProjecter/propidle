@@ -15,7 +15,7 @@
         <form method="POST" target="$resourcePath$">
             <table>
                 <tr>
-                    <th style="white-space:nowrap;">Make <a href="$aliasUrl$">$aliasUrl$</a> redirect to:</th>
+                    <th style="white-space:nowrap;">Make <a href="$first(aliasUrl).url$">$first(aliasUrl).name$</a> redirect to:</th>
                     <td style="width:100%;"><input name="to" size="40" value="$redirectTo$"/></td>
                 </tr>
             </table>
@@ -23,10 +23,10 @@
         </form>
     </div>
     $if(!currentRedirectTo.empty)$
-    <p>Currently <a href="$aliasUrl$">$aliasUrl$</a> redirects to: <a href="$currentRedirectTo$">$currentRedirectTo$</a>
+    <p>Currently <a href="$first(aliasUrl).url$">$first(aliasUrl).name$</a> redirects to: <a href="$first(currentRedirectTo).url$">$first(currentRedirectTo).name$</a>
     </p>
     <p><a href="$editUrl$">Edit this Alias</a>
-    <p>Try it out: <a href="$aliasUrl$">$aliasUrl$</a></p>
+    <p>Try it out: <a href="$first(aliasUrl).url$">$first(aliasUrl).name$</a></p>
     $endif$
 </div>
 </body>

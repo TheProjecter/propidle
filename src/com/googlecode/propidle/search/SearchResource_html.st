@@ -21,7 +21,7 @@
     </tr>
     $matches:{match |
     <tr>
-        <td><a href="$match.url$">$match.url$</a></td>
+        <td><a href="$first(match.url).url$">$first(match.url).name$</a></td>
         <td>$match.propertyName$</td>
         <td>$match.propertyValue$</td>
     </tr>

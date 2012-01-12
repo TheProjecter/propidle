@@ -19,6 +19,7 @@ import static com.googlecode.totallylazy.Predicates.and;
 import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.URLs.packageUrl;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
+import static com.googlecode.utterlyidle.sitemesh.QueryParamRule.queryParamRule;
 import static com.googlecode.utterlyidle.sitemesh.StaticDecoratorRule.staticRule;
 
 public class SiteMashDecoratorModule implements RequestScopedModule, ModuleDefiner, SiteMeshModule {
@@ -27,6 +28,8 @@ public class SiteMashDecoratorModule implements RequestScopedModule, ModuleDefin
         return this;
     }
 
+
+
     public Module addPerRequestObjects(Container container) throws Exception {
         container.add(Decorators.class);
         container.addInstance(DecoratorProvider.class, provider(container));
@@ -34,6 +37,7 @@ public class SiteMashDecoratorModule implements RequestScopedModule, ModuleDefin
     }
 
     public com.googlecode.utterlyidle.sitemesh.Decorators addDecorators(com.googlecode.utterlyidle.sitemesh.Decorators decorators) {
+        decorators.add(queryParamRule("decorator"));
         return decorators.add(staticRule(and(returnsHtml(), not(statusPage())), TemplateName.templateName("decorator")));
     }
 

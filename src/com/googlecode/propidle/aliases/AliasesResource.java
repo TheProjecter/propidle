@@ -47,9 +47,13 @@ public class AliasesResource {
         Iterable<Alias> alias = aliases.getAll();
 
         Model basicModel = modelWithName(ALL_ALIASES).
-                add("aliasesUrl", basePath.subDirectory(ALL_ALIASES).toString()).
+                add("aliasesUrl", aliasesUrlAsModel()).
                 add(TITLE, "Property file aliases");
         return sequence(alias).fold(basicModel, addAliasToModel());
+    }
+
+    private Model aliasesUrlAsModel() {
+        return model().add("name", redirector.resourceUriOf(method(on(AliasesResource.class).listAllAliases()))).add("url", basePath.subDirectory(ALL_ALIASES).toString());
     }
 
     @GET
@@ -69,7 +73,7 @@ public class AliasesResource {
 
         Model model = modelWithName(ALIAS).
                 add(TITLE, "Alias \"" + from + "\"").
-                add("aliasUrl", basePath.subDirectory(resourcePath).toString()).
+                add("aliasUrl", model().add("name", resourcePath).add("url", basePath.subDirectory(resourcePath).toString())).
                 add("redirectTo", redirectTo);
 
         if (redirectTo.url().toString().startsWith("/composite?")) {
@@ -77,7 +81,7 @@ public class AliasesResource {
         }
 
         if (!"".equals(alias.to().toString())) {
-            model.add("currentRedirectTo", alias.to());
+            model.add("currentRedirectTo", model().add("name", alias.to().toString()).add("url", basePath.file(alias.to().toString())));
         }
 
         return model;
@@ -116,8 +120,8 @@ public class AliasesResource {
         return new Callable2<Model, Alias, Model>() {
             public Model call(Model model, Alias alias) throws Exception {
                 return model.add("aliases", model().
-                        add("from", removeEndingSlash(basePath.subDirectory(ALL_ALIASES).subDirectory(alias.from()).toString())).
-                        add("to", alias.to()));
+                        add("from", model().add("name", alias.from().toString()).add("url", removeEndingSlash(basePath.subDirectory(ALL_ALIASES).subDirectory(alias.from()).toString()))).
+                        add("to", model().add("name", alias.to().toString()).add("url", basePath.file(alias.to().toString()))));
             }
         };
     }

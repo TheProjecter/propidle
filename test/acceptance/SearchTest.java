@@ -22,7 +22,7 @@ public class SearchTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/search?q=core")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(tr(td(anchor("/properties/properties.one")), td("property_one"), td("stifled core dump"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td(anchor(absoluteUrl("properties/properties.one"), "properties/properties.one")), td("property_one"), td("stifled core dump"))));
         then(theHtmlOf(), the(LastResponse.class), not(anyOf(matches("properties.two"), matches("property_two"), matches("massive short-faced bear"))));
     }
 }
