@@ -1,12 +1,12 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.proxy.Invocation;
-import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.PathParam;
@@ -22,20 +22,19 @@ import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
-@Path(ChangesResource.NAME)
 @Produces(TEXT_HTML)
 public class ChangesResource {
     public static final String NAME = "changes";
     private final AllChanges changes;
-    private final Redirector redirector;
+    private final PropidlePath propidlePath;
 
-    public ChangesResource(AllChanges changes, Redirector redirector) {
+    public ChangesResource(AllChanges changes, PropidlePath propidlePath) {
         this.changes = changes;
-        this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @GET
-    @Path("{path:.+$}")
+    @Path(ChangesResource.NAME+"{path:.+$}")
     public Model get(@PathParam("path") PropertiesPath path, @QueryParam("forRevision") Option<RevisionNumber> revisionNumber) {
         Iterable<Change> changesForProperties = revisionNumber.isEmpty() ? changes.get(path) : changes.get(path, revisionNumber.get());
         Model model = sequence(changesForProperties).
@@ -50,7 +49,7 @@ public class ChangesResource {
     }
 
     private Model propertiesUrlAsModel(PropertiesPath path) {
-        return model().add("name", redirector.resourceUriOf(propertiesResourceInvocation(path))).add("url", redirector.absoluteUriOf(propertiesResourceInvocation(path)));
+        return model().add("name", propidlePath.path(propertiesResourceInvocation(path))).add("url", propidlePath.absoluteUriOf(propertiesResourceInvocation(path)));
     }
 
     private Invocation<Object, Model> propertiesResourceInvocation(PropertiesPath path) {

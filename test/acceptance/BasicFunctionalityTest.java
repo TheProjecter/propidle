@@ -32,7 +32,7 @@ public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(post("/properties/pilot/myapp").withForm("properties", "a=2")));
         when(a(RequestIsMade.class).to(get("/changes/pilot/myapp")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("pilot/myapp"), td("\\d+"), td("a"), td(""), td("1"))));
-        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("pilot/myapp"), td("\\d+"), td("a"), td("1"), td("2"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td(""), td("1"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td("1"), td("2"))));
     }
 }

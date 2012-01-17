@@ -3,7 +3,6 @@ package com.googlecode.propidle;
 import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertyDiffTool;
-import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
 import com.googlecode.propidle.server.*;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
@@ -14,13 +13,10 @@ import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
-import com.googlecode.utterlyidle.handlers.ResponseHandlers;
 import com.googlecode.utterlyidle.handlers.TransactionHttpHandler;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
-import com.googlecode.utterlyidle.modules.ResponseHandlersModule;
-import com.googlecode.utterlyidle.rendering.ExceptionRenderer;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.generics.TypeFor;
 import com.googlecode.yadic.resolvers.OptionResolver;
@@ -48,12 +44,12 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
         container.add(Clock.class, SystemClock.class);
         container.add(PropertyDiffTool.class, PropertyDiffTool.class);
 
-        container.add(UrlResolver.class, UtterlyIdleUrlResolver.class);
         container.add(UriGetter.class, SimpleUriGetter.class);
         container.decorate(UriGetter.class, RelativeUriGetter.class);
 
         // Shared repositories
         container.add(AllProperties.class, AllPropertiesFromChanges.class);
+        container.add(PropidlePath.class, PropidlePath.class);
         return this;
     }
 

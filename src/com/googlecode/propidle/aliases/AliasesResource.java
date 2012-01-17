@@ -1,6 +1,7 @@
 package com.googlecode.propidle.aliases;
 
 import com.googlecode.propidle.ModelName;
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.*;
@@ -25,7 +26,6 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 
-@Path(AliasesResource.ALL_ALIASES)
 @Produces(TEXT_HTML)
 public class AliasesResource {
     public static final String ALL_ALIASES = "aliases";
@@ -34,15 +34,18 @@ public class AliasesResource {
     private final ResourcePath resourcePath;
     private final BasePath basePath;
     private final Redirector redirector;
+    private final PropidlePath propidlePath;
 
-    public AliasesResource(Aliases aliases, ResourcePath resourcePath, BasePath basePath, Redirector redirector) {
+    public AliasesResource(Aliases aliases, ResourcePath resourcePath, BasePath basePath, Redirector redirector, PropidlePath propidlePath) {
         this.aliases = aliases;
         this.resourcePath = resourcePath;
         this.basePath = basePath;
         this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @GET
+    @Path(AliasesResource.ALL_ALIASES)
     public Model listAllAliases() {
         Iterable<Alias> alias = aliases.getAll();
 
@@ -53,16 +56,17 @@ public class AliasesResource {
     }
 
     private Model aliasesUrlAsModel() {
-        return model().add("name", redirector.resourceUriOf(method(on(AliasesResource.class).listAllAliases()))).add("url", basePath.subDirectory(ALL_ALIASES).toString());
+        return model().add("name", propidlePath.path(method(on(AliasesResource.class).listAllAliases()))).add("url", basePath.subDirectory(ALL_ALIASES).toString());
     }
 
     @GET
+    @Path(AliasesResource.ALL_ALIASES)
     public Response edit(@QueryParam("from") AliasPath from, @QueryParam("to") AliasDestination overrideDestination) {
         return redirector.seeOther(method(on(AliasesResource.class).edit("", from, some(overrideDestination))));
     }
 
     @GET
-    @Path("{from:.+}")
+    @Path(AliasesResource.ALL_ALIASES+"{from:.+}")
     public Model edit(@QueryParam("edit") String edit, @PathParam("from") AliasPath from, @QueryParam("to") Option<AliasDestination> overrideDestination) {
         Alias alias = aliases.get(from);
         if (alias == null) {
@@ -88,20 +92,20 @@ public class AliasesResource {
     }
 
     @POST
-    @Path("{from:.+}")
+    @Path(AliasesResource.ALL_ALIASES+"{from:.+}")
     public Response update(@PathParam("from") AliasPath from, @FormParam("to") AliasDestination to) {
         aliases.put(alias(from, to));
         return redirector.seeOther(method(on(AliasesResource.class).edit("", from, none(AliasDestination.class))));
     }
 
     @GET
-    @Path("{from:.+}")
+    @Path(AliasesResource.ALL_ALIASES+"{from:.+}")
     public Response followRedirectHtml(@PathParam("from") AliasPath from) {
         return redirectFrom(from);
     }
 
     @GET
-    @Path("{from:.+}")
+    @Path(AliasesResource.ALL_ALIASES+"{from:.+}")
     @Produces(TEXT_PLAIN)
     public Response followRedirectPlain(@PathParam("from") AliasPath from) {
         return redirectFrom(from);

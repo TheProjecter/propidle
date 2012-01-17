@@ -78,9 +78,9 @@ public class AliasesTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/aliases/")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_1?edit=")), "redirect_1")));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_1?edit=")), "/redirect_1")));
         then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("properties/1"), "/properties/1")));
-        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_2?edit=")), "redirect_2")));
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_2?edit=")), "/redirect_2")));
         then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("properties/2"),"/properties/2")));
     }
 }

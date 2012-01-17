@@ -1,6 +1,7 @@
 package com.googlecode.propidle.filenames;
 
 import com.googlecode.propidle.PathType;
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.search.FileNameSearcher;
@@ -12,10 +13,10 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Uri;
-import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.PathParam;
+import com.googlecode.utterlyidle.annotations.Priority;
 import com.googlecode.utterlyidle.annotations.Produces;
 import com.googlecode.utterlyidle.annotations.QueryParam;
 import com.googlecode.utterlyidle.rendering.Model;
@@ -30,30 +31,28 @@ import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
-@Path(FileNamesResource.NAME)
 @Produces({TEXT_HTML})
 public class FileNamesResource {
     public static final String NAME = "filenames";
     public static final String DIRECTORY_VIEW_NAME = "directory_view";
     private final FileNameSearcher searcher;
-    private final UrlResolver urlResolver;
     private final AllChanges allChanges;
-    private final Redirector redirector;
+    private final PropidlePath propidlePath;
 
-    public FileNamesResource(FileNameSearcher searcher, UrlResolver urlResolver, AllChanges allChanges, Redirector redirector) {
+    public FileNamesResource(FileNameSearcher searcher, AllChanges allChanges, PropidlePath propidlePath) {
         this.searcher = searcher;
-        this.urlResolver = urlResolver;
         this.allChanges = allChanges;
-        this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @GET
+    @Path(FileNamesResource.NAME)
     @Produces({TEXT_HTML, TEXT_PLAIN})
     public Model get(@QueryParam("q") Query query) {
         Model model = modelWithName(NAME).
                 add(PropertiesModule.TITLE, "Filenames \"" + query + "\"").
-                add("searchUrl", urlResolver.searchUrl()).
-                add("createPropertiesUrl", model().add("name", redirector.resourceUriOf(method(on(PropertiesResource.class).getAll()))).add("url", redirector.absoluteUriOf(method(on(PropertiesResource.class).getAll())))).
+                add("searchUrl", propidlePath.absoluteUriOf(method(on(FileNamesResource.class).getChildrenOf(propertiesPath("/"))))).
+                add("createPropertiesUrl", model().add("name", propidlePath.path(method(on(PropertiesResource.class).getAll()))).add("url", propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getAll())))).
                 add("q", query.query());
         if (!query.isEmpty()) {
             Iterable<Pair<PropertiesPath, PathType>> paths = searcher.search(query);
@@ -65,17 +64,12 @@ public class FileNamesResource {
     }
 
     @GET
-    public Model getBase() {
-        return getChildrenOf(propertiesPath("/"));
-    }
-
-    @GET
-    @Path("{path:.*$}")
+    @Path(FileNamesResource.NAME+"{path:.*$}")
     public Model getChildrenOf(@PathParam("path") PropertiesPath path) {
         Iterable<Pair<PropertiesPath, PathType>> paths = sequence(allChanges.childrenOf(path));
         Model model = modelWithName(DIRECTORY_VIEW_NAME).
-                add("searchUrl", urlResolver.searchUrl()).
-                add("createPropertiesUrl", model().add("name", redirector.resourceUriOf(method(on(PropertiesResource.class).getAll()))).add("url", urlResolver.createPropertiesUrl())).
+                add("searchUrl", propidlePath.absoluteUriOf(method(on(FileNamesResource.class).getChildrenOf(path)))).
+                add("createPropertiesUrl", model().add("name", propidlePath.path(method(on(PropertiesResource.class).getAll()))).add("url", propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getAll())))).
                         add(PropertiesModule.TITLE, "Children of \"" + path + "\"");
         return sequence(paths).
                 sortBy(typeThenPath()).fold(model, pathsIntoModel());
@@ -104,19 +98,19 @@ public class FileNamesResource {
         };
     }
 
-    private Uri absoluteUrl(Pair<PropertiesPath, PathType> pathAndTypes) {
+    private String absoluteUrl(Pair<PropertiesPath, PathType> pathAndTypes) {
         if (pathAndTypes.second().equals(FILE)) {
-            return redirector.absoluteUriOf(method(on(PropertiesResource.class).getProperties(pathAndTypes.first())));
+            return propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getProperties(pathAndTypes.first())));
         } else {
-            return redirector.resourceUriOf(method(on(FileNamesResource.class).getChildrenOf(pathAndTypes.first())));
+            return propidlePath.absoluteUriOf(method(on(FileNamesResource.class).getChildrenOf(pathAndTypes.first())));
         }
     }
 
-    private Uri urlOf(Pair<PropertiesPath, PathType> pathAndTypes) {
+    private String urlOf(Pair<PropertiesPath, PathType> pathAndTypes) {
         if (pathAndTypes.second().equals(FILE)) {
-            return urlResolver.resolvePropertiesUrl(pathAndTypes.first());
+            return propidlePath.path(method(on(PropertiesResource.class).getProperties(pathAndTypes.first())));
         } else {
-            return urlResolver.resolveFileNameUrl(pathAndTypes.first());
+            return propidlePath.path(method(on(FileNamesResource.class).getChildrenOf(pathAndTypes.first())));
         }
     }
 

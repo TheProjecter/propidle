@@ -2,7 +2,7 @@
     <head>
         <title>$title$</title>
     </head>
-    <body>$thisUrl$
+    <body>
         <div>
             <div class="section">
                 <h2>Create a composite properties file</h2>
@@ -30,10 +30,10 @@
             <div class="section">
             $if(!alias.empty)$
                 <h2> Update the alias </h2>
-                <form method="post" action="$aliasesUrl$$alias$">
+                <form method="post" action="$first(aliasesUrl).name$$alias$">
                     <input name="to" size="40" type="hidden" value="$thisUrl$"/>
                     <p>
-                        $aliasesUrl$$alias$
+                        $first(aliasesUrl).name$$alias$
                         <input type="submit" value="Update"/>
                     </p>
                 </form>

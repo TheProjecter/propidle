@@ -1,6 +1,7 @@
 package com.googlecode.propidle.search;
 
 import com.googlecode.propidle.ModelName;
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
@@ -27,11 +28,11 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 public class SearchResource {
     public static final String NAME = "search";
     private final PropertiesSearcher searcher;
-    private final Redirector redirector;
+    private final PropidlePath propidlePath;
 
-    public SearchResource(PropertiesSearcher searcher, Redirector redirector) {
+    public SearchResource(PropertiesSearcher searcher, PropidlePath propidlePath) {
         this.searcher = searcher;
-        this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @GET
@@ -50,7 +51,7 @@ public class SearchResource {
         return new Callable2<Model, SearchResult, Model>() {
             public Model call(Model model, SearchResult searchResult) throws Exception {
                 return model.add("matches", model().
-                        add("url", model().add("name",redirector.resourceUriOf(method(on(PropertiesResource.class).getProperties(searchResult.path())))).add("url", redirector.absoluteUriOf(method(on(PropertiesResource.class).getProperties(searchResult.path()))))).
+                        add("url", model().add("name", propidlePath.path(method(on(PropertiesResource.class).getProperties(searchResult.path())))).add("url", propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getProperties(searchResult.path()))))).
                         add("propertyName", searchResult.propertyName()).
                         add("propertyValue", searchResult.propertyValue())
                 );

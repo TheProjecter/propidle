@@ -29,18 +29,18 @@ public class FileNamesTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "+ONE +pilot")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(li(anchor(absoluteUrl("properties/pilot/ONE"), img(".*file.png") + "pilot/ONE"))));
-        then(theHtmlOf(), the(LastResponse.class), not(matches(anchor(absoluteUrl("properties/pilot/TWO"), img(".*file.png") + "pilot/TWO"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li(anchor(absoluteUrl("properties/pilot/ONE"), img(".*file.png") + "/pilot/ONE"))));
+        then(theHtmlOf(), the(LastResponse.class), not(matches(anchor(absoluteUrl("properties/pilot/TWO"), img(".*file.png") + "/pilot/TWO"))));
 
         when(a(RequestIsMade.class).to(get("/filenames?q=pilot")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor(absoluteUrl("properties/pilot/ONE"), "pilot/ONE")))));
-        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor(absoluteUrl("properties/pilot/TWO"), "pilot/TWO")))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor(absoluteUrl("properties/pilot/ONE"), "/pilot/ONE")))));
+        then(theHtmlOf(), the(LastResponse.class), matches(li((anchor(absoluteUrl("properties/pilot/TWO"), "/pilot/TWO")))));
     }
 
     @Test
     public void shouldReturnFileNamesInCSVFormat() throws Exception {
         when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "p*").withHeader("Accept", "text/plain")));
-        then(theContentOf(),the(LastResponse.class), is("properties/pilot/ONE,properties/pilot/TWO"));
+        then(theContentOf(),the(LastResponse.class), is("/properties/pilot/ONE,/properties/pilot/TWO"));
     }
 }

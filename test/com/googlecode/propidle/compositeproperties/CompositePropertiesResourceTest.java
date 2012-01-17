@@ -30,6 +30,6 @@ public class CompositePropertiesResourceTest extends PropertiesApplicationTestCa
     public void composePropertiesWorksForMultipleProperties() throws Exception {
         when(a(RequestIsMade.class).to(get("/composite?url=/properties/pilot/ONE&url=/properties/pilot/TWO")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(input("to", "composite\\?url=%2Fproperties%2Fpilot%2FONE&url=%2Fproperties%2Fpilot%2FTWO")));
+        then(theHtmlOf(), the(LastResponse.class), matches(input("to", "/composite\\?url=%2Fproperties%2Fpilot%2FONE&url=%2Fproperties%2Fpilot%2FTWO")));
     }
 }

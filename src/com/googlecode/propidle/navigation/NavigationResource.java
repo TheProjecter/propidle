@@ -1,5 +1,6 @@
 package com.googlecode.propidle.navigation;
 
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.compositeproperties.CompositePropertiesResource;
 import com.googlecode.propidle.diff.DiffResource;
@@ -8,7 +9,6 @@ import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.search.SearchResource;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.proxy.Call;
-import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
@@ -27,10 +27,10 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 @Produces(TEXT_HTML)
 public class NavigationResource {
     public static final String PATH = "nav";
-    private final Redirector redirector;
+    private final PropidlePath propidlePath;
 
-    public NavigationResource(Redirector redirector) {
-        this.redirector = redirector;
+    public NavigationResource(PropidlePath propidlePath) {
+        this.propidlePath = propidlePath;
     }
 
     @GET
@@ -40,11 +40,11 @@ public class NavigationResource {
 
     private List links() throws Throwable {
         return sequence().
-                add(model().add("name", "Properties").add("url", redirector.absoluteUriOf(Call.method(Call.on(PropertiesResource.class).getAll())))).
-                add(model().add("name", "Compose Properties").add("url", redirector.absoluteUriOf(Call.method(Call.on(CompositePropertiesResource.class).getHtml(Option.none(String.class), null))))).
-                add(model().add("name", "Aliases").add("url", redirector.absoluteUriOf(Call.method(Call.on(AliasesResource.class).listAllAliases())))).
-                add(model().add("name", "Search").add("url", redirector.absoluteUriOf(Call.method(Call.on(SearchResource.class).get(Option.none(Query.class)))))).
-                add(model().add("name", "Compare Properties").add("url", redirector.absoluteUriOf(Call.method(Call.on(DiffResource.class).get())))).toList();
+                add(model().add("name", "Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(PropertiesResource.class).getAll())))).
+                add(model().add("name", "Compose Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(CompositePropertiesResource.class).getHtml(Option.none(String.class), null))))).
+                add(model().add("name", "Aliases").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(AliasesResource.class).listAllAliases())))).
+                add(model().add("name", "Search").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(SearchResource.class).get(Option.none(Query.class)))))).
+                add(model().add("name", "Compare Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(DiffResource.class).get())))).toList();
 
     }
 }
