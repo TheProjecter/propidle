@@ -4,7 +4,7 @@ import com.googlecode.utterlyidle.io.HierarchicalPath;
 
 public class NormalisedHierarchicalPath extends HierarchicalPath {
     public NormalisedHierarchicalPath(String value) {
-        super(removeStartingSlash(removeEndingSlash(value.trim())));
+        super(ensureStartingSlash(removeEndingSlash(value.trim())));
     }
 
     public static String removeEndingSlash(String value) {

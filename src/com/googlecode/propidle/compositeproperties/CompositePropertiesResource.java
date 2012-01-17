@@ -1,8 +1,8 @@
 package com.googlecode.propidle.compositeproperties;
 
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.propidle.properties.PropertiesResource;
-import com.googlecode.propidle.properties.UtterlyIdleUrlResolver;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.util.Predicates;
 import com.googlecode.propidle.util.collections.MultiMap;
@@ -17,7 +17,6 @@ import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.Application;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.QueryParameters;
-import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.Status;
@@ -55,13 +54,13 @@ public class CompositePropertiesResource {
     private final BasePath basePath;
     private final Option<RequestedRevisionNumber> requestedRevisionNumber;
     private final Application application;
-    private final Redirector redirector;
+    private final PropidlePath propidlePath;
 
-    public CompositePropertiesResource(BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, Application application, Redirector redirector) {
+    public CompositePropertiesResource(BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, Application application, PropidlePath propidlePath) {
         this.basePath = basePath;
         this.requestedRevisionNumber = requestedRevisionNumber;
         this.application = application;
-        this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @GET
@@ -89,7 +88,7 @@ public class CompositePropertiesResource {
                 map(toPair()).
                 fold(modelWithName(NAME), modelOfPropertiesAndOverrides(overrides)).
                 add("revision", requestedRevisionNumber.getOrNull()).
-                add("aliasesUrl", model().add("name", redirector.resourceUriOf(method(on(AliasesResource.class).listAllAliases()))).add("url", model().add("name", redirector.absoluteUriOf(method(on(AliasesResource.class).listAllAliases()))))).
+                add("aliasesUrl", model().add("name", propidlePath.path(method(on(AliasesResource.class).listAllAliases()))).add("url", model().add("name", propidlePath.absoluteUriOf(method(on(AliasesResource.class).listAllAliases()))))).
                 add("thisUrl", compositeUrlWithAliasRemoved(parameters)).
                 add(TITLE, title(urls));
 
@@ -101,7 +100,7 @@ public class CompositePropertiesResource {
     private String compositeUrlWithAliasRemoved(QueryParameters parameters) {
         QueryParameters paramsWithOutAlias = QueryParameters.queryParameters(parameters);
         paramsWithOutAlias.remove("alias");
-        return redirector.resourceUriOf(method(on(CompositePropertiesResource.class).getHtml(Option.<String>none(), paramsWithOutAlias))).toString();
+        return propidlePath.path(method(on(CompositePropertiesResource.class).getHtml(Option.<String>none(), paramsWithOutAlias))).toString();
     }
 
     private Callable2<Model, String, Model> intoModel() {

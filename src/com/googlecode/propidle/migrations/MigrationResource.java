@@ -1,9 +1,9 @@
 package com.googlecode.propidle.migrations;
 
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.status.StatusResource;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.annotations.POST;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.Produces;
@@ -30,13 +30,13 @@ import static java.lang.System.nanoTime;
 public class MigrationResource {
     private final Properties properties;
     private final Resolver myScope;
-    private final Redirector redirector;
+    private final PropidlePath propidlePath;
     public static final String NAME = "migrations";
 
-    public MigrationResource(Properties properties, Resolver myScope, Redirector redirector) {
+    public MigrationResource(Properties properties, Resolver myScope, PropidlePath propidlePath) {
         this.properties = properties;
         this.myScope = myScope;
-        this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @POST
@@ -52,7 +52,7 @@ public class MigrationResource {
         }
         return modelWithName(NAME)
                 .add("runTime", format("%s ms", calculateMilliseconds(start, nanoTime())))
-                .add("statusReport", redirector.resourceUriOf(method(on(StatusResource.class).reportStatus())))
+                .add("statusReport", propidlePath.path(method(on(StatusResource.class).reportStatus())))
                 .add("migrations", migrations.map(reportMigration()));
     }
 

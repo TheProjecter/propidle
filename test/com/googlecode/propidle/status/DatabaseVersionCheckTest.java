@@ -7,7 +7,6 @@ import com.googlecode.totallylazy.proxy.Invocation;
 import com.googlecode.utterlyidle.BaseUri;
 import com.googlecode.utterlyidle.BaseUriRedirector;
 import com.googlecode.utterlyidle.Binding;
-import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.RegisteredResources;
 import com.googlecode.utterlyidle.Response;
 import com.googlecode.utterlyidle.migrations.*;

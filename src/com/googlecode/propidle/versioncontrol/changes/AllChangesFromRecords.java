@@ -7,7 +7,6 @@ import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.lazyrecords.Keyword;
 import com.googlecode.lazyrecords.Record;
 import com.googlecode.lazyrecords.Records;
@@ -24,6 +23,7 @@ import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.re
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.Strings.empty;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
@@ -52,13 +52,9 @@ public class AllChangesFromRecords implements AllChanges {
     }
 
     public Iterable<Pair<PropertiesPath, PathType>> childrenOf(PropertiesPath parent) {
-        Sequence<String> propertiesPaths = records.
-                get(CHANGES).
+        return records.get(CHANGES).
                 filter(where(PROPERTIES_PATH, startsWith(parent.toString())).
-                        and(where(PROPERTIES_PATH, not(parent.toString())))).
-                map(PROPERTIES_PATH).
-                unique();
-        return propertiesPaths.map(toPropertiesPath()).map(toPairs(parent)).unique();
+                        and(where(PROPERTIES_PATH, not(parent.toString())))).map(PROPERTIES_PATH).unique().map(toPropertiesPath()).map(toPairs(parent)).unique();
     }
 
     private Callable1<? super PropertiesPath, Pair<PropertiesPath, PathType>> toPairs(final PropertiesPath parent) {
@@ -70,12 +66,16 @@ public class AllChangesFromRecords implements AllChanges {
     }
 
     private PropertiesPath childPath(HierarchicalPath propertiesPath, HierarchicalPath parent) {
-        return propertiesPath(parent.subDirectory(propertiesPath.remove(parent).segments().headOption().getOrElse("")));
+        return propertiesPath(parent.subDirectory(findCurrentNodeName(propertiesPath, parent)));
+    }
+
+    private String findCurrentNodeName(HierarchicalPath propertiesPath, HierarchicalPath parent) {
+        return propertiesPath.remove(parent).segments().filter(not(empty())).headOption().getOrElse("");
     }
 
     private PathType type(PropertiesPath propertiesPath, PropertiesPath parent) {
         HierarchicalPath path = propertiesPath.remove(parent);
-        return path.segments().size().intValue() > 1 ? DIRECTORY : FILE;
+        return path.segments().filter(not(empty())).size().intValue() > 1 ? DIRECTORY : FILE;
     }
 
 

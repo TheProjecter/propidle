@@ -1,5 +1,6 @@
 package com.googlecode.propidle.properties;
 
+import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.filenames.FileNamesResource;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
@@ -27,37 +28,40 @@ import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
-@Path(PropertiesResource.NAME)
 @Produces(TEXT_HTML)
 public class PropertiesResource {
     private final AllProperties repository;
     private final Option<RequestedRevisionNumber> requestedRevisionNumber;
     private final HighestRevisionNumbers highestRevisionNumbers;
     private final Redirector redirector;
+    private final PropidlePath propidlePath;
     public static final String NAME = "properties";
     public static final String PLAIN_NAME = NAME + ".properties";
     public static final String HTML_EDITABLE = NAME + ".html";
     public static final String HTML_READ_ONLY = NAME + ".readonly.html";
 
-    public PropertiesResource(AllProperties repository, Option<RequestedRevisionNumber> requestedRevisionNumber, HighestRevisionNumbers highestRevisionNumbers, Redirector redirector) {
+    public PropertiesResource(AllProperties repository, Option<RequestedRevisionNumber> requestedRevisionNumber, HighestRevisionNumbers highestRevisionNumbers, Redirector redirector, PropidlePath propidlePath) {
         this.repository = repository;
         this.requestedRevisionNumber = requestedRevisionNumber;
         this.highestRevisionNumbers = highestRevisionNumbers;
         this.redirector = redirector;
+        this.propidlePath = propidlePath;
     }
 
     @GET
+    @Path(PropertiesResource.NAME)
     public Response getAll() {
         return redirector.seeOther(method(on(FileNamesResource.class).getChildrenOf(propertiesPath("/"))));
     }
 
     @GET
+    @Path(PropertiesResource.NAME)
     public Response create(@QueryParam("path") PropertiesPath path) {
         return redirector.seeOther(method(on(PropertiesResource.class).getHtml(path)));
     }
 
     @GET
-    @Path("{path:.+$}")
+    @Path(PropertiesResource.NAME+"{path:.+$}")
     @Priority(Priority.High)
     public Model getHtml(@PathParam("path") PropertiesPath path) {
         Model model = modelOf(path).add("changesUrl", changeUrlAsModel(path));
@@ -65,7 +69,7 @@ public class PropertiesResource {
     }
 
     private Model changeUrlAsModel(PropertiesPath path) {
-        return model().add("name", redirector.resourceUriOf(changeResourceInvocation(path))).add("url", redirector.absoluteUriOf(changeResourceInvocation(path)));
+        return model().add("name", propidlePath.path(changeResourceInvocation(path))).add("url", propidlePath.absoluteUriOf(changeResourceInvocation(path)));
     }
 
     private Invocation<Object, Model> changeResourceInvocation(PropertiesPath path) {
@@ -73,14 +77,14 @@ public class PropertiesResource {
     }
 
     @GET
-    @Path("{path:.+$}")
+    @Path(PropertiesResource.NAME+"{path:.+$}")
     @Produces(TEXT_PLAIN)
     public Model getProperties(@PathParam("path") PropertiesPath path) {
         return name(modelOf(path), PLAIN_NAME);
     }
 
     @POST
-    @Path("{path:.+$}")
+    @Path(PropertiesResource.NAME+"{path:.+$}")
     public Response post(@PathParam("path") PropertiesPath path, @FormParam("properties") PropertiesInput propertiesInput) {
         RevisionNumber revisionNumber = repository.put(path, properties(propertiesInput));
         return redirector.seeOther(method(on(ChangesResource.class).get(path, some(revisionNumber))));
@@ -89,7 +93,7 @@ public class PropertiesResource {
     private Model modelOf(PropertiesPath path) {
         final Model model = basicModelOf(path);
         model.
-                add("latestRevisionUrl", redirector.absoluteUriOf(method(on(PropertiesResource.class).getProperties(path))));
+                add("latestRevisionUrl", propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getProperties(path))));
         return model;
     }
 
