@@ -29,6 +29,7 @@ import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.annotations.Priority.High;
 import static com.googlecode.utterlyidle.rendering.Model.model;
 
 @Produces({TEXT_HTML})
@@ -47,6 +48,7 @@ public class FileNamesResource {
 
     @GET
     @Path(FileNamesResource.NAME)
+    @Priority(High)
     @Produces({TEXT_HTML, TEXT_PLAIN})
     public Model get(@QueryParam("q") Query query) {
         Model model = modelWithName(NAME).
