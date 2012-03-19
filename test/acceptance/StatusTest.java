@@ -2,6 +2,7 @@ package acceptance;
 
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import com.googlecode.propidle.status.LuceneDirectoryCheck;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -22,6 +23,7 @@ public class StatusTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(get("/status")));
 
         then(theHtmlOf(), the(LastResponse.class), containsString("<title>Status Report</title>"));
+        then(theHtmlOf(), the(LastResponse.class), containsString(LuceneDirectoryCheck.class.getSimpleName()));
         then(theHtmlOf(), the(LastResponse.class), containsString("Can read Lucene Directory"));
     }
 
