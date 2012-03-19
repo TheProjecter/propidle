@@ -20,15 +20,11 @@ public class ConnectionDetailsCheck implements StatusCheck {
     }
 
     public StatusCheckResult check() throws Exception {
-        boolean canconnect = canConnect();
-        StatusCheckResult result = statusCheckResult(
+        return statusCheckResult(
                 statusCheckName(getClass().getSimpleName())).
                 add("JDBC URL", connectionDetails.url()).
                 add("Username", connectionDetails.user()).
-                add("Result", (canconnect ? "PASS" : "FAIL"));
-        result.setFatal(!canconnect);
-
-        return result;
+                add("Result", (canConnect() ? "PASS" : "FAIL"));
     }
 
     private boolean canConnect() throws Exception {
