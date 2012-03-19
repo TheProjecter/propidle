@@ -16,6 +16,7 @@ import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.MediaType.WILDCARD;
 import static com.googlecode.utterlyidle.Responses.response;
+import static com.googlecode.utterlyidle.Status.*;
 
 @Path(StatusResource.NAME)
 @Produces(TEXT_HTML)
@@ -30,20 +31,7 @@ public class StatusResource {
 
     @GET
     public Response reportStatus() {
-        Iterable<StatusCheckResult> statusCheckResults = statusChecks.checks();
-        Status status = Status.OK;
-        if ( sequence(statusCheckResults).exists(fatalStatusCheckResult()) ){
-            status = status.SERVICE_UNAVAILABLE;
-        }
-        return response(status).entity(modelWithName(NAME).add("checks", statusCheckResults));
-    }
-
-    private Predicate<StatusCheckResult> fatalStatusCheckResult() {
-        return new Predicate<StatusCheckResult>() {
-            public boolean matches(StatusCheckResult statusCheckResult) {
-                return statusCheckResult.isFatal();
-            }
-        };
+        return response(OK).entity(modelWithName(NAME).add("checks", statusChecks.checks()));
     }
 
 }
