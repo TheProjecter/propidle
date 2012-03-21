@@ -65,7 +65,6 @@ public class FileNamesResource {
     
     @GET
     @Path(FileNamesResource.NAME)
-    @Priority(High)
     @Produces({TEXT_PLAIN})
     public Model getAutoComplete(@QueryParam("q") Query query) {
         return get(Query.query(appendAnyWildCard(query)));
