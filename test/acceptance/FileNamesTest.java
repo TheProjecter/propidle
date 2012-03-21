@@ -23,6 +23,10 @@ public class FileNamesTest extends PropertiesApplicationTestCase {
     public void setup() throws Exception {
         given(that(PropertiesExist.class).with(propertiesPath("pilot/ONE")).and(properties("a=1")));
         given(that(PropertiesExist.class).with(propertiesPath("pilot/TWO")).and(properties("a=1")));
+
+        given(that(PropertiesExist.class).with(propertiesPath("ooo/ali-sahin")).and(properties("a=1")));
+        given(that(PropertiesExist.class).with(propertiesPath("ooo/ali")).and(properties("a=1")));
+        given(that(PropertiesExist.class).with(propertiesPath("ooo/sahin")).and(properties("a=1")));
     }
     @Test
     public void listsPropertiesFilesFilteredByName() throws Exception {
@@ -40,7 +44,19 @@ public class FileNamesTest extends PropertiesApplicationTestCase {
 
     @Test
     public void shouldReturnFileNamesInCSVFormat() throws Exception {
-        when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "p*").withHeader("Accept", "text/plain")));
+        when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "p").withHeader("Accept", "text/plain")));
         then(theContentOf(),the(LastResponse.class), is("/properties/pilot/ONE,/properties/pilot/TWO"));
+    }
+
+    @Test
+    public void shouldReturnResultsWhichContainLuceneEscapeCharacter() throws Exception {
+        when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "ali-sa").withHeader("Accept", "text/plain")));
+        then(theContentOf(),the(LastResponse.class), is("/properties/ooo/ali-sahin"));
+    }
+
+    @Test
+    public void shouldReturnNoResultWhenQueryIsEmpty() throws Exception {
+        when(a(RequestIsMade.class).to(get("/filenames").withQuery("q", "").withHeader("Accept", "text/plain")));
+        then(theContentOf(),the(LastResponse.class), is(""));
     }
 }

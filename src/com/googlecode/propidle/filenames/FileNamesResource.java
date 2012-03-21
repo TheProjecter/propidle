@@ -7,12 +7,10 @@ import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.search.FileNameSearcher;
 import com.googlecode.propidle.search.Query;
 import com.googlecode.propidle.server.PropertiesModule;
-import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.PathParam;
@@ -49,7 +47,7 @@ public class FileNamesResource {
     @GET
     @Path(FileNamesResource.NAME)
     @Priority(High)
-    @Produces({TEXT_HTML, TEXT_PLAIN})
+    @Produces({TEXT_HTML})
     public Model get(@QueryParam("q") Query query) {
         Model model = modelWithName(NAME).
                 add(PropertiesModule.TITLE, "Filenames \"" + query + "\"").
@@ -63,6 +61,14 @@ public class FileNamesResource {
                     fold(model, pathsIntoModel());
         }
         return model;
+    }
+    
+    @GET
+    @Path(FileNamesResource.NAME)
+    @Priority(High)
+    @Produces({TEXT_PLAIN})
+    public Model getAutoComplete(@QueryParam("q") Query query) {
+        return get(Query.query(appendAnyWildCard(query)));
     }
 
     @GET
@@ -114,6 +120,10 @@ public class FileNamesResource {
         } else {
             return propidlePath.path(method(on(FileNamesResource.class).getChildrenOf(pathAndTypes.first())));
         }
+    }
+
+    private String appendAnyWildCard(Query q) {
+        return q.query() == "" ? "" : "*"+q.query()+"*";
     }
 
 }
