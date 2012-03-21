@@ -29,7 +29,7 @@
                         selectASuggestion(suggestionsContainer.children().first())
                     }
 
-                } else if (event.keyCode != 38 && event.keyCode != 40) {
+                } else if (event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40) {
                     clearTimeout(timer);
                     timer = setTimeout(showSuggestions, 500);
                 }
@@ -45,7 +45,7 @@
                         xhr.setRequestHeader("Accept", "text/plain");
                     }
                 });
-                searchFor = (searchFor == "" ? "" : '' + searchFor + '*');
+                searchFor = (searchFor == "" ? "" : '' + searchFor);
                 showLoader(true);
 
                 jQuery.get("filenames", {

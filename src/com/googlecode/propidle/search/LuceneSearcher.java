@@ -38,11 +38,9 @@ public class LuceneSearcher {
     }
 
     private org.apache.lucene.search.Query toQuery(Query query) throws ParseException {
-        return new MultiFieldQueryParser(
-                version,
-                sequence(query.fieldNames()).toArray(String.class),
-                analyzer
-        ).parse(query.query());
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(version,sequence(query.fieldNames()).toArray(String.class),analyzer);
+        parser.setAllowLeadingWildcard(true);
+        return parser.parse(query.query());
     }
 
     private Callable1<? super ScoreDoc, Document> toDocument(final IndexSearcher searcher) {
