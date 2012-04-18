@@ -47,7 +47,7 @@ public class ServerTest {
         response = clientHttpHandler.handle(RequestBuilder.get(propertiesUrl).accepting(TEXT_PLAIN).build());
 
         assertThat(response.status(), is(OK));
-        assertThat(new String(response.bytes()), is("# /properties/test?revision=0\ntest=hello\n"));
+        assertThat(response.entity().toString(), is("# /properties/test?revision=0\ntest=hello\r"));
     }
 
     public static class ResponseAsString implements Callable1<InputStream, Void> {

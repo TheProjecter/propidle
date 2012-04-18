@@ -9,7 +9,7 @@ import com.googlecode.utterlyidle.annotations.Produces;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
-import static com.googlecode.utterlyidle.Responses.response;
+import static com.googlecode.utterlyidle.ResponseBuilder.response;
 import static com.googlecode.utterlyidle.Status.NOT_FOUND;
 import static com.googlecode.utterlyidle.Status.OK;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -34,11 +34,11 @@ public class ScheduleResource {
     public Response schedule(@FormParam(TASK_NAME_PARAM_NAME) String taskName, @FormParam(DELAY_IN_SECONDS_PARAM_NAME) Long delayInSeconds, @FormParam(INITIAL_DELAY_IN_SECONDS_PARAM_NAME) Option<Long> initialDelayInSecondsOption) {
         RunnableRequest runnableRequest = requests.runnableRequest(taskName);
         if(runnableRequest == null) {
-            return response(NOT_FOUND).entity("Could not schedule unknown tasks. Available tasks are: " + sequence(requests.availableTaskNames()).toString());
+            return response(NOT_FOUND).entity("Could not schedule unknown tasks. Available tasks are: " + sequence(requests.availableTaskNames()).toString()).build();
         }
         scheduler.schedule(runnableRequest, initialDelayInSecondsOption.getOrElse(0L), delayInSeconds, SECONDS);
 
-        return response(OK).entity("Task has been scheduled");
+        return response(OK).entity("Task has been scheduled").build();
 
     }
 

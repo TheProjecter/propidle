@@ -1,10 +1,12 @@
 package com.googlecode.propidle.urls;
 
+import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.*;
 
-import com.googlecode.utterlyidle.MediaType;
-
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.Responses.response;
 
 public class StubHandler implements HttpHandler {
@@ -12,19 +14,11 @@ public class StubHandler implements HttpHandler {
     private Response response;
 
     public static StubHandler stubHandler(Status status) {
-        return new StubHandler(response().
-                status(status));
+        return new StubHandler(response(status));
     }
 
     public static StubHandler stubHandler(String response) {
-        return new StubHandler(response().
-                status(Status.OK).
-                header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN).
-                bytes(response.getBytes()));
-    }
-
-    public static StubHandler stubHandler() {
-        return stubHandler("");
+        return new StubHandler(response(Status.OK, sequence(Pair.<String, String>pair(CONTENT_TYPE, TEXT_PLAIN)), response.getBytes()));
     }
 
     public StubHandler(Response response) {

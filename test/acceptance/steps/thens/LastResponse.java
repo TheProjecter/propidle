@@ -36,7 +36,7 @@ public class LastResponse implements Callable<Response> {
     public static Callable1<Response, String> theHeader(final String headerName) {
         return new Callable1<Response, String>() {
             public String call(Response response) throws Exception {
-                return response.header(headerName);
+                return response.headers().getValue(headerName);
             }
         };
     }
@@ -53,7 +53,7 @@ public class LastResponse implements Callable<Response> {
     public static Callable1<Response, String> theContentOf() {
         return new Callable1<Response, String>() {
             public String call(Response response) throws Exception {
-                final String html = new String(response.bytes());
+                final String html = response.entity().toString();
                 assertThat("Expected a successful response but got " + html, response.status().code(), allOf(greaterThanOrEqualTo(200), lessThan(300)));
                 return html;
             }
@@ -67,7 +67,7 @@ public class LastResponse implements Callable<Response> {
     public static Callable1<Response, Properties> thePropertiesFileFrom() {
         return new Callable1<Response, Properties>() {
             public Properties call(Response response) throws Exception {
-                return properties(new String(response.bytes()));
+                return properties(response.entity().toString());
             }
         };
     }

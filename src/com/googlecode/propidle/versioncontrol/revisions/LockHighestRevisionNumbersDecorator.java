@@ -2,6 +2,8 @@ package com.googlecode.propidle.versioncontrol.revisions;
 
 import com.googlecode.utterlyidle.migrations.persistence.RecordLock;
 
+import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.HIGHEST_REVISION;
+
 public class LockHighestRevisionNumbersDecorator implements HighestRevisionNumbers {
     private final HighestRevisionNumbers decorated;
     private final RecordLock recordLock;
@@ -16,7 +18,7 @@ public class LockHighestRevisionNumbersDecorator implements HighestRevisionNumbe
     }
 
     public NewRevisionNumber newRevisionNumber() {
-        recordLock.aquire(HighestRevisionNumbersFromRecords.HIGHEST_REVISION);
+        recordLock.aquire(HIGHEST_REVISION);
         return decorated.newRevisionNumber();
     }
 }

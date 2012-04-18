@@ -1,19 +1,20 @@
 package com.googlecode.propidle.versioncontrol.revisions;
 
-import static com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber.highestExistingRevisionNumber;
-import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
+import com.googlecode.lazyrecords.Definition;
 import com.googlecode.lazyrecords.Keyword;
-
-import static com.googlecode.lazyrecords.Keywords.keyword;
-import static com.googlecode.lazyrecords.MapRecord.record;
-
-import com.googlecode.lazyrecords.Keywords;
 import com.googlecode.lazyrecords.Record;
 import com.googlecode.lazyrecords.Records;
 
+import static com.googlecode.lazyrecords.Definition.constructors.definition;
+import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.Record.constructors.record;
+import static com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber.highestExistingRevisionNumber;
+import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
+
 public class HighestRevisionNumbersFromRecords implements HighestRevisionNumbers {
-    public static final Keyword<String> HIGHEST_REVISION = keyword("highest_revision", String.class);
+
     public static final Keyword<Integer> REVISION_NUMBER = keyword("revision_number", Integer.class);
+    public static final Definition HIGHEST_REVISION = definition("highest_revision", REVISION_NUMBER);
 
     private final Records records;
     private NewRevisionNumber newRevisionNumber;
@@ -21,7 +22,6 @@ public class HighestRevisionNumbersFromRecords implements HighestRevisionNumbers
 
     public HighestRevisionNumbersFromRecords(Records records) {
         this.records = records;
-        records.define(HIGHEST_REVISION, REVISION_NUMBER);
     }
 
     public NewRevisionNumber newRevisionNumber() {

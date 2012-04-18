@@ -1,12 +1,12 @@
 package acceptance;
 
-import org.junit.Test;
-
 import acceptance.steps.givens.CurrentRevision;
 import acceptance.steps.givens.PropertiesExist;
-import static acceptance.steps.thens.LastResponse.*;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Test;
+
+import static acceptance.steps.thens.LastResponse.*;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
@@ -22,9 +22,9 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
         given(that(PropertiesExist.class).with(propertiesPath("properties.one")).and(properties("revision=0")));
         given(that(PropertiesExist.class).with(propertiesPath("properties.one")).and(properties("revision=1")));
 
-        when(a(RequestIsMade.class).to(get("/properties/properties.one.properties").withQuery("revision", "0")));
+        when(a(RequestIsMade.class).to(get("/properties/properties.one.properties").query("revision", "0")));
 
-        then(theContentOf(), the(LastResponse.class), is("# "+absoluteUrl("properties/properties.one?revision=0\nrevision=0\n")));
+        then(theContentOf(), the(LastResponse.class), is("# "+absoluteUrl("properties/properties.one?revision=0\nrevision=0\r")));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
         given(that(CurrentRevision.class).startsAt(revisionNumber(0)));
         given(that(PropertiesExist.class).with(propertiesPath("properties.one")).and(properties("a=some value")));
 
-        when(a(RequestIsMade.class).to(get("/properties/properties.one").withQuery("revision", "0")));
+        when(a(RequestIsMade.class).to(get("/properties/properties.one").query("revision", "0")));
 
         then(theHtmlOf(), the(LastResponse.class), not(matches("<form")));
         then(theHtmlOf(), the(LastResponse.class), matches("Revision 0"));
