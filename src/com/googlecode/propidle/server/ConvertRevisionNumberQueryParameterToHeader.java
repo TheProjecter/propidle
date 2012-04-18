@@ -1,9 +1,8 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.utterlyidle.HttpHandler;
-import com.googlecode.utterlyidle.QueryParameters;
-import com.googlecode.utterlyidle.Request;
-import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.*;
+
+import static com.googlecode.utterlyidle.RequestBuilder.*;
 
 
 public class ConvertRevisionNumberQueryParameterToHeader implements HttpHandler {
@@ -18,8 +17,7 @@ public class ConvertRevisionNumberQueryParameterToHeader implements HttpHandler 
         final QueryParameters queryParameters = QueryParameters.parse(request.uri().query());
         String revision = queryParameters.getValue(REVISION_PARAM);
         if(revision != null){
-            queryParameters.remove(REVISION_PARAM);
-            request.headers().add(REVISION_PARAM, revision);
+            request = modify(request).removeQuery(REVISION_PARAM).header(REVISION_PARAM, revision).build();
         }
         return decorated.handle(request);
     }

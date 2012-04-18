@@ -15,9 +15,8 @@ import com.googlecode.utterlyidle.modules.ResponseHandlersModule;
 import com.googlecode.utterlyidle.rendering.ExceptionRenderer;
 import com.googlecode.yadic.Container;
 
-import static com.googlecode.totallylazy.Pair.pair;
-import static com.googlecode.totallylazy.Predicates.*;
-import static com.googlecode.utterlyidle.HeaderParameters.headerParameters;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
+import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.utterlyidle.HttpHeaders.ACCEPT;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
@@ -43,11 +42,11 @@ public class ExceptionFormattingModule implements RequestScopedModule, ResponseH
         return new ResponseHandler() {
             public Response handle(Response response) throws Exception {
 
-                Response htmlResponse = Responses.response(INTERNAL_SERVER_ERROR).
+                Response htmlResponse = ResponseBuilder.response(INTERNAL_SERVER_ERROR).
                         header(CONTENT_TYPE, TEXT_HTML).
                         entity(model().
                                 add("errorMessage", "An error occured in propidle").
-                                add("stackTrace", ExceptionRenderer.toString((Exception) response.entity())));
+                                add("stackTrace", ExceptionRenderer.toString((Exception) response.entity().value()))).build();
                 return renderer(new ModelTemplateRenderer("Error_html", ExceptionFormattingModule.class)).handle(htmlResponse);
             }
         };

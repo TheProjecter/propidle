@@ -2,18 +2,10 @@ package acceptance;
 
 import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.propidle.WrapCallableInTransaction;
-import com.googlecode.propidle.scheduling.RunnableRequest;
 import com.googlecode.propidle.scheduling.StubScheduledExecutorService;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Maps;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Strings;
-import com.googlecode.totallylazy.Xml;
+import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.MemoryResponse;
-import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.io.HierarchicalPath;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
 import com.googlecode.yatspec.junit.SpecRunner;
@@ -26,8 +18,6 @@ import org.junit.runner.RunWith;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.totallylazy.Maps.map;
-import static com.googlecode.totallylazy.Pair.pair;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -109,7 +99,7 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
 
     private class ResponseRenderer implements Renderer<Response> {
         public String render(Response response) throws Exception {
-            return Xml.escape(format("%s\n\n%s", response.toString(), Strings.toString(response.bytes())));
+            return Xml.escape(format("%s\n\n%s", response.headers().toString(), response.entity().toString()));
         }
     }
 

@@ -1,5 +1,6 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
+import com.googlecode.lazyrecords.Definition;
 import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.properties.PropertyValue;
@@ -12,6 +13,8 @@ import com.googlecode.lazyrecords.Record;
 import com.googlecode.lazyrecords.Records;
 import com.googlecode.utterlyidle.io.HierarchicalPath;
 
+import static com.googlecode.lazyrecords.Definition.constructors.definition;
+import static com.googlecode.lazyrecords.Record.constructors.record;
 import static com.googlecode.propidle.PathType.DIRECTORY;
 import static com.googlecode.propidle.PathType.FILE;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
@@ -28,15 +31,14 @@ import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.lazyrecords.Keywords.keyword;
-import static com.googlecode.lazyrecords.MapRecord.record;
 
 public class AllChangesFromRecords implements AllChanges {
-    public static final Keyword CHANGES = keyword("changes");
     public static final Keyword<String> PROPERTIES_PATH = keyword("properties_path", String.class);
-    public static final Keyword<Number> REVISION_NUMBER = keyword("revision_number", Number.class);
+    public static final Keyword<Integer> REVISION_NUMBER = keyword("revision_number", Integer.class);
     public static final Keyword<String> PROPERTY_NAME = keyword("property_name", String.class);
     public static final Keyword<String> PREVIOUS_VALUE = keyword("previous_value", String.class);
     public static final Keyword<String> UPDATED_VALUE = keyword("updated_value", String.class);
+    public static final Definition CHANGES = definition("changes", PROPERTIES_PATH, REVISION_NUMBER, PROPERTY_NAME, PREVIOUS_VALUE, UPDATED_VALUE);
 
     public final Records records;
 
@@ -120,7 +122,7 @@ public class AllChangesFromRecords implements AllChanges {
         return new Callable1<Record, Change>() {
             public Change call(Record record) throws Exception {
                 return new Change(
-                        revisionNumber(record.get(REVISION_NUMBER).intValue()),
+                        revisionNumber(record.get(REVISION_NUMBER)),
                         propertiesPath(record.get(PROPERTIES_PATH)),
                         changedProperty(
                                 propertyName(record.get(PROPERTY_NAME)),
@@ -129,10 +131,5 @@ public class AllChangesFromRecords implements AllChanges {
                 );
             }
         };
-    }
-
-    public static Records defineChangesRecord(Records records) {
-        records.define(CHANGES, PROPERTIES_PATH, REVISION_NUMBER, PROPERTY_NAME, PREVIOUS_VALUE, UPDATED_VALUE);
-        return records;
     }
 }

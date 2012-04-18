@@ -1,27 +1,24 @@
 package com.googlecode.propidle.urls;
 
-import com.googlecode.totallylazy.Strings;
-import com.googlecode.utterlyidle.*;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.totallylazy.Option;
+import com.googlecode.utterlyidle.Application;
+import com.googlecode.utterlyidle.BasePath;
+import com.googlecode.utterlyidle.RequestBuilder;
+import com.googlecode.utterlyidle.Response;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
-import static com.googlecode.propidle.util.Exceptions.toException;
-import com.googlecode.propidle.server.RequestedRevisionNumber;
-import com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader;
 import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
+import static com.googlecode.propidle.util.Exceptions.toException;
 import static com.googlecode.totallylazy.Callers.callConcurrently;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.utterlyidle.annotations.Path;
-
-import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.quote;
+import static com.googlecode.utterlyidle.HttpHeaders.ACCEPT;
 
 public class RelativeUriGetter implements UriGetter {
     private final UriGetter decorated;
@@ -63,7 +60,7 @@ public class RelativeUriGetter implements UriGetter {
 
     private InputStream getRelativeUri(URI uri, MimeType mimeType) throws Exception {
         uri = stripBasePath(uri);
-        RequestBuilder request = RequestBuilder.get(uri.toString()).withHeader(HttpHeaders.ACCEPT, mimeType.value());
+        RequestBuilder request = RequestBuilder.get(uri.toString()).replaceHeader(ACCEPT, mimeType.value());
         if(!requestedRevisionNumber.isEmpty()){
             request.withHeader(REVISION_PARAM, requestedRevisionNumber.get().toString());
         }
@@ -71,12 +68,12 @@ public class RelativeUriGetter implements UriGetter {
 
         validateResponseCode(response, uri);
 
-        return new ByteArrayInputStream(response.bytes());
+        return new ByteArrayInputStream(response.entity().asBytes());
     }
 
     private void validateResponseCode(Response response, URI uri) {
         if (response.status().code() >= 400) {
-            throw new HttpStatusCodeException(uri, response.status(), Strings.toString(response.bytes()));
+            throw new HttpStatusCodeException(uri, response.status(), response.entity().toString());
         }
     }
 

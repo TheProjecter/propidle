@@ -3,17 +3,18 @@ package com.googlecode.propidle;
 import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.properties.AllPropertiesFromChanges;
 import com.googlecode.propidle.properties.PropertyDiffTool;
-import com.googlecode.propidle.server.*;
+import com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader;
+import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.propidle.server.RequestedRevisionNumberActivator;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
-import com.googlecode.propidle.urls.UrlResolver;
 import com.googlecode.propidle.util.time.Clock;
 import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
-import com.googlecode.utterlyidle.handlers.TransactionHttpHandler;
+import com.googlecode.utterlyidle.lazyrecords.TransactionHttpHandler;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
@@ -23,9 +24,9 @@ import com.googlecode.yadic.resolvers.OptionResolver;
 
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
 import static com.googlecode.utterlyidle.MediaType.TEXT_HTML;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
+import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
 
 public class BasicModule implements RequestScopedModule, ApplicationScopedModule {
     public Module addPerRequestObjects(Container container) {
@@ -36,7 +37,7 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
 
         container.decorate(HttpHandler.class, ConvertRevisionNumberQueryParameterToHeader.class);
         container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
-        container.add(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
+        container.addType(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
 
         container.decorate(HttpHandler.class, TransactionHttpHandler.class);
 

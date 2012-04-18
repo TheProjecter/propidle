@@ -58,6 +58,10 @@
           <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-456-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-457-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/yadic-133-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/yadic-144-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/lazyrecords-38-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-493-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/funclate-71-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
       </library>

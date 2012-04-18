@@ -12,7 +12,7 @@ public class DemoServer {
         int port = args.length > 0 ? Integer.valueOf(args[0]) : 8000;
         TestPropertiesApplication application = new TestPropertiesApplication();
         new ServerActivator(application, defaultConfiguration().basePath(TestPropertiesApplication.basePath).port(port)).call();
-        application.handle(RequestBuilder.post(ScheduleResource.NAME).withForm("taskName", "rebuildIndex").build());
+        application.handle(RequestBuilder.post(ScheduleResource.NAME).form("taskName", "rebuildIndex").build());
         application.startPropertyDependentTasks();
     }
 }

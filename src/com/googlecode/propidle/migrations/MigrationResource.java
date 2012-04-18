@@ -10,8 +10,8 @@ import com.googlecode.utterlyidle.annotations.Produces;
 import com.googlecode.utterlyidle.migrations.RunMigrations;
 import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;
 import com.googlecode.utterlyidle.rendering.Model;
-import com.googlecode.yadic.Container;
 import com.googlecode.yadic.Resolver;
+import com.googlecode.yadic.closeable.CloseableContainer;
 
 import java.util.Properties;
 
@@ -43,7 +43,7 @@ public class MigrationResource {
     public Model perform() throws Exception {
         long start = nanoTime();
 
-        Container container = MigrationsContainer.migrationsContainer(myScope, properties);
+        CloseableContainer container = MigrationsContainer.migrationsContainer(myScope, properties);
         Sequence<MigrationLogItem> migrations;
         try {
             migrations = sequence(inTransaction(container, RunMigrations.class));

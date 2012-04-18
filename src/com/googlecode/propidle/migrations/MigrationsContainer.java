@@ -8,21 +8,22 @@ import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
-import com.googlecode.yadic.Container;
 import com.googlecode.yadic.Resolver;
 import com.googlecode.yadic.SimpleContainer;
+import com.googlecode.yadic.closeable.CloseableContainer;
 
 import java.util.Properties;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.modules.Modules.activate;
 import static com.googlecode.yadic.Containers.selfRegister;
+import static com.googlecode.yadic.closeable.CloseableContainer.closeableContainer;
 
 public class MigrationsContainer {
-    public static Container migrationsContainer(Resolver parentScope, Properties properties) throws Exception {
+    public static CloseableContainer migrationsContainer(Resolver parentScope, Properties properties) throws Exception {
         Sequence<Module> moduleSequence = PersistenceModules.forMigrations(properties);
         
-        Container container = selfRegister(new SimpleContainer(parentScope));
+        CloseableContainer container = closeableContainer(selfRegister(new SimpleContainer(parentScope)));
         moduleSequence.forEach(activate(container, sequence(ApplicationScopedModule.class, RequestScopedModule.class)));
 
         new MigrationActionsModule().call(container);

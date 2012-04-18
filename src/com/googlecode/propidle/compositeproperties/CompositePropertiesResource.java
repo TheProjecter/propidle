@@ -125,7 +125,7 @@ public class CompositePropertiesResource {
 
                 if (response.status() == Status.OK) {
                     Properties properties = new Properties();
-                    properties.load(new ByteArrayInputStream(response.bytes()));
+                    properties.load(new ByteArrayInputStream(response.entity().asBytes()));
                     return right(properties);
                 }
                 return left(response.status());

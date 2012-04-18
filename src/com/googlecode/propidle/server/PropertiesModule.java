@@ -37,7 +37,7 @@ public class PropertiesModule extends AbstractModule implements ArgumentScopedMo
     }
 
     public Module addPerArgumentObjects(final Container container) {
-        container.add(PropertiesPath.class, PropertiesPathFromStringResolver.class);
+        container.addType(PropertiesPath.class, PropertiesPathFromStringResolver.class);
         return this;
     }
 
