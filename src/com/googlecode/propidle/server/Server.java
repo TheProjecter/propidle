@@ -1,7 +1,6 @@
 package com.googlecode.propidle.server;
 
 import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.ServerActivator;
 import com.googlecode.utterlyidle.ServerConfiguration;
@@ -19,7 +18,7 @@ import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Uri.uri;
 import static java.lang.String.format;
 
-public class Server {
+public class    Server {
     public static final String JDBC_URL = "jdbc.url";
     public static final String JDBC_USER = "jdbc.user";
     public static final String JDBC_PASSWORD = "jdbc.password";
