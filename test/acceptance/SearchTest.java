@@ -22,7 +22,18 @@ public class SearchTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/search?q=core")));
 
-        then(theHtmlOf(), the(LastResponse.class), matches(tr(td(anchor(absoluteUrl("properties/properties.one"), "/properties/properties.one")), td("property_one"), td("stifled core dump"))));
+        then(theHtmlOf(), the(LastResponse.class), matches(result("properties/properties.one", "property_one", "stifled core dump")));
         then(theHtmlOf(), the(LastResponse.class), not(anyOf(matches("properties.two"), matches("property_two"), matches("massive short-faced bear"))));
+    }
+
+    @Test
+    public void caseInsensitivePropertyNameCanBeSearched() throws Exception {
+        given(that(PropertiesExist.class).with(propertiesPath("path")).and(properties("a.Property.name=foodbar")));
+        when(a(RequestIsMade.class).to(get("/search?q=a.property.name")));
+        then(theHtmlOf(), the(LastResponse.class), matches(result("properties/path", "a.Property.name", "foodbar")));
+    }
+
+    private String result(String path, String name, String value) {
+        return tr(td(anchor(absoluteUrl(path), "/" + path)), td(name), td(value));
     }
 }

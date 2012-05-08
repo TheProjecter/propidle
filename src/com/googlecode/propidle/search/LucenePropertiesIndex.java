@@ -1,13 +1,10 @@
 package com.googlecode.propidle.search;
 
-import static com.googlecode.propidle.properties.Properties.toPairs;
 import com.googlecode.propidle.properties.PropertiesPath;
-import static com.googlecode.propidle.util.Strings.reduceToAlphaNumerics;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -20,13 +17,18 @@ import org.apache.lucene.util.Version;
 
 import java.util.Properties;
 
+import static com.googlecode.propidle.properties.Properties.toPairs;
+import static com.googlecode.propidle.util.Strings.reduceToAlphaNumerics;
+import static com.googlecode.totallylazy.Sequences.sequence;
+
 public class LucenePropertiesIndex implements PropertiesIndex {
     public static final String PATH = "url";
     public static final String SEARCHABLE_PROPERTY_NAME = "searchable.property.name";
     public static final String PROPERTY_NAME = "property.name";
     public static final String PROPERTY_VALUE = "property.value";
     public static final String SEARCHABLE_PROPERTY_VALUE = "searchable.property.value";
-    public static final Sequence<String> ALL_FIELDS = sequence(PATH, SEARCHABLE_PROPERTY_NAME, PROPERTY_NAME, SEARCHABLE_PROPERTY_VALUE, PROPERTY_VALUE);
+    public static final String SEARCHABLE_LOWER_CASE_PROPERTY_NAME = "searchable.lower.case.property.name";
+    public static final Sequence<String> ALL_FIELDS = sequence(PATH, SEARCHABLE_PROPERTY_NAME, PROPERTY_NAME, SEARCHABLE_PROPERTY_VALUE, PROPERTY_VALUE, SEARCHABLE_LOWER_CASE_PROPERTY_NAME);
 
     private final IndexWriter writer;
     private final QueryParser queryParser;
@@ -73,6 +75,7 @@ public class LucenePropertiesIndex implements PropertiesIndex {
                 document.add(searchablePropertyName(property));
                 document.add(propertyValueField(property));
                 document.add(searchablePropertyValueField(property));
+                document.add(searchableLowerCasePropertyName(property));
                 return document;
             }
         };
@@ -86,12 +89,16 @@ public class LucenePropertiesIndex implements PropertiesIndex {
         return new Field(PROPERTY_NAME, property.first(), Field.Store.YES, Field.Index.NOT_ANALYZED);
     }
 
+    private Field propertyValueField(Pair<String, String> property) {
+        return new Field(PROPERTY_VALUE, property.second(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+    }
+
     private Field searchablePropertyValueField(Pair<String, String> property) {
         return new Field(SEARCHABLE_PROPERTY_VALUE, reduceToAlphaNumerics(property.second()), Field.Store.NO, Field.Index.ANALYZED);
     }
 
-    private Field propertyValueField(Pair<String, String> property) {
-        return new Field(PROPERTY_VALUE, property.second(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+    private Fieldable searchableLowerCasePropertyName(Pair<String, String> property) {
+        return new Field(SEARCHABLE_LOWER_CASE_PROPERTY_NAME, property.first().toLowerCase(), Field.Store.NO, Field.Index.NOT_ANALYZED);
     }
 
     private Fieldable searchablePropertyName(Pair<String, String> property) {
