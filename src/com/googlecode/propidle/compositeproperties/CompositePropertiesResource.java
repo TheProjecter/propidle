@@ -6,20 +6,8 @@ import com.googlecode.propidle.properties.PropertiesResource;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
 import com.googlecode.propidle.util.Predicates;
 import com.googlecode.propidle.util.collections.MultiMap;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callables;
-import com.googlecode.totallylazy.Either;
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Uri;
-import com.googlecode.utterlyidle.Application;
-import com.googlecode.utterlyidle.BasePath;
-import com.googlecode.utterlyidle.QueryParameters;
-import com.googlecode.utterlyidle.RequestBuilder;
-import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.Status;
+import com.googlecode.totallylazy.*;
+import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.annotations.GET;
 import com.googlecode.utterlyidle.annotations.Path;
 import com.googlecode.utterlyidle.annotations.Produces;
@@ -31,9 +19,7 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
-import static com.googlecode.propidle.properties.Properties.compose;
-import static com.googlecode.propidle.properties.Properties.key;
-import static com.googlecode.propidle.properties.Properties.toPair;
+import static com.googlecode.propidle.properties.Properties.*;
 import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Left.left;
@@ -51,13 +37,11 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 @Produces(TEXT_HTML)
 public class CompositePropertiesResource {
     public static final String NAME = "composite";
-    private final BasePath basePath;
     private final Option<RequestedRevisionNumber> requestedRevisionNumber;
     private final Application application;
     private final PropidlePath propidlePath;
 
-    public CompositePropertiesResource(BasePath basePath, Option<RequestedRevisionNumber> requestedRevisionNumber, Application application, PropidlePath propidlePath) {
-        this.basePath = basePath;
+    public CompositePropertiesResource(Option<RequestedRevisionNumber> requestedRevisionNumber, Application application, PropidlePath propidlePath) {
         this.requestedRevisionNumber = requestedRevisionNumber;
         this.application = application;
         this.propidlePath = propidlePath;

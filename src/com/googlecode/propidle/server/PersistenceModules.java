@@ -2,6 +2,7 @@ package com.googlecode.propidle.server;
 
 import com.googlecode.propidle.PersistenceMechanism;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Sequences;
 import com.googlecode.utterlyidle.migrations.bootstrap.hsql.HsqlMigrationsModule;
 import com.googlecode.utterlyidle.migrations.bootstrap.oracle.OracleMigrationsModule;
 import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
@@ -24,9 +25,9 @@ public class PersistenceModules {
         PersistenceMechanism persistenceMechanism = PersistenceMechanism.fromProperties(properties);
         switch (persistenceMechanism) {
             case HSQL:
-                return sqlModules(runtimeConnection(properties), new HsqlModule());
+                return Sequences.<Module>sequence(new SqlModule(properties), new HsqlModule());
             case ORACLE:
-                return sqlModules(runtimeConnection(properties), new OracleModule());
+                return Sequences.<Module>sequence(new SqlModule(properties), new OracleModule());
             case IN_MEMORY:
                 return sequence(new InMemoryPersistenceModule()).safeCast(Module.class);
             default:
@@ -50,12 +51,6 @@ public class PersistenceModules {
         return sequence(new SqlPersistenceModule(connectionDetails)).
                 safeCast(Module.class).
                 join(sequence(modules));
-    }
-
-    public static ConnectionDetails runtimeConnection(Properties properties) {
-        return connectionDetails(getOrFail(properties, Server.JDBC_URL),
-                                 getOrFail(properties, Server.JDBC_USER),
-                                 getOrFail(properties, Server.JDBC_PASSWORD));
     }
 
     private static ConnectionDetails migrationConnectionDetails(Properties properties) {
