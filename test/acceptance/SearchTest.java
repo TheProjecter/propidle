@@ -1,11 +1,11 @@
 package acceptance;
 
-import org.junit.Test;
-
 import acceptance.steps.givens.PropertiesExist;
-import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Test;
+
+import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.*;

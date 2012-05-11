@@ -4,6 +4,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 
 import static com.googlecode.propidle.status.StatusCheckName.statusCheckName;
@@ -14,9 +15,11 @@ import static com.googlecode.totallylazy.Predicates.instanceOf;
 
 public class ConnectionDetailsCheck implements StatusCheck {
     private final ConnectionDetails connectionDetails;
+    private final DataSource dataSource;
 
-    public ConnectionDetailsCheck(ConnectionDetails connectionDetails) {
+    public ConnectionDetailsCheck(ConnectionDetails connectionDetails, DataSource dataSource) {
         this.connectionDetails = connectionDetails;
+        this.dataSource = dataSource;
     }
 
     public StatusCheckResult check() throws Exception {
@@ -28,7 +31,7 @@ public class ConnectionDetailsCheck implements StatusCheck {
     }
 
     private boolean canConnect() throws Exception {
-        Option<Connection> connection = handleException(openConnection(), instanceOf(Exception.class)).call(connectionDetails);
+        Option<Connection> connection = handleException(openConnection(), instanceOf(Exception.class)).call(dataSource);
         if (connection.isEmpty()) {
             return false;
         }
@@ -36,10 +39,10 @@ public class ConnectionDetailsCheck implements StatusCheck {
         return true;
     }
 
-    private Callable1<ConnectionDetails, Connection> openConnection() {
-        return new Callable1<ConnectionDetails, Connection>() {
-            public Connection call(ConnectionDetails connectionDetails) throws Exception {
-                return connectionDetails.openConnection();
+    private Callable1<DataSource, Connection> openConnection() {
+        return new Callable1<DataSource, Connection>() {
+            public Connection call(DataSource dataSource) throws Exception {
+                return dataSource.getConnection();
             }
         };
     }
