@@ -1,11 +1,8 @@
 package com.googlecode.propidle.aliases;
 
-import com.googlecode.propidle.ModelName;
 import com.googlecode.propidle.PropidlePath;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.*;
-import com.googlecode.utterlyidle.handlers.ClientHttpHandler;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import com.googlecode.utterlyidle.annotations.*;
@@ -13,9 +10,11 @@ import com.googlecode.utterlyidle.annotations.*;
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.NormalisedHierarchicalPath.removeEndingSlash;
 import static com.googlecode.propidle.aliases.Alias.alias;
+import static com.googlecode.propidle.aliases.Alias.toAliasPath;
 import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
 import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
+import static com.googlecode.totallylazy.Callables.ascending;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -47,12 +46,37 @@ public class AliasesResource {
     @GET
     @Path(AliasesResource.ALL_ALIASES)
     public Model listAllAliases() {
-        Iterable<Alias> alias = aliases.getAll();
+        return listAliases(none(String.class));
+    }
+
+    @GET
+    @Path(AliasesResource.ALL_ALIASES)
+    public Model listAliases(@QueryParam("filter") String filter) {
+        return listAliases(some(filter));
+    }
+
+    private Model listAliases(Option<String> filter) {
+        Iterable<Alias> alias = sequence(aliases.getAll()).filter(filter.map(toPredicate()).getOrElse(Predicates.always(Alias.class))).sortBy(ascending(toAliasPath()));
 
         Model basicModel = modelWithName(ALL_ALIASES).
                 add("aliasesUrl", aliasesUrlAsModel()).
+                add("filter", filter.getOrElse("")).
                 add(TITLE, "Property file aliases");
         return sequence(alias).fold(basicModel, addAliasToModel());
+    }
+
+    private Callable1<String, Predicate<Alias>> toPredicate() {
+        return new Callable1<String, Predicate<Alias>>() {
+            @Override
+            public Predicate<Alias> call(final String s) throws Exception {
+                return new Predicate<Alias>() {
+                    @Override
+                    public boolean matches(Alias alias) {
+                        return alias.from().toString().contains(s); 
+                    }
+                }; 
+            }
+        };
     }
 
     private Model aliasesUrlAsModel() {

@@ -19,6 +19,14 @@
         <p><input type="submit" value="Create alias"/></p>
     </form>
 </div>
+<div class="section">
+    <h2>Filter aliases:</h2>
+
+    <form method="GET">
+        <p>Filter on:<input name="filter" size="40" value="$filter$"/></p>
+        <p><input type="submit" value="Filter"/></p>
+    </form>
+</div>
 
 <table class="data-table">
     <tr>

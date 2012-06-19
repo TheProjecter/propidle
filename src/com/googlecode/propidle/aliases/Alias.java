@@ -1,6 +1,7 @@
 package com.googlecode.propidle.aliases;
 
 import com.googlecode.propidle.util.NullArgumentException;
+import com.googlecode.totallylazy.Callable1;
 
 public class Alias {
     private final AliasPath from;
@@ -48,5 +49,14 @@ public class Alias {
         int result = from.hashCode();
         result = 31 * result + to.hashCode();
         return result;
+    }
+    
+    public static Callable1<Alias, AliasPath> toAliasPath() {
+        return new Callable1<Alias, AliasPath>() {
+            @Override
+            public AliasPath call(Alias alias) throws Exception {
+                return alias.from();
+            }
+        };
     }
 }
