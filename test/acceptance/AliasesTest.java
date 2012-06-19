@@ -9,15 +9,20 @@ import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.anchor;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.input;
 import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
+import static com.googlecode.totallylazy.Pair.pair;
+import static com.googlecode.utterlyidle.FormParameters.formParameters;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.Status.SEE_OTHER;
 import static org.hamcrest.Matchers.is;
 
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.utterlyidle.FormParameters;
 import org.junit.Test;
 
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static java.util.regex.Pattern.quote;
+import static org.hamcrest.Matchers.not;
 
 public class AliasesTest extends PropertiesApplicationTestCase {
     @Test
@@ -82,5 +87,16 @@ public class AliasesTest extends PropertiesApplicationTestCase {
         then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("properties/1"), "/properties/1")));
         then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_2?edit=")), "/redirect_2")));
         then(theHtmlOf(), the(LastResponse.class), matches(anchor(absoluteUrl("properties/2"),"/properties/2")));
+    }
+
+    @Test
+    public void weCanFilterTheListOfAvailableAliases() throws Exception {
+        given(that(AliasExists.class).from(aliasPath("redirect_1")).to(aliasDestination("/properties/1")));
+        given(that(AliasExists.class).from(aliasPath("redirect_2")).to(aliasDestination("/properties/2")));
+
+        when(a(RequestIsMade.class).to(get("/aliases/").query("filter", "1")));
+
+        then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_1?edit=")), "/redirect_1")));
+        then(theHtmlOf(), the(LastResponse.class), not(matches(anchor(quote(absoluteUrl("aliases/redirect_2?edit=")), "/redirect_2"))));
     }
 }
