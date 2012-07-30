@@ -65,6 +65,7 @@
           <root url="jar://$MODULE_DIR$/lib/runtime/lucene-core-3.0.3-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-migrations-39-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/lazyrecords-61-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-migrations-41-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
       </library>

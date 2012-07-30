@@ -10,4 +10,5 @@ mvn://repo.bodar.com/com.googlecode.funclate:funclate:jar|sources:71
 mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:493
 mvn://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:41
 mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:144
+mvn://repo.bodar.com/com.googlecode.utterlyidle-auth:utterlyidle-auth:jar|sources:33
 mvn:org.sitemesh:sitemesh:jar:3.0-alpha-2

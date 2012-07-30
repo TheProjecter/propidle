@@ -10,9 +10,9 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.proxy.Invocation;
 import com.googlecode.utterlyidle.Redirector;
 import com.googlecode.utterlyidle.Response;
+import com.googlecode.utterlyidle.annotations.*;
 import com.googlecode.utterlyidle.rendering.Model;
 
-import com.googlecode.utterlyidle.annotations.*;
 import java.util.concurrent.Callable;
 
 import static com.googlecode.propidle.ModelName.name;
@@ -87,6 +87,7 @@ public class PropertiesResource {
     @Path(PropertiesResource.NAME+"{path:.+$}")
     public Response post(@PathParam("path") PropertiesPath path, @FormParam("properties") PropertiesInput propertiesInput) {
         RevisionNumber revisionNumber = repository.put(path, properties(propertiesInput));
+        //add a row to the revNo-User Table  with(revisionNumber)
         return redirector.seeOther(method(on(ChangesResource.class).get(path, some(revisionNumber))));
     }
 
