@@ -1,33 +1,33 @@
 package com.googlecode.propidle.properties;
 
-import static com.googlecode.propidle.properties.PropertyDiffTool.propertyValueChanged;
-
-import com.googlecode.propidle.versioncontrol.changes.Change;
-import com.googlecode.propidle.versioncontrol.changes.AllChanges;
-import static com.googlecode.propidle.versioncontrol.changes.Changes.properties;
-import static com.googlecode.propidle.versioncontrol.changes.Changes.changes;
-import static com.googlecode.propidle.versioncontrol.changes.Changes.revisionNumberOfChange;
-import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
-import com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber;
-import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.propidle.util.NullArgumentException;
+import com.googlecode.propidle.versioncontrol.changes.AllChanges;
+import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.changes.ChangeDetailsFromRecords;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
+import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Predicate;
-import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
-import static com.googlecode.totallylazy.Predicates.where;
 import com.googlecode.totallylazy.Sequence;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
 import java.util.Properties;
+
+import static com.googlecode.propidle.properties.PropertyDiffTool.propertyValueChanged;
+import static com.googlecode.propidle.versioncontrol.changes.Changes.*;
+import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
+import static com.googlecode.totallylazy.Predicates.where;
+import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class AllPropertiesFromChanges implements AllProperties {
     private final AllChanges changes;
     private final PropertyDiffTool propertyDiffTool;
     private final HighestRevisionNumbers highestRevisionNumbers;
+    private final ChangeDetailsFromRecords changeDetailsFromRecords;
 
-    public AllPropertiesFromChanges(AllChanges changes, PropertyDiffTool propertyDiffTool, HighestRevisionNumbers highestRevisionNumbers) {
+    public AllPropertiesFromChanges(AllChanges changes, PropertyDiffTool propertyDiffTool, HighestRevisionNumbers highestRevisionNumbers, ChangeDetailsFromRecords changeDetailsFromRecords) {
         this.changes = changes;
         this.propertyDiffTool = propertyDiffTool;
         this.highestRevisionNumbers = highestRevisionNumbers;
+        this.changeDetailsFromRecords = changeDetailsFromRecords;
     }
 
     public Properties get(PropertiesPath path, RevisionNumber revision) {
@@ -37,12 +37,11 @@ public class AllPropertiesFromChanges implements AllProperties {
     }
 
     public RevisionNumber put(PropertiesPath path, Properties updated) {
-        NewRevisionNumber newRevisionNumber = highestRevisionNumbers.newRevisionNumber();
-        Properties previous = get(path, newRevisionNumber.minus(1));
-
-        changes.put(changes(path, newRevisionNumber, diff(previous, updated)));
-
-        return newRevisionNumber;
+        RevisionNumber revisionNumber = highestRevisionNumbers.newRevisionNumber();
+        Properties previous = get(path, revisionNumber.minus(1));
+        changes.put(changes(path, revisionNumber, diff(previous, updated)));
+        changeDetailsFromRecords.createDetails(revisionNumber);
+        return revisionNumber;
     }
 
     private Sequence<PropertyComparison> diff(Properties previous, Properties updated) {
