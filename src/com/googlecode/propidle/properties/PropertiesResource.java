@@ -3,6 +3,7 @@ package com.googlecode.propidle.properties;
 import com.googlecode.propidle.PropidlePath;
 import com.googlecode.propidle.filenames.FileNamesResource;
 import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.propidle.versioncontrol.changes.ChangeDetails;
 import com.googlecode.propidle.versioncontrol.changes.ChangesResource;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
@@ -40,7 +41,7 @@ public class PropertiesResource {
     public static final String HTML_EDITABLE = NAME + ".html";
     public static final String HTML_READ_ONLY = NAME + ".readonly.html";
 
-    public PropertiesResource(AllProperties repository, Option<RequestedRevisionNumber> requestedRevisionNumber, HighestRevisionNumbers highestRevisionNumbers, Redirector redirector, PropidlePath propidlePath) {
+    public PropertiesResource(AllProperties repository, Option<RequestedRevisionNumber> requestedRevisionNumber, HighestRevisionNumbers highestRevisionNumbers, Redirector redirector, PropidlePath propidlePath, ChangeDetails changeDetails) {
         this.repository = repository;
         this.requestedRevisionNumber = requestedRevisionNumber;
         this.highestRevisionNumbers = highestRevisionNumbers;

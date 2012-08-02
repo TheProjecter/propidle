@@ -13,7 +13,7 @@
     </p>
 </div>
 <table>
-<tr><th>properties file</th><th>revision</th><th>property name</th><th>old value</th><th>new value</th></tr>
+<tr><th>properties file</th><th>revision</th><th>property name</th><th>old value</th><th>new value</th><th>details</th></tr>
 $changes:change()$
 </table>
 </body>
