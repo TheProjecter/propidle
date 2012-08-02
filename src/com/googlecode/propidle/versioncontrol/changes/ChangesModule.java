@@ -20,6 +20,7 @@ public class ChangesModule implements RequestScopedModule, ResourcesModule, Resp
     public Module addPerRequestObjects(Container container) {
         container.add(AllChanges.class, AllChangesFromRecords.class);
         container.add(ChangeDetailsFromRecords.class);
+        container.add(ChangeDetails.class);
         return this;
     }
 

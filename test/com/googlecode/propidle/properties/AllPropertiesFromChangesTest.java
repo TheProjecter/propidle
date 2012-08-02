@@ -1,15 +1,12 @@
 package com.googlecode.propidle.properties;
 
 import com.googlecode.lazyrecords.Records;
-import com.googlecode.propidle.util.time.StoppedClock;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.changes.ChangeDetail;
+import com.googlecode.propidle.versioncontrol.changes.ChangeDetails;
 import com.googlecode.propidle.versioncontrol.changes.ChangeDetailsFromRecords;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.time.Dates;
-import org.hamcrest.core.IsCollectionContaining;
+import com.googlecode.totallylazy.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +23,7 @@ import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.propertyNameOfChange;
 import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
+import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,7 +36,7 @@ public class AllPropertiesFromChangesTest {
     private static final PropertiesPath PATH = propertiesPath(UUID.randomUUID().toString());
     private AllChanges changes;
     private HighestRevisionNumbers highestRevisionNumbers;
-    private StoppedClock clock;
+    private Pair<String, String> testChangeDetail = pair("test", "detail");
     private ChangeDetailsFromRecords changesDetails;
 
     @Before
@@ -47,8 +45,9 @@ public class AllPropertiesFromChangesTest {
 
         Records records = testRecordsWithAllMigrationsRun();
         changes = new AllChangesFromRecords(records);
-        clock = new StoppedClock(Dates.date(1986, 1, 1));
-        changesDetails = new ChangeDetailsFromRecords(records, clock);
+        ChangeDetails changeDetails = new ChangeDetails();
+        changeDetails.value().put(testChangeDetail.first(), testChangeDetail.second());
+        changesDetails = new ChangeDetailsFromRecords(records, changeDetails);
         repository = new AllPropertiesFromChanges(changes, new PropertyDiffTool(), highestRevisionNumbers, changesDetails);
         givenRevisionIs(0);
     }
@@ -57,12 +56,11 @@ public class AllPropertiesFromChangesTest {
     public void storesDateWithChange() throws Exception {
         Properties properties = new Properties();
         properties.setProperty("NZL", "Number 1");
-
         repository.put(PATH, properties);
 
-        Sequence<ChangeDetail> details = sequence(changesDetails.changesForRevision(revisionNumber(0))).realise();
-        
-        assertThat(details, IsCollectionContaining.hasItem(new ChangeDetail("date", clock.time().toString())));
+        ChangeDetails details = changesDetails.changesForRevision(revisionNumber(0));
+
+        assertThat(details.value().get(testChangeDetail.first()), is(testChangeDetail.second()));
     }
 
     @Test

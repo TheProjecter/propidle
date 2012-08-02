@@ -7,11 +7,7 @@ import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.proxy.Invocation;
-import com.googlecode.utterlyidle.annotations.GET;
-import com.googlecode.utterlyidle.annotations.Path;
-import com.googlecode.utterlyidle.annotations.PathParam;
-import com.googlecode.utterlyidle.annotations.Produces;
-import com.googlecode.utterlyidle.annotations.QueryParam;
+import com.googlecode.utterlyidle.annotations.*;
 import com.googlecode.utterlyidle.rendering.Model;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
@@ -26,10 +22,12 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 public class ChangesResource {
     public static final String NAME = "changes";
     private final AllChanges changes;
+    private final ChangeDetailsFromRecords changeDetails;
     private final PropidlePath propidlePath;
 
-    public ChangesResource(AllChanges changes, PropidlePath propidlePath) {
+    public ChangesResource(AllChanges changes, ChangeDetailsFromRecords changeDetails, PropidlePath propidlePath) {
         this.changes = changes;
+        this.changeDetails = changeDetails;
         this.propidlePath = propidlePath;
     }
 
@@ -66,7 +64,8 @@ public class ChangesResource {
                         add("propertyName", change.propertyName()).
                         add("previous", change.previous()).
                         add("updated", change.updated()).
-                        add("status", change.status()));
+                        add("status", change.status()).
+                        add("details", changeDetails.changesForRevision(change.revisionNumber()).value()));
             }
         };
     }
