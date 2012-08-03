@@ -69,6 +69,9 @@ input[type="submit"] {
 .property {
     display:block;
 }
+.detail {
+    display: block;
+}
 .new{
     background:#CCFFCC;
 }
