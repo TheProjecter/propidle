@@ -1,1 +1,1 @@
-<tr class="$it.status$"><td>$it.propertiesPath$</td><td>$it.revisionNumber$</td><td>$it.propertyName$</td><td>$it.previous$</td><td>$it.updated$</td><td>$first(it.details).keys:{key | <p>$key$: $first(it.details).(key)$</p>}$</td></tr>
+<tr class="$it.status$"><td>$it.propertiesPath$</td><td>$it.revisionNumber$</td><td>$it.propertyName$</td><td>$it.previous$</td><td>$it.updated$</td><td>$first(it.details).keys:{key | <span class="detail">$key$: $first(it.details).(key)$</span>}$</td></tr>
