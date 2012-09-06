@@ -68,4 +68,23 @@
         </sequential>
     </macrodef>
 
+    <macrodef name="jar.client">
+        <sequential>
+            <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="all.dependencies"/>
+            <jarjar jarfile="${release.client.jar.path}">
+                <zipfileset src="${release.jar.path}"/>
+                <zipgroupfileset dir="${runtime.dependencies.dir}" includes="totallylazy-*.jar, utterlyidle-*.jar, yadic-*.jar" excludes="*sources.jar"/>
+                <rule pattern="com.googlecode.totallylazy.*" result="com.googlecode.propidle.internal.totallylazy.$@1"/>
+                <rule pattern="com.googlecode.totallylazy.**.*" result="com.googlecode.propidle.internal.totallylazy.@1.$@2"/>
+                <rule pattern="com.googlecode.utterlyidle.*" result="com.googlecode.propidle.internal.utterllyidle.$@1"/>
+                <rule pattern="com.googlecode.utterlyidle.**.*" result="com.googlecode.propidle.internal.utterllyidle.@1.$@2"/>
+                <rule pattern="com.googlecode.yadic.*"       result="com.googlecode.propidle.internal.yadic.@1"/>
+                <rule pattern="com.googlecode.yadic.**.*"       result="com.googlecode.propidle.internal.yadic.@1.$@2"/>
+
+                <keep pattern="com.googlecode.propidle.client.**.*"/>
+                <keep pattern="com.googlecode.propidle.client.*"/>
+            </jarjar>
+        </sequential>
+    </macrodef>
+
 </project>

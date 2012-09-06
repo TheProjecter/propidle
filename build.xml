@@ -11,14 +11,18 @@
     <property name="release.name" value="${ant.project.name}-${release.version}"/>
     <property name="release.jar" value="${release.name}.jar"/>
     <property name="release.pom" value="${release.name}.pom"/>
+    <property name="release.client.pom" value="${release.name}-client.pom"/>
+    <property name="release.client.jar" value="${release.name}-client.jar"/>
     <property name="release.src" value="${release.name}-sources.jar"/>
     <property name="release.jar.path" value="${artifacts}/${release.jar}"/>
+    <property name="release.client.jar.path" value="${artifacts}/${release.client.jar}"/>
     <property name="release.src.path" value="${artifacts}/${release.src}"/>
     <property name="release.pom.path" value="${artifacts}/${release.pom}"/>
     <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
     <property name="build.dependencies.dir" value="lib/build"/>
     <property name="runtime.dependencies.dir" value="lib/runtime"/>
     <property name="optional.dependencies.dir" value="lib/runtime-optional"/>
+
 
     <import file="${build}/macros.xml"/>
     <import file="${build}/shavenmaven.xml"/>
@@ -36,7 +40,7 @@
     </path>
 
     <target name="update">
-        <!--<install version="43"/>-->
+        <install version="52"/>
         <parallel>
             <update dependencies="build/build.dependencies"
                     directory="${build.dependencies.dir}"/>
@@ -77,11 +81,17 @@
             <entry key="release.name" value="${release.name}"/>
             <entry key="release.path"
                    value="com/googlecode/${ant.project.name}/${ant.project.name}/${release.version}/"/>
-            <entry key="release.files" value="${release.jar},${release.pom},${release.src}"/>
+            <entry key="release.files" value="${release.jar},${release.pom},${release.src},${release.client.jar},${release.client.pom}"/>
             <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
             <entry key="${release.jar}.labels" value="Jar"/>
+            <entry key="${release.client.jar}.description" value="Client jar build:${build.number} "/>
+            <entry key="${release.client.jar}.labels" value="Jar"/>
+            <entry key="${release.client.jar}.path" value="com/googlecode/${ant.project.name}/${ant.project.name}-client/${release.version}"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
             <entry key="${release.pom}.labels" value="POM"/>
+            <entry key="${release.client.pom}.description" value="Maven POM file client build:${build.number}"/>
+            <entry key="${release.client.pom}.labels" value="POM"/>
+            <entry key="${release.client.pom}.path" value="com/googlecode/${ant.project.name}/${ant.project.name}-client/${release.version}"/>
             <entry key="${release.src}.description" value="Source file build:${build.number}"/>
             <entry key="${release.src}.labels" value="Source"/>
         </propertyfile>
@@ -89,10 +99,15 @@
         <generate.pom artifact.uri="mvn:com.googlecode.${ant.project.name}:${ant.project.name}:jar:${release.version}"
                          dependencies="build/runtime.dependencies"
                          directory="${artifacts}"/>
+        <generate.pom artifact.uri="mvn:com.googlecode.${ant.project.name}:${ant.project.name}-client:jar:${release.version}" directory="${artifacts}"/>
 
     </target>
 
-    <target name="build" depends="update, clean, compile, test, package" description="build all"/>
+    <target name="jar.client">
+        <jar.client/>
+    </target>
+
+    <target name="build" depends="update, clean, compile, jar.client, test, package" description="build all"/>
 
     <target name="local-install" depends="build" description="Install in local mvn repo">
         <exec executable="mvn">

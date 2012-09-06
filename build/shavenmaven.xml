@@ -42,7 +42,7 @@
 
     <macrodef name="generate.pom">
         <attribute name="artifact.uri"/>
-        <attribute name="dependencies"/>
+        <attribute name="dependencies" default=""/>
         <attribute name="directory"/>
         <attribute name="shavenmaven.jar" default="lib/shavenmaven.jar"/>
 
@@ -50,9 +50,7 @@
             <mkdir dir="@{directory}"/>
             <java classname="com.googlecode.shavenmaven.PomGenerator" classpath="@{shavenmaven.jar}" fork="true"
                   failonerror="true">
-                <arg value="@{artifact.uri}"/>
-                <arg value="@{dependencies}"/>
-                <arg value="@{directory}"/>
+                <arg line="@{artifact.uri} @{dependencies} @{directory}"/>
             </java>
         </sequential>
     </macrodef>
