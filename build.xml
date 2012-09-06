@@ -41,7 +41,7 @@
     </path>
 
     <target name="update">
-        <install version="52"/>
+        <!--<install version="52"/>-->
         <parallel>
             <update dependencies="build/build.dependencies"
                     directory="${build.dependencies.dir}"/>
@@ -80,19 +80,18 @@
             <entry key="release.version" value="${release.version}"/>
             <entry key="project.name" value="${ant.project.name}"/>
             <entry key="release.name" value="${release.name}"/>
-            <entry key="release.path"
-                   value="com/googlecode/${ant.project.name}/${ant.project.name}/${release.version}/"/>
+            <entry key="release.path" value="com/googlecode/${ant.project.name}/${ant.project.name}/${release.version}/"/>
             <entry key="release.files" value="${release.jar},${release.pom},${release.src},${release.client.jar},${release.client.pom}"/>
             <entry key="${release.jar}.description" value="${hg.summary} build:${build.number} "/>
             <entry key="${release.jar}.labels" value="Jar"/>
             <entry key="${release.client.jar}.description" value="Client jar build:${build.number} "/>
             <entry key="${release.client.jar}.labels" value="Jar"/>
-            <entry key="${release.client.jar}.path" value="com/googlecode/${ant.project.name}/${ant.project.name}-client/${release.version}"/>
+            <entry key="${release.client.jar}.path" value="com/googlecode/${ant.project.name}/${ant.project.name}-client/${release.version}/"/>
             <entry key="${release.pom}.description" value="Maven POM file build:${build.number}"/>
             <entry key="${release.pom}.labels" value="POM"/>
             <entry key="${release.client.pom}.description" value="Maven POM file client build:${build.number}"/>
             <entry key="${release.client.pom}.labels" value="POM"/>
-            <entry key="${release.client.pom}.path" value="com/googlecode/${ant.project.name}/${ant.project.name}-client/${release.version}"/>
+            <entry key="${release.client.pom}.path" value="com/googlecode/${ant.project.name}/${ant.project.name}-client/${release.version}/"/>
             <entry key="${release.src}.description" value="Source file build:${build.number}"/>
             <entry key="${release.src}.labels" value="Source"/>
         </propertyfile>
