@@ -8,7 +8,7 @@ import com.googlecode.totallylazy.Sequences;
 import java.util.Properties;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
+import static com.googlecode.totallylazy.Sets.complement;
 
 public class PropertyChangeEvent {
     private final Properties updatedProperties;
@@ -49,9 +49,9 @@ public class PropertyChangeEvent {
         if (o == null || getClass() != o.getClass()) return false;
 
         PropertyChangeEvent event = (PropertyChangeEvent) o;
-
-        if (!hasExactly(event.changes).matches(changes)) return false;
         if (!updatedProperties.equals(event.updatedProperties)) return false;
+        if(!event.changes.size().equals(changes.size())) return false;
+        if(!complement(event.changes.toSet(), changes.toSet()).isEmpty()) return false;
 
         return true;
     }

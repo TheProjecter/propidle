@@ -2,11 +2,10 @@ package com.googlecode.propidle.urls;
 
 import com.googlecode.propidle.util.tinytype.StringTinyType;
 
-import com.googlecode.utterlyidle.MediaType;
 
 public class MimeType extends StringTinyType<MimeType> {
-    public static MimeType TEXT_PLAIN = mimeType(MediaType.TEXT_PLAIN);
-    public static MimeType TEXT_HTML = mimeType(MediaType.TEXT_HTML);
+    public static MimeType TEXT_PLAIN = mimeType("text/plain");
+    public static MimeType TEXT_HTML = mimeType("text/html");
 
     public static MimeType mimeType(String value) {
         return new MimeType(value);
