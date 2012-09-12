@@ -2,6 +2,7 @@
   <library name="runtime-optional">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/lib/runtime-optional" />
+      <root url="file://$PROJECT_DIR$/lib/runtime-optional" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
