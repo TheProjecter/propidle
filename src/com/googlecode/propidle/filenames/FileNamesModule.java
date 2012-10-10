@@ -25,16 +25,16 @@ import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotated
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
-public class FileNamesModule implements ResourcesModule, ResponseHandlersModule, RequestScopedModule, ApplicationScopedModule {
+public class FileNamesModule implements ResourcesModule, ResponseHandlersModule, RequestScopedModule {
     public Module addResources(Resources resources) {
         resources.add(annotatedClass(FileNamesResource.class));
         return this;
     }
 
     public Module addPerRequestObjects(Container container) {
-        container.decorate(AllProperties.class, FileNameIndexingDecorator.class);
-
+        container.add(FileNameIndex.class, LuceneFileNameIndex.class);
         container.add(FileNameSearcher.class, LuceneFileNameSearcher.class);
+        container.decorate(AllProperties.class, FileNameIndexingDecorator.class);
         return this;
     }
 
@@ -53,27 +53,23 @@ public class FileNamesModule implements ResourcesModule, ResponseHandlersModule,
             }
         };
     }
-    public Module addPerApplicationObjects(Container container) {
-        container.add(FileNameIndex.class, LuceneFileNameIndex.class);
-        return this;
-    }
 
     private class ModelAutoCompleteRenderer implements Renderer<Model> {
         private final int MAX_NUMBER_OF_RESULTS=20;
 
         public String render(Model model) throws Exception {
-            Sequence filenames = sequence(model.get("filenames"));
-            if(filenames.isEmpty()){
+            Sequence<Model> fileNames = sequence(model.get("filenames")).safeCast(Model.class);
+            if(fileNames.isEmpty()){
                 return "";
             } else {
-                return  filenames.map(toUrl()).take(MAX_NUMBER_OF_RESULTS).toString(",");
+                return  fileNames.map(toUrl()).take(MAX_NUMBER_OF_RESULTS).toString(",");
             }
         }
 
-        private Callable1<Object, String> toUrl() {
-            return new Callable1<Object,String>() {
-                public String call(Object filename) throws Exception {
-                    return ((Model)filename).first("url").toString();
+        private Callable1<Model, String> toUrl() {
+            return new Callable1<Model,String>() {
+                public String call(Model filename) throws Exception {
+                    return filename.first("url").toString();
                 }
             };
         }
