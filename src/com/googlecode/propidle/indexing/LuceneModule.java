@@ -22,6 +22,7 @@ import org.apache.lucene.util.Version;
 
 import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
+import static java.util.Collections.emptySet;
 
 public class LuceneModule implements ApplicationScopedModule, RequestScopedModule, ResourcesModule, SchedulableRequestModule {
     public static final String REBUILD_INDEX_TASK_NAME = "rebuildIndex";
@@ -35,7 +36,7 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
     public Module addPerApplicationObjects(Container container) {
         container.addInstance(Version.class, Version.LUCENE_30);
         container.addInstance(Directory.class, directory);
-        container.addInstance(Analyzer.class, new StandardAnalyzer(Version.LUCENE_30));
+        container.addInstance(Analyzer.class, new StandardAnalyzer(Version.LUCENE_30, emptySet()));
         container.addActivator(IndexWriter.class, IndexWriterActivator.class);
         container.add(ParallelExecutionGuard.class);
         return this;
