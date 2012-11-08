@@ -21,7 +21,7 @@ public class PropertiesAtUrl implements Callable<Properties> {
     }
 
     public static PropertiesAtUrl propertiesAtUrl(URL url) {
-        return new PropertiesAtUrl(url, 0);
+        return propertiesAtUrl(url, Integer.getInteger("propidle.connection.timeout", 0));
     }
 
     public static PropertiesAtUrl propertiesAtUrl(URL url, UriGetter uriGetter) {
