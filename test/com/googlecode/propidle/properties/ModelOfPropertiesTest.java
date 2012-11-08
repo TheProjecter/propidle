@@ -27,7 +27,7 @@ public class ModelOfPropertiesTest {
         "keep\\=on going"));
 
         String propertiesAsString = sequence(modelOfProperties(properties).get("properties")).toString("\n");
-        Properties reloadedProperties = com.googlecode.propidle.properties.Properties.properties(propertiesAsString);
+        Properties reloadedProperties = com.googlecode.propidle.client.properties.Properties.properties(propertiesAsString);
 
         assertThat(reloadedProperties, is(equalTo(properties)));
     }

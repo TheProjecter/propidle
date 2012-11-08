@@ -8,7 +8,7 @@ import com.googlecode.utterlyidle.RequestBuilder;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.RequestBuilder.get;

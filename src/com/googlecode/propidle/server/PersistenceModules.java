@@ -14,7 +14,7 @@ import com.googlecode.utterlyidle.modules.Module;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.properties.Properties.getOrFail;
+import static com.googlecode.propidle.client.properties.Properties.getOrFail;
 import static com.googlecode.propidle.util.Modules.asRequestScopeModule;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;

@@ -1,4 +1,4 @@
-package com.googlecode.propidle.properties;
+package com.googlecode.propidle.client.properties;
 
 import com.googlecode.propidle.util.tinytype.TinyType;
 import com.googlecode.totallylazy.Callable1;

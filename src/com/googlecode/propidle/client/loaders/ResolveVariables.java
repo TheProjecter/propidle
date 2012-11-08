@@ -5,7 +5,7 @@ import com.googlecode.totallylazy.*;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.propidle.properties.Properties.toPairs;
+import static com.googlecode.propidle.client.properties.Properties.toPairs;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public final class ResolveVariables implements Callable<Properties> {

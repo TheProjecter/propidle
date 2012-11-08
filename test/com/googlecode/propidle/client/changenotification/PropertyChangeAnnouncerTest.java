@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertyComparison.changedProperty;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;

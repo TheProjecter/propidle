@@ -35,7 +35,7 @@ public class PropertiesExistInDatabase implements Callable<Void> {
     }
 
     public Void call() throws Exception {
-        allProperties.put(com.googlecode.propidle.properties.Properties.toPairs(properties).map(toChange()));
+        allProperties.put(com.googlecode.propidle.client.properties.Properties.toPairs(properties).map(toChange()));
         return null;
     }
 

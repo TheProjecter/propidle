@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.Properties;
 import java.util.UUID;
 
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.properties.PropertyComparison.*;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
