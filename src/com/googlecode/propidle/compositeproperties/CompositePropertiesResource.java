@@ -19,7 +19,7 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
 import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
-import static com.googlecode.propidle.client.properties.Properties.*;
+import static com.googlecode.propidle.properties.Properties.*;
 import static com.googlecode.propidle.server.ConvertRevisionNumberQueryParameterToHeader.REVISION_PARAM;
 import static com.googlecode.propidle.server.PropertiesModule.TITLE;
 import static com.googlecode.totallylazy.Left.left;

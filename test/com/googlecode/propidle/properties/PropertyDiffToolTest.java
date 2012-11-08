@@ -1,9 +1,8 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.properties.PropertyDiffTool;
 import org.junit.Test;
 
-import static com.googlecode.propidle.client.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.properties.PropertyComparison.*;

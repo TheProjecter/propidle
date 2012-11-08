@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static com.googlecode.propidle.client.properties.Properties.toPair;
+import static com.googlecode.propidle.properties.Properties.toPair;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
 import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;

@@ -3,14 +3,11 @@ package acceptance;
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
-import com.googlecode.utterlyidle.MediaType;
-import com.googlecode.utterlyidle.RequestBuilder;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
-import static com.googlecode.propidle.client.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static org.hamcrest.Matchers.is;
 

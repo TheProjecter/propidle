@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import static acceptance.steps.thens.LastResponse.thePropertiesFileFrom;
-import static com.googlecode.propidle.client.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.td;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.tr;

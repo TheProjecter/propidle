@@ -17,7 +17,7 @@ import org.apache.lucene.util.Version;
 
 import java.util.Properties;
 
-import static com.googlecode.propidle.client.properties.Properties.toPairs;
+import static com.googlecode.propidle.properties.Properties.toPairs;
 import static com.googlecode.propidle.util.Strings.reduceToAlphaNumerics;
 import static com.googlecode.totallylazy.Sequences.sequence;
 

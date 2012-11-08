@@ -8,12 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
-import static com.googlecode.propidle.client.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.anchor;
-import static com.googlecode.propidle.util.matchers.HtmlRegexes.img;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.input;
-import static com.googlecode.propidle.util.matchers.HtmlRegexes.li;
 import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static org.hamcrest.Matchers.not;

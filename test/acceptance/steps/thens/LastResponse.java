@@ -9,7 +9,7 @@ import com.googlecode.utterlyidle.Status;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.propidle.client.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.totallylazy.Uri.uri;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

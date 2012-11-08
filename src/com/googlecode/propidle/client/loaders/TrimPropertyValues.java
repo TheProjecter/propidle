@@ -6,8 +6,8 @@ import com.googlecode.totallylazy.Pair;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.propidle.client.properties.Properties.properties;
-import static com.googlecode.propidle.client.properties.Properties.toPairs;
+import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.toPairs;
 import static com.googlecode.totallylazy.Pair.pair;
 
 public class TrimPropertyValues implements Callable<Properties> {
