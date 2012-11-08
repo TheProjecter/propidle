@@ -1,7 +1,5 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.utterlyidle.rendering.Model;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class ModelOfPropertiesTest {
         "keep\\=on going"));
 
         String propertiesAsString = sequence(modelOfProperties(properties).get("properties")).toString("\n");
-        Properties reloadedProperties = com.googlecode.propidle.client.properties.Properties.properties(propertiesAsString);
+        Properties reloadedProperties = com.googlecode.propidle.properties.Properties.properties(propertiesAsString);
 
         assertThat(reloadedProperties, is(equalTo(properties)));
     }

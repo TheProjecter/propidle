@@ -1,6 +1,6 @@
 package acceptance;
 
-import static com.googlecode.propidle.client.properties.Properties.properties;
+import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import acceptance.steps.thens.LastResponse;

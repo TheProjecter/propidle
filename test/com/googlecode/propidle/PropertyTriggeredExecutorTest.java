@@ -74,7 +74,7 @@ public class PropertyTriggeredExecutorTest {
     private Callable<Properties> stubPropertyLoader() {
         return new Callable<Properties>() {
             public Properties call() throws Exception {
-                return com.googlecode.propidle.client.properties.Properties.properties(properties);
+                return com.googlecode.propidle.properties.Properties.properties(properties);
             }
         };
     }
