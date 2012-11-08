@@ -18,7 +18,7 @@ import java.util.concurrent.Callable;
 
 import static com.googlecode.propidle.ModelName.name;
 import static com.googlecode.propidle.properties.ModelOfProperties.modelOfProperties;
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.server.RequestedRevisionNumber.requestedRevisionNumber;
 import static com.googlecode.totallylazy.Option.none;

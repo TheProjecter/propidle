@@ -18,7 +18,7 @@ import com.googlecode.utterlyidle.MediaType;
 import java.util.Properties;
 
 import static com.googlecode.propidle.ModelName.modelWithName;
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.totallylazy.Left.left;
 import static com.googlecode.totallylazy.Right.right;
 import static com.googlecode.totallylazy.Sequences.sequence;

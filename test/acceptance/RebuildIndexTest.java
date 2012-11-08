@@ -10,7 +10,7 @@ import static acceptance.TestSupportModule.SCHEDULED_TEST_TASK_NAME;
 import static acceptance.TestSupportModule.SCHEDULED_TEST_URL;
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
 import static acceptance.steps.thens.LastResponse.theStatusOf;
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.scheduling.ScheduleResource.TASK_NAME_PARAM_NAME;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.*;

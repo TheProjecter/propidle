@@ -19,7 +19,7 @@ import java.util.Properties;
 import static com.googlecode.propidle.PersistenceMechanism.HSQL;
 import static com.googlecode.propidle.PersistenceMechanism.PERSISTENCE;
 import static com.googlecode.propidle.migrations.MigrationsContainer.migrationsContainer;
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.server.PersistenceModules.persistenceModules;
 import static com.googlecode.propidle.server.PropertiesApplication.inTransaction;
 import static com.googlecode.totallylazy.Pair.pair;

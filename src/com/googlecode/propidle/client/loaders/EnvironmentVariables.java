@@ -1,6 +1,6 @@
 package com.googlecode.propidle.client.loaders;
 
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 
 import java.util.Properties;
 import java.util.concurrent.Callable;

@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.Properties;
 
-import static com.googlecode.propidle.properties.Properties.getOrFail;
+import static com.googlecode.propidle.client.properties.Properties.getOrFail;
 import static com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
 
 public class SqlModule implements RequestScopedModule, ApplicationScopedModule {

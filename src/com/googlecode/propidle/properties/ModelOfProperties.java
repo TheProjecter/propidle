@@ -33,7 +33,7 @@ public class ModelOfProperties {
     }
 
     private static Sequence<String> toReloadableProperties(Properties properties) {
-            String[] lines = com.googlecode.propidle.properties.Properties.asString(properties).split("\n");
+            String[] lines = com.googlecode.propidle.client.properties.Properties.asString(properties).split("\n");
             return sequence(lines).filter(not(comment()));
     }
 

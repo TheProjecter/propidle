@@ -9,7 +9,7 @@ public enum PersistenceMechanism {
     public static final String PERSISTENCE = "persistence";
 
     public static PersistenceMechanism fromProperties(Properties properties) {
-        return parse(com.googlecode.propidle.properties.Properties.getOrFail(properties, PERSISTENCE));
+        return parse(com.googlecode.propidle.client.properties.Properties.getOrFail(properties, PERSISTENCE));
     }
 
     public static PersistenceMechanism parse(String value) {

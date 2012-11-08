@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import static com.googlecode.propidle.properties.Properties.properties;
+import static com.googlecode.propidle.client.properties.Properties.properties;
 import static com.googlecode.propidle.urls.MimeType.TEXT_PLAIN;
 
 public class PropertiesAtUrl implements Callable<Properties> {

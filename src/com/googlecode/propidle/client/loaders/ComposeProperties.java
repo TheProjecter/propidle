@@ -1,6 +1,6 @@
 package com.googlecode.propidle.client.loaders;
 
-import static com.googlecode.propidle.properties.Properties.compose;
+import static com.googlecode.propidle.client.properties.Properties.compose;
 import com.googlecode.totallylazy.Callables;
 import com.googlecode.totallylazy.Sequence;
 import static com.googlecode.totallylazy.Sequences.sequence;
