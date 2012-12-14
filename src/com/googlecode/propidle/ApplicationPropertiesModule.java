@@ -27,15 +27,13 @@ public class ApplicationPropertiesModule implements ApplicationScopedModule, Req
         this.propertyLoader = propertyLoader;
     }
 
-    public Module addPerApplicationObjects(Container container) {
+    public Container addPerApplicationObjects(Container container) {
         container.addActivator(DynamicProperties.class, new DynamicPropertiesActivator(propertyLoader));
-        container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
-        return this;
+        return container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
     }
 
-    public Module addPerRequestObjects(Container container) {
-        container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
-        return this;
+    public Container addPerRequestObjects(Container container) {
+        return container.addActivator(Properties.class, SnapshotPropertiesActivator.class);
     }
 
     public void addTask(SchedulableRequests schedulableRequests) {
@@ -43,8 +41,7 @@ public class ApplicationPropertiesModule implements ApplicationScopedModule, Req
 
     }
 
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(ReloadPropertiesResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(ReloadPropertiesResource.class));
     }
 }

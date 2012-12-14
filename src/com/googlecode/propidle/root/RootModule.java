@@ -7,8 +7,7 @@ import com.googlecode.utterlyidle.modules.ResourcesModule;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotatedClass;
 
 public class RootModule implements ResourcesModule {
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(RootResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(RootResource.class));
     }
 }

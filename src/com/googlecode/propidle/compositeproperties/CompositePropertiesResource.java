@@ -103,7 +103,7 @@ public class CompositePropertiesResource {
             public Either<Status, Properties> call(Uri url) throws Exception {
                 RequestBuilder request = RequestBuilder.get(url.toString()).accepting(TEXT_PLAIN);
                 if (!requestedRevisionNumber.isEmpty()) {
-                    request.withHeader(REVISION_PARAM, requestedRevisionNumber.get().toString());
+                    request.header(REVISION_PARAM, requestedRevisionNumber.get().toString());
                 }
                 Response response = application.handle(request.build());
 

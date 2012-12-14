@@ -7,10 +7,8 @@ import com.googlecode.utterlyidle.sitemesh.SiteMeshHandler;
 import com.googlecode.yadic.Container;
 
 public class SiteMashHandlerModule implements RequestScopedModule {
-
-    public Module addPerRequestObjects(Container container) throws Exception {
-        container.decorate(HttpHandler.class, SiteMeshHandler.class);
-        return this;
+    public Container addPerRequestObjects(Container container) throws Exception {
+        return container.decorate(HttpHandler.class, SiteMeshHandler.class);
     }
 
 }

@@ -33,25 +33,22 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
         this.directory = directory;
     }
 
-    public Module addPerApplicationObjects(Container container) {
+    public Container addPerApplicationObjects(Container container) {
         container.addInstance(Version.class, Version.LUCENE_30);
         container.addInstance(Directory.class, directory);
         container.addInstance(Analyzer.class, new StandardAnalyzer(Version.LUCENE_30, emptySet()));
         container.addActivator(IndexWriter.class, IndexWriterActivator.class);
-        container.add(ParallelExecutionGuard.class);
-        return this;
+        return container.add(ParallelExecutionGuard.class);
     }
 
-    public Module addPerRequestObjects(Container container) {
+    public Container addPerRequestObjects(Container container) {
         container.add(IndexRebuilder.class, FileAndPropertiesIndexRebuilder.class);
         container.decorate(IndexRebuilder.class, NoParallelExecutionIndexBuilder.class);
-        container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
-        return this;
+        return container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
     }
 
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(RebuildIndexResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(RebuildIndexResource.class));
     }
 
     public void addTask(SchedulableRequests schedulableRequests) {

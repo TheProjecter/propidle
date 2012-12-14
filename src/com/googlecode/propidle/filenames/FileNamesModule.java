@@ -26,23 +26,20 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class FileNamesModule implements ResourcesModule, ResponseHandlersModule, RequestScopedModule {
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(FileNamesResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(FileNamesResource.class));
     }
 
-    public Module addPerRequestObjects(Container container) {
+    public Container addPerRequestObjects(Container container) {
         container.add(FileNameIndex.class, LuceneFileNameIndex.class);
         container.add(FileNameSearcher.class, LuceneFileNameSearcher.class);
-        container.decorate(AllProperties.class, FileNameIndexingDecorator.class);
-        return this;
+        return container.decorate(AllProperties.class, FileNameIndexingDecorator.class);
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
         handlers.add(and(where(entity(Model.class), nameIs(FileNamesResource.NAME)),not(requestAccepts(TEXT_PLAIN))), renderer(new ModelTemplateRenderer("FileNamesResource_search_html", FileNamesResource.class)));
         handlers.add(where(entity(Model.class), nameIs(FileNamesResource.DIRECTORY_VIEW_NAME)), renderer(new ModelTemplateRenderer("FileNamesResource_directories_html", FileNamesResource.class)));
-        handlers.add(and(where(entity(Model.class), nameIs(FileNamesResource.NAME)),requestAccepts(TEXT_PLAIN)), renderer(new ModelAutoCompleteRenderer()));
-        return this;
+        return handlers.add(and(where(entity(Model.class), nameIs(FileNamesResource.NAME)),requestAccepts(TEXT_PLAIN)), renderer(new ModelAutoCompleteRenderer()));
     }
 
     private LogicalPredicate<Pair<Request, Response>> requestAccepts(final String mediaType) {

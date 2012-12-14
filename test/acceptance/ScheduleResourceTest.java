@@ -25,8 +25,8 @@ public class ScheduleResourceTest extends PropertiesApplicationTestCase {
     @Test
     public void cannotScheduleAnUnknownTask() throws Exception {
         when(a(RequestIsMade.class).to(post("/schedule").
-                withForm(TASK_NAME_PARAM_NAME, "unknownTask").
-                withForm(DELAY_IN_SECONDS_PARAM_NAME, DELAY)));
+                form(TASK_NAME_PARAM_NAME, "unknownTask").
+                form(DELAY_IN_SECONDS_PARAM_NAME, DELAY)));
 
         then(theStatusOf(), the(LastResponse.class), is(NOT_FOUND));
     }
@@ -34,8 +34,8 @@ public class ScheduleResourceTest extends PropertiesApplicationTestCase {
     @Test
     public void scheduleKnownTask() throws Exception {
         when(a(RequestIsMade.class).to(post("/schedule").
-                withForm(TASK_NAME_PARAM_NAME, SCHEDULED_TEST_TASK_NAME).
-                withForm(DELAY_IN_SECONDS_PARAM_NAME, DELAY)));
+                form(TASK_NAME_PARAM_NAME, SCHEDULED_TEST_TASK_NAME).
+                form(DELAY_IN_SECONDS_PARAM_NAME, DELAY)));
 
         then(theStatusOf(), the(LastResponse.class), is(OK));
         then(theScheduledRequestsPath(), is(SCHEDULED_TEST_URL));
@@ -44,9 +44,9 @@ public class ScheduleResourceTest extends PropertiesApplicationTestCase {
     @Test
     public void scheduleKnownTaskWithInitialDelay() throws Exception {
         when(a(RequestIsMade.class).to(post("/schedule").
-                withForm(TASK_NAME_PARAM_NAME, SCHEDULED_TEST_TASK_NAME).
-                withForm(DELAY_IN_SECONDS_PARAM_NAME, DELAY).
-                withForm(INITIAL_DELAY_IN_SECONDS_PARAM_NAME, DELAY)));
+                form(TASK_NAME_PARAM_NAME, SCHEDULED_TEST_TASK_NAME).
+                form(DELAY_IN_SECONDS_PARAM_NAME, DELAY).
+                form(INITIAL_DELAY_IN_SECONDS_PARAM_NAME, DELAY)));
 
         then(theStatusOf(), the(LastResponse.class), is(OK));
         then(theScheduledRequestsPath(), is(SCHEDULED_TEST_URL));

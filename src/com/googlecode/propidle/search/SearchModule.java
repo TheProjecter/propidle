@@ -4,10 +4,7 @@ import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.server.ModelTemplateRenderer;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
-import com.googlecode.utterlyidle.modules.AbstractModule;
-import com.googlecode.utterlyidle.modules.Module;
-import com.googlecode.utterlyidle.modules.ResourcesModule;
-import com.googlecode.utterlyidle.modules.ResponseHandlersModule;
+import com.googlecode.utterlyidle.modules.*;
 import com.googlecode.utterlyidle.rendering.Model;
 import com.googlecode.yadic.Container;
 
@@ -17,25 +14,21 @@ import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotated
 import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
-public class SearchModule extends AbstractModule{
+public class SearchModule implements ApplicationScopedModule, RequestScopedModule, ResourcesModule, ResponseHandlersModule{
     @Override
-    public Module addPerApplicationObjects(Container container) {
-        container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
-        return this;
+    public Container addPerApplicationObjects(Container container) {
+        return container.add(PropertiesSearcher.class, LucenePropertiesSearcher.class);
     }
 
-    public Module addPerRequestObjects(Container container){
+    public Container addPerRequestObjects(Container container){
         container.add(PropertiesIndex.class, LucenePropertiesIndex.class);
-        container.decorate(AllProperties.class, PropertiesIndexingDecorator.class);
-        return this;
+        return container.decorate(AllProperties.class, PropertiesIndexingDecorator.class);
     }
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(SearchResource.class));
-        return null;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(SearchResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
-        return this;
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
+        return handlers.add(where(entity(Model.class), nameIs(SearchResource.NAME)), renderer(new ModelTemplateRenderer("SearchResource_html", SearchResource.class)));
     }
 }

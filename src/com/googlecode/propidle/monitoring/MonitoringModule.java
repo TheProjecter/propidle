@@ -8,14 +8,12 @@ import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 
 public class MonitoringModule implements ApplicationScopedModule, RequestScopedModule {
-    public Module addPerApplicationObjects(Container container) {
+    public Container addPerApplicationObjects(Container container) {
         container.add(HttpRequestCounter.class);
-        container.add(RegisterCountingMBeans.class);
-        return this;
+        return container.add(RegisterCountingMBeans.class);
     }
 
-    public Module addPerRequestObjects(Container container) {
-        container.decorate(HttpHandler.class, HttpRequestCountingHandler.class);
-        return this;
+    public Container addPerRequestObjects(Container container) {
+        return container.decorate(HttpHandler.class, HttpRequestCountingHandler.class);
     }
 }

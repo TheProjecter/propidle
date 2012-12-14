@@ -17,9 +17,9 @@ public class ScheduleTaskRequest implements ScheduleTask {
 
     public void schedule(final String taskName, long initialDelay, long delay) throws Exception {
         Response response = application.handle(RequestBuilder.post(ScheduleResource.NAME).
-                withForm(ScheduleResource.TASK_NAME_PARAM_NAME, taskName).
-                withForm(ScheduleResource.INITIAL_DELAY_IN_SECONDS_PARAM_NAME, valueOf(initialDelay)).
-                withForm(ScheduleResource.DELAY_IN_SECONDS_PARAM_NAME, valueOf(delay)).
+                form(ScheduleResource.TASK_NAME_PARAM_NAME, taskName).
+                form(ScheduleResource.INITIAL_DELAY_IN_SECONDS_PARAM_NAME, valueOf(initialDelay)).
+                form(ScheduleResource.DELAY_IN_SECONDS_PARAM_NAME, valueOf(delay)).
                 build());
 
         if(response.status() == Status.OK) {

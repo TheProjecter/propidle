@@ -23,6 +23,6 @@ public class TaskIsScheduled implements Callable<Response> {
     }
 
     public Response call() throws Exception {
-        return application.handle(RequestBuilder.post(ScheduleResource.NAME).withForm(TASK_NAME_PARAM_NAME, scheduledTaskName).build());
+        return application.handle(RequestBuilder.post(ScheduleResource.NAME).form(TASK_NAME_PARAM_NAME, scheduledTaskName).build());
     }
 }

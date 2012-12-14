@@ -12,22 +12,19 @@ import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.annotated
 import static java.util.concurrent.Executors.newScheduledThreadPool;
 
 public class SchedulingModule implements ResourcesModule, ModuleDefiner, ApplicationScopedModule {
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(ScheduleResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(ScheduleResource.class));
     }
 
-    public Module defineModules(ModuleDefinitions moduleDefinitions) {
-        moduleDefinitions.addApplicationModule(SchedulableRequestModule.class);
-        return this;
+    public ModuleDefinitions defineModules(ModuleDefinitions moduleDefinitions) {
+        return moduleDefinitions.addApplicationModule(SchedulableRequestModule.class);
     }
 
-    public Module addPerApplicationObjects(Container container) {
+    public Container addPerApplicationObjects(Container container) {
         container.add(ScheduleTask.class, ScheduleTaskRequest.class);
         container.addActivator(ScheduledExecutorService.class, closeableExecutorService());
         container.add(SchedulableRequests.class);
-        container.add(Scheduler.class);
-        return this;
+        return container.add(Scheduler.class);
     }
 
     private CloseableCallable<ScheduledExecutorService> closeableExecutorService() {

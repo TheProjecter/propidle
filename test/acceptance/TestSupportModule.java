@@ -37,27 +37,23 @@ public class TestSupportModule implements ApplicationScopedModule, RequestScoped
         this.executorService = executorService;
     }
 
-    public Module addPerApplicationObjects(Container container) {
+    public Container addPerApplicationObjects(Container container) {
         container.add(WebClient.class);
         container.addInstance(InterestingGivens.class, interestingGivens);
         container.addInstance(CapturedInputAndOutputs.class, capturedInputAndOutputs);
         container.addInstance(TestLogger.class, logger);
         container.remove(ScheduledExecutorService.class);
-        container.addInstance(ScheduledExecutorService.class, executorService);
-
-        return this;
+        return container.addInstance(ScheduledExecutorService.class, executorService);
     }
 
-    public Module addPerRequestObjects(Container container) {
+    public Container addPerRequestObjects(Container container) {
         container.add(AliasExists.class);
         container.add(CurrentRevision.class);
         container.add(PropertiesExist.class);
         container.add(TaskIsScheduled.class);
         container.add(LastResponse.class);
         container.add(RequestIsMade.class);
-        container.add(PropertiesExistInDatabase.class);
-
-        return this;
+        return container.add(PropertiesExistInDatabase.class);
     }
 
     public void addTask(SchedulableRequests schedulableRequests) {

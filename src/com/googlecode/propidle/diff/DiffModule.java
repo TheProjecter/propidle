@@ -15,13 +15,11 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class DiffModule implements ResourcesModule, ResponseHandlersModule {
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(DiffResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(DiffResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(DiffResource.NAME)), renderer(new ModelTemplateRenderer("DiffResource_html", DiffResource.class)));
-        return this;
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
+        return handlers.add(where(entity(Model.class), nameIs(DiffResource.NAME)), renderer(new ModelTemplateRenderer("DiffResource_html", DiffResource.class)));
     }
 }

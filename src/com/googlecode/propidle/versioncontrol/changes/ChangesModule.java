@@ -17,20 +17,17 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class ChangesModule implements RequestScopedModule, ResourcesModule, ResponseHandlersModule {
-    public Module addPerRequestObjects(Container container) {
+    public Container addPerRequestObjects(Container container) {
         container.add(AllChanges.class, AllChangesFromRecords.class);
         container.add(ChangeDetailsFromRecords.class);
-        container.add(ChangeDetails.class);
-        return this;
+        return container.add(ChangeDetails.class);
     }
 
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(ChangesResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(ChangesResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(ChangesResource.NAME)), renderer(new ModelTemplateRenderer("ChangesResource_html", ChangesResource.class)));
-        return this;
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
+        return handlers.add(where(entity(Model.class), nameIs(ChangesResource.NAME)), renderer(new ModelTemplateRenderer("ChangesResource_html", ChangesResource.class)));
     }
 }

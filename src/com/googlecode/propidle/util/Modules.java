@@ -17,13 +17,12 @@ public class Modules {
         return new Callable1<Callable1<Container, Container>, Module>() {
             public Module call(final Callable1<Container, Container> containerCallable) throws Exception {
                 return new RequestScopedModule() {
-                    public Module addPerRequestObjects(Container container) {
+                    public Container addPerRequestObjects(Container container) {
                         try {
-                            containerCallable.call(container);
+                            return containerCallable.call(container);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        return this;
                     }
                 };
             }

@@ -17,19 +17,16 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class AliasesModule implements RequestScopedModule, ResourcesModule, ResponseHandlersModule {
-    public Module addPerRequestObjects(Container container) {
-        container.add(Aliases.class, AliasesFromRecords.class);
-        return this;
+    public Container addPerRequestObjects(Container container) {
+        return container.add(Aliases.class, AliasesFromRecords.class);
     }
 
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(AliasesResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(AliasesResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
         handlers.add(where(entity(Model.class), nameIs(AliasesResource.ALIAS)), renderer(new ModelTemplateRenderer("AliasResource_html", AliasesResource.class)));
-        handlers.add(where(entity(Model.class), nameIs(AliasesResource.ALL_ALIASES)), renderer(new ModelTemplateRenderer("AliasesResource_html", AliasesResource.class)));
-        return this;
+        return handlers.add(where(entity(Model.class), nameIs(AliasesResource.ALL_ALIASES)), renderer(new ModelTemplateRenderer("AliasesResource_html", AliasesResource.class)));
     }
 }

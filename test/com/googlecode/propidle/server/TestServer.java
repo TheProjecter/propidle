@@ -62,9 +62,8 @@ public class TestServer extends Server {
     }
 
     public static class DisableTasks implements ApplicationScopedModule {
-        public Module addPerApplicationObjects(Container container) throws Exception {
-            container.replace(ScheduleTask.class, IgnoreScheduler.class);
-            return this;
+        public Container addPerApplicationObjects(Container container) throws Exception {
+            return container.replace(ScheduleTask.class, IgnoreScheduler.class);
         }
     }
 }

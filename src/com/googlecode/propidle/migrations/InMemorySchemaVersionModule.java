@@ -8,9 +8,8 @@ public class InMemorySchemaVersionModule implements RequestScopedModule {
     private InMemorySchemaVersionModule() {
     }
 
-    public Module addPerRequestObjects(Container container) {
-        container.add(SchemaVersion.class, InMemorySchemaVersion.class);
-        return this;
+    public Container addPerRequestObjects(Container container) {
+        return container.add(SchemaVersion.class, InMemorySchemaVersion.class);
     }
 
     public static InMemorySchemaVersionModule inMemorySchemaVersionModule() {
