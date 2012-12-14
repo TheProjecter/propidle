@@ -40,7 +40,7 @@ public class ServerTest {
         HttpHandler clientHttpHandler = new RedirectHttpHandler(new ClientHttpHandler());
         Uri propertiesUrl = uri(serverUrl + "properties/test");
 
-        Response response = clientHttpHandler.handle(RequestBuilder.post(propertiesUrl).withForm("properties", "test:hello").build());
+        Response response = clientHttpHandler.handle(RequestBuilder.post(propertiesUrl).form("properties", "test:hello").build());
 
         assertThat(response.status(), is(OK));
 

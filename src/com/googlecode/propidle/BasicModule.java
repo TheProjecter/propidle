@@ -29,7 +29,7 @@ import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader.Replacements.replacements;
 
 public class BasicModule implements RequestScopedModule, ApplicationScopedModule {
-    public Module addPerRequestObjects(Container container) {
+    public Container addPerRequestObjects(Container container) {
         // HttpHandler decoration
         container.addInstance(ConvertExtensionToAcceptHeader.Replacements.class,
                 replacements(pair("properties", TEXT_PLAIN), pair("html", TEXT_HTML)));
@@ -50,13 +50,11 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
 
         // Shared repositories
         container.add(AllProperties.class, AllPropertiesFromChanges.class);
-        container.add(PropidlePath.class, PropidlePath.class);
-        return this;
+        return container.add(PropidlePath.class, PropidlePath.class);
     }
 
-    public Module addPerApplicationObjects(Container container) {
-        container.add(PropertyTriggeredExecutor.class);
-        return this;
+    public Container addPerApplicationObjects(Container container) {
+        return container.add(PropertyTriggeredExecutor.class);
     }
 
 }

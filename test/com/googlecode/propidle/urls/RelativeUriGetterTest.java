@@ -131,6 +131,16 @@ public class RelativeUriGetterTest {
             public void close() throws IOException {
                 throw new UnsupportedOperationException();
             }
+
+            @Override
+            public void start() throws Exception {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void stop() throws Exception {
+                throw new UnsupportedOperationException();
+            }
         };
     }
 

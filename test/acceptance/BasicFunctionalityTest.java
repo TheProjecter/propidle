@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.is;
 public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
     @Test
     public void allowsChangesToPropertyFilesByPostingFileContents() throws Exception {
-        when(a(RequestIsMade.class).to(post("/properties/pilot/myapp/v1.5").withForm("properties", "a=1")));
+        when(a(RequestIsMade.class).to(post("/properties/pilot/myapp/v1.5").form("properties", "a=1")));
 
         when(a(RequestIsMade.class).to(get("/properties/pilot/myapp/v1.5.properties")));
 
@@ -30,7 +30,7 @@ public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
     public void recordsChangesWhenModifyingProperties() throws Exception {
         given(that(PropertiesExist.class).with(propertiesPath("pilot/myapp")).and(properties("a=1")));
 
-        when(a(RequestIsMade.class).to(post("/properties/pilot/myapp").withForm("properties", "a=2")));
+        when(a(RequestIsMade.class).to(post("/properties/pilot/myapp").form("properties", "a=2")));
         when(a(RequestIsMade.class).to(get("/changes/pilot/myapp")));
 
         then(theHtmlOf(), the(LastResponse.class), matches(tr(td("/pilot/myapp"), td("\\d+"), td("a"), td(""), td("1"), td("date.+"))));

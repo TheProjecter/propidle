@@ -77,7 +77,7 @@ public class AllChangesFromRecords implements AllChanges {
 
     private PathType type(PropertiesPath propertiesPath, PropertiesPath parent) {
         HierarchicalPath path = propertiesPath.remove(parent);
-        return path.segments().filter(not(empty())).size().intValue() > 1 ? DIRECTORY : FILE;
+        return path.segments().filter(not(empty())).size() > 1 ? DIRECTORY : FILE;
     }
 
 

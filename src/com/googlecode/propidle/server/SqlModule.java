@@ -29,23 +29,22 @@ public class SqlModule implements RequestScopedModule, ApplicationScopedModule {
     }
 
     @Override
-    public Module addPerApplicationObjects(Container container) throws Exception {
+    public Container addPerApplicationObjects(Container container) throws Exception {
         container.addInstance(ConnectionDetails.class, connectionDetails(getOrFail(properties, Server.JDBC_URL),
                         getOrFail(properties, Server.JDBC_USER),
                         getOrFail(properties, Server.JDBC_PASSWORD)));
-        container.addActivator(DataSource.class, DataSourceActivator.class);
-        return this;
+        return container.addActivator(DataSource.class, DataSourceActivator.class);
     }
 
     @Override
-    public Module addPerRequestObjects(Container container) throws Exception {
+    public Container addPerRequestObjects(Container container) throws Exception {
         container.addActivator(Connection.class, ConnectionActivator.class);
         container.add(Transaction.class, SqlTransaction.class);
         container.add(SqlRecords.class);
         container.add(Logger.class, IgnoreLogger.class);
         container.add(SqlMappings.class);
         container.addActivator(Records.class, container.getActivator(SqlRecords.class));
-        return this;
+        return container;
     }
 
 }

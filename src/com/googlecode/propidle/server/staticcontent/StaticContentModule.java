@@ -11,12 +11,10 @@ import static com.googlecode.utterlyidle.dsl.DslBindings.bindings;
 import static com.googlecode.utterlyidle.dsl.StaticBindingBuilder.in;
 
 public class StaticContentModule implements ResourcesModule {
-
     public static final String STATIC_RESOURCE_PATH = "static";
 
-    public Module addResources(Resources resources) {
+    public Resources addResources(Resources resources) {
         resources.add(bindings(in(packageUrl(getClass())).path(STATIC_RESOURCE_PATH)));
-        resources.add(annotatedClass(FavIconResource.class));
-        return this;
+        return resources.add(annotatedClass(FavIconResource.class));
     }
 }

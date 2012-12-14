@@ -26,7 +26,7 @@ import static com.googlecode.utterlyidle.sitemesh.ContentTypePredicate.contentTy
 
 public class StatusModule implements RequestScopedModule, ResourcesModule, ResponseHandlersModule {
 
-    public Module addPerRequestObjects(final Container container) {
+    public Container addPerRequestObjects(final Container container) {
         container.add(StatusChecks.class);
         container.get(StatusChecks.class).add(DisplayBuildNumber.class);
         container.get(StatusChecks.class).add(LuceneDirectoryCheck.class);
@@ -36,17 +36,15 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
             container.get(StatusChecks.class).add(ConnectionDetailsCheck.class);
             container.get(StatusChecks.class).add(DatabaseVersionCheck.class);
         }
-        return this;
+        return container;
     }
 
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(StatusResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(StatusResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_HTML)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
-        return this;
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
+        return handlers.add(modelNameIs(StatusResource.NAME).and(contentType(TEXT_HTML)), renderer(new ModelTemplateRenderer("Status_html", StatusResource.class).withRenderer(Action.class, actionRenderer())));
     }
 
     private Renderer<Action> actionRenderer() {

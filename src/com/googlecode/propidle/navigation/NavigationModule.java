@@ -16,13 +16,11 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class NavigationModule implements ResourcesModule, ResponseHandlersModule {
-    public Module addResources(Resources bindings) throws Exception {
-        bindings.add(annotatedClass(NavigationResource.class));
-        return this;
+    public Resources addResources(Resources bindings) throws Exception {
+        return bindings.add(annotatedClass(NavigationResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers responseHandlers) throws Exception {
-        responseHandlers.add(where(entity(Model.class), nameIs(NavigationResource.PATH)), renderer(new ModelTemplateRenderer("NavigationResource_html", NavigationResource.class)));
-        return this;
+    public ResponseHandlers addResponseHandlers(ResponseHandlers responseHandlers) throws Exception {
+        return responseHandlers.add(where(entity(Model.class), nameIs(NavigationResource.PATH)), renderer(new ModelTemplateRenderer("NavigationResource_html", NavigationResource.class)));
     }
 }

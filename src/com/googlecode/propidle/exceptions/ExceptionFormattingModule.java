@@ -27,15 +27,13 @@ import static com.googlecode.utterlyidle.rendering.Model.model;
 
 
 public class ExceptionFormattingModule implements RequestScopedModule, ResponseHandlersModule {
-    public Module addPerRequestObjects(Container container) throws Exception {
-        container.decorate(HttpHandler.class, ExceptionHandler.class);
-        return this;
+    public Container addPerRequestObjects(Container container) throws Exception {
+        return container.decorate(HttpHandler.class, ExceptionHandler.class);
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) throws Exception {
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) throws Exception {
         LogicalPredicate<Pair<Request,Response>> where = Predicates.<Pair<Request, Response>, Object>where(entity(), is(instanceOf(Exception.class))).and(acceptsHtml());
-        handlers.add(where, exceptionResponseHandler());
-        return this;
+        return handlers.add(where, exceptionResponseHandler());
     }
 
     private ResponseHandler exceptionResponseHandler() {

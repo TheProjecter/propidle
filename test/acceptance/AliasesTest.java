@@ -36,7 +36,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
     @Test
     public void afterEditingAnAliasUsersAreRedirectedToTheEditPage() throws Exception {
         when(a(RequestIsMade.class).to(post("/aliases/production/myApplication/v123?edit=").
-                withForm("to", "/some_other_url")));
+                form("to", "/some_other_url")));
 
         then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
         then(theLocationOf(), the(LastResponse.class), is(absoluteUrl("aliases/production/myApplication/v123?edit=")));
@@ -55,7 +55,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
     @Test
     public void onceCreatedAliasesWillRedirectToNewLocation() throws Exception {
         when(a(RequestIsMade.class).to(post("/aliases/production/myApplication/v123?edit=").
-                withForm("to", "/some_other_url")));
+                form("to", "/some_other_url")));
 
         when(a(RequestIsMade.class).to(get("/aliases/production/myApplication/v123").
                 accepting(TEXT_PLAIN)));
@@ -67,7 +67,7 @@ public class AliasesTest extends PropertiesApplicationTestCase {
     @Test
     public void propertiesFileExtensionIsRetainedInRedirectUrl() throws Exception {
         when(a(RequestIsMade.class).to(post("/aliases/alias?edit=").
-                withForm("to", "/redirect")));
+                form("to", "/redirect")));
 
         when(a(RequestIsMade.class).to(get("/aliases/alias.properties").
                 accepting(TEXT_PLAIN)));

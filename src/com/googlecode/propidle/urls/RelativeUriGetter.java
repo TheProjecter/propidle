@@ -1,6 +1,7 @@
 package com.googlecode.propidle.urls;
 
 import com.googlecode.propidle.server.RequestedRevisionNumber;
+import com.googlecode.totallylazy.Function;
 import com.googlecode.totallylazy.Option;
 import com.googlecode.utterlyidle.Application;
 import com.googlecode.utterlyidle.BasePath;
@@ -37,7 +38,7 @@ public class RelativeUriGetter implements UriGetter {
         if (uri.getScheme() == null && uri.getHost() == null) {
             try {
                 // Make sure the other request happens on a different thread, in case we're using thread locals
-                return sequence(callConcurrently(getRelativeUriTask(uri, mimeType))).head();
+                return callConcurrently(getRelativeUriTask(uri, mimeType)).apply();
             } catch (Throwable e) {
                 Throwable cause = e.getCause();
                 if(cause instanceof ExecutionException && cause.getCause() != null){
@@ -50,8 +51,8 @@ public class RelativeUriGetter implements UriGetter {
         }
     }
 
-    private Callable<InputStream> getRelativeUriTask(final URI uri, final MimeType mimeType) {
-        return new Callable<InputStream>() {
+    private Function<InputStream> getRelativeUriTask(final URI uri, final MimeType mimeType) {
+        return new Function<InputStream>() {
             public InputStream call() throws Exception {
                 return getRelativeUri(uri, mimeType);
             }
@@ -62,7 +63,7 @@ public class RelativeUriGetter implements UriGetter {
         uri = stripBasePath(uri);
         RequestBuilder request = RequestBuilder.get(uri.toString()).replaceHeader(ACCEPT, mimeType.value());
         if(!requestedRevisionNumber.isEmpty()){
-            request.withHeader(REVISION_PARAM, requestedRevisionNumber.get().toString());
+            request.header(REVISION_PARAM, requestedRevisionNumber.get().toString());
         }
         Response response = application.handle(request.build());
 

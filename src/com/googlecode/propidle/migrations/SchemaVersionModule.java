@@ -8,9 +8,8 @@ public class SchemaVersionModule implements RequestScopedModule {
     private SchemaVersionModule() {
     }
 
-    public Module addPerRequestObjects(Container container) {
-        container.add(SchemaVersion.class, SchemaVersionFromMigrationLog.class);
-        return this;
+    public Container addPerRequestObjects(Container container) {
+        return container.add(SchemaVersion.class, SchemaVersionFromMigrationLog.class);
     }
 
     public static SchemaVersionModule schemaVersionModule() {

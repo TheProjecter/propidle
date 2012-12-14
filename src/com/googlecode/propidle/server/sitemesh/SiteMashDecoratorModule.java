@@ -23,17 +23,13 @@ import static com.googlecode.utterlyidle.sitemesh.QueryParamRule.queryParamRule;
 import static com.googlecode.utterlyidle.sitemesh.StaticDecoratorRule.staticRule;
 
 public class SiteMashDecoratorModule implements RequestScopedModule, ModuleDefiner, SiteMeshModule {
-    public Module defineModules(ModuleDefinitions moduleDefinitions) throws Exception {
-        moduleDefinitions.addRequestModule(SiteMeshModule.class);
-        return this;
+    public ModuleDefinitions defineModules(ModuleDefinitions moduleDefinitions) throws Exception {
+        return moduleDefinitions.addRequestModule(SiteMeshModule.class);
     }
 
-
-
-    public Module addPerRequestObjects(Container container) throws Exception {
+    public Container addPerRequestObjects(Container container) throws Exception {
         container.add(Decorators.class);
-        container.addInstance(DecoratorProvider.class, provider(container));
-        return this;
+        return container.addInstance(DecoratorProvider.class, provider(container));
     }
 
     public com.googlecode.utterlyidle.sitemesh.Decorators addDecorators(com.googlecode.utterlyidle.sitemesh.Decorators decorators) {

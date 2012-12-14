@@ -21,8 +21,8 @@ public class DiffTest extends PropertiesApplicationTestCase {
         when(a(RequestIsMade.class).to(get("/properties/base")));
         when(a(RequestIsMade.class).to(
                 get("/diff").
-                        withQuery("left", "/properties/base").
-                        withQuery("right", "/properties/other")));
+                        query("left", "/properties/base").
+                        query("right", "/properties/other")));
 
         then(theHtmlOf(), the(LastResponse.class), matches(tr(td("removed"), td("removed value"), td(""))));
         then(theHtmlOf(), the(LastResponse.class), matches(tr(td("changed"), td("changed value 1"), td("changed value 2"))));

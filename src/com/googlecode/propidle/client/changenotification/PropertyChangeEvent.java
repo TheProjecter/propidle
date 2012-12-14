@@ -50,7 +50,7 @@ public class PropertyChangeEvent {
 
         PropertyChangeEvent event = (PropertyChangeEvent) o;
         if (!updatedProperties.equals(event.updatedProperties)) return false;
-        if(!event.changes.size().equals(changes.size())) return false;
+        if(!(event.changes.size() == changes.size())) return false;
         if(!complement(event.changes.toSet(), changes.toSet()).isEmpty()) return false;
 
         return true;

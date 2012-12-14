@@ -18,18 +18,16 @@ import static com.googlecode.utterlyidle.handlers.HandlerRule.entity;
 import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.renderer;
 
 public class PropidleMigrationsModule implements RequestScopedModule, ResourcesModule, ResponseHandlersModule {
-    public Module addPerRequestObjects(Container container) {
+    public Container addPerRequestObjects(Container container) {
         container.get(ModuleMigrationsCollector.class).add(PropIdleMigrations.class);
-        return this;
+        return container;
     }
 
-    public Module addResources(Resources resources) {
-        resources.add(annotatedClass(MigrationResource.class));
-        return this;
+    public Resources addResources(Resources resources) {
+        return resources.add(annotatedClass(MigrationResource.class));
     }
 
-    public Module addResponseHandlers(ResponseHandlers handlers) {
-        handlers.add(where(entity(Model.class), nameIs(MigrationResource.NAME)), renderer(new ModelTemplateRenderer("MigrationResource_html", MigrationResource.class)));
-        return this;
+    public ResponseHandlers addResponseHandlers(ResponseHandlers handlers) {
+        return handlers.add(where(entity(Model.class), nameIs(MigrationResource.NAME)), renderer(new ModelTemplateRenderer("MigrationResource_html", MigrationResource.class)));
     }
 }
