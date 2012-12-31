@@ -18,6 +18,9 @@ import static org.hamcrest.Matchers.is;
 
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.utterlyidle.FormParameters;
+import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
+import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
+import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import org.junit.Test;
 
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
@@ -99,4 +102,5 @@ public class AliasesTest extends PropertiesApplicationTestCase {
         then(theHtmlOf(), the(LastResponse.class), matches(anchor(quote(absoluteUrl("aliases/redirect_1?edit=")), "/redirect_1")));
         then(theHtmlOf(), the(LastResponse.class), not(matches(anchor(quote(absoluteUrl("aliases/redirect_2?edit=")), "/redirect_2"))));
     }
+
 }

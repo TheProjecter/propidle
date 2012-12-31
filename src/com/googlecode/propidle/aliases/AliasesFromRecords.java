@@ -33,6 +33,11 @@ public class AliasesFromRecords implements Aliases{
         return this;
     }
 
+    public Aliases delete(AliasPath alias) {
+        records.remove(ALIASES, where(FROM, is(alias.toString())));
+        return this;
+    }
+
     public Alias get(AliasPath path) {
         Option<Record> record = records.get(ALIASES).
                 filter(where(FROM, is(path.toString())))

@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link type="text/css" rel="stylesheet" href="$base$static/base.css"/>
     <title>$title$</title>
     <script src="$base$static/jquery-1.6.2.min.js" type="text/javascript"></script>
