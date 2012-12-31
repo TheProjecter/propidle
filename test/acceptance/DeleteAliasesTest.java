@@ -1,5 +1,7 @@
 package acceptance;
 
+import acceptance.steps.thens.LastResponse;
+import acceptance.steps.whens.RequestIsMade;
 import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.propidle.aliases.*;
 import com.googlecode.totallylazy.*;
@@ -22,6 +24,9 @@ import org.junit.runner.RunWith;
 import java.util.Collection;
 import java.util.Date;
 
+import static acceptance.steps.thens.LastResponse.theLocationOf;
+import static acceptance.steps.thens.LastResponse.theStatusOf;
+import static com.googlecode.propidle.aliases.AliasDestination.*;
 import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.totallylazy.UrlEncodedMessage.decode;
 import static com.googlecode.totallylazy.proxy.Call.method;
@@ -29,6 +34,7 @@ import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
+import static com.googlecode.utterlyidle.Status.SEE_OTHER;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.relativeUriOf;
 import static com.googlecode.yatspec.state.givenwhenthen.SyntacticSugar.to;
 import static org.hamcrest.Matchers.contains;
@@ -60,7 +66,7 @@ public class DeleteAliasesTest extends TestState {
         given(anAliasFrom("redirect_1", to("/properties/1")));
         given(anAliasFrom("redirect_2", to("/properties/2")));
 
-        when(deleteAlias("redirect_1"));
+        when(weDeleteTheAlias("redirect_1"));
 
         then(aliases(), not(Matchers.contains(aliasPath("redirect_1"))));
         then(aliases(), contains(aliasPath("redirect_2")));
@@ -73,8 +79,26 @@ public class DeleteAliasesTest extends TestState {
         then(theAliasExists(), is(false));
     }
 
-    private ActionUnderTest deleteAlias(String alias) {
-        return executeRequest(post(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).delete(aliasPath(alias)))))).build());
+    @Test
+    public void afterEditingAnAliasUsersAreRedirectedToTheEditPage() throws Exception {
+        when(weCreateTheAlias("production/myApplication/v123"));
+        then(aliases(), contains(aliasPath("production/myApplication/v123")));
+    }
+
+    private ActionUnderTest weCreateTheAlias(final String alias) {
+        return new ActionUnderTest() {
+            @Override
+            public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                executeRequest(post(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).update(aliasPath(alias), null))))).form("to", aliasDestination("whatever"))).execute(interestingGivens, capturedInputAndOutputs);
+                executeRequest(get(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).listAllAliases()))))).execute(interestingGivens, capturedInputAndOutputs);
+                return capturedInputAndOutputs;
+            }
+        };
+    }
+
+
+    private ActionUnderTest weDeleteTheAlias(String alias) {
+        return executeRequest(post(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).delete(aliasPath(alias)))))));
     }
 
     private StateExtractor<Boolean> theAliasExists() {
@@ -87,7 +111,7 @@ public class DeleteAliasesTest extends TestState {
     }
 
     private ActionUnderTest weGetTheAlias(String alias) {
-        return executeRequest(get(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).followRedirectHtml(aliasPath(alias)))))).build());
+        return executeRequest(get(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).followRedirectHtml(aliasPath(alias)))))));
     }
 
     private Uri fullyQualifiedUri(Uri relativeUri) {
@@ -140,11 +164,12 @@ public class DeleteAliasesTest extends TestState {
         return header.contains(MediaType.TEXT_HTML) || header.contains(MediaType.TEXT_PLAIN);
     }
 
-    private ActionUnderTest executeRequest(final Request request) {
+    private ActionUnderTest executeRequest(final RequestBuilder request) {
         return new ActionUnderTest() {
             @Override
             public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                Response aliasesResponse = httpHandler().handle(request);
+                Response aliasesResponse = httpHandler().handle(request.build());
+                capturedInputAndOutputs.remove(LAST_RESPONSE);
                 capturedInputAndOutputs.add(LAST_RESPONSE, aliasesResponse);
                 return capturedInputAndOutputs;
             }
@@ -158,7 +183,7 @@ public class DeleteAliasesTest extends TestState {
                 application.usingRequestScope(new Callable1<Container, Object>() {
                     @Override
                     public Object call(Container container) throws Exception {
-                        return container.get(Aliases.class).put(Alias.alias(aliasPath(from), AliasDestination.aliasDestination(to)));
+                        return container.get(Aliases.class).put(Alias.alias(aliasPath(from), aliasDestination(to)));
                     }
                 });
                 return interestingGivens;
