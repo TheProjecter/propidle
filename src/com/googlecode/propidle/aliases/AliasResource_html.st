@@ -6,7 +6,7 @@
 <div class="section">
     <h2>Create an alias to another properties file URL</h2>
     $if(currentRedirectTo.empty)$
-    <p class="error-text">This alias does not yet exist- hit <strong>Save</strong></p>
+    <p class="error-text alias-not-found">This alias does not yet exist- hit <strong>Save</strong></p>
     $endif$
 
     <p>Aliases work like <a href="http://tinyurl.com">tinyurl</a> for properties files</p>
