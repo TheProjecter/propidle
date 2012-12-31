@@ -2,9 +2,9 @@ package acceptance.steps;
 
 import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.utterlyidle.Application;
+import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.RequestBuilder;
 import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.Request;
 import com.googlecode.yatspec.state.givenwhenthen.TestLogger;
 
 public class WebClient {

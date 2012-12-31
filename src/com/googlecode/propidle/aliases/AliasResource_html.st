@@ -26,6 +26,9 @@
     <p>Currently <a href="$first(aliasUrl).url$">$first(aliasUrl).name$</a> redirects to: <a href="$first(currentRedirectTo).url$">$first(currentRedirectTo).name$</a>
     </p>
     <p><a href="$editUrl$">Edit this Alias</a>
+    <form action="$deleteUrl$" method="POST">
+        <input type="submit" value="Delete this Alias"></input>
+    </form>
     <p>Try it out: <a href="$first(aliasUrl).url$">$first(aliasUrl).name$</a></p>
     $endif$
 </div>

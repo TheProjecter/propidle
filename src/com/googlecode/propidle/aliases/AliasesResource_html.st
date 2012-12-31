@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
     <title>$title$</title>
@@ -28,7 +27,7 @@
     </form>
 </div>
 
-<table class="data-table">
+<table class="data-table aliases">
     <tr>
         <th width="50%">If I go to</th>
         <th width="50%">I will be redirected to</th>

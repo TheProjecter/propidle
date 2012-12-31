@@ -102,7 +102,8 @@ public class AliasesResource {
         Model model = modelWithName(ALIAS).
                 add(TITLE, "Alias \"" + from + "\"").
                 add("aliasUrl", model().add("name", resourcePath).add("url", basePath.subDirectory(resourcePath).toString())).
-                add("redirectTo", redirectTo);
+                add("redirectTo", redirectTo).
+                add("deleteUrl", redirector.absoluteUriOf(method(on(AliasesResource.class).delete(from))));
 
         if (redirectTo.url().toString().startsWith("/composite?")) {
             model.add("editUrl", redirectTo.url().toString()+"&alias="+UrlEncodedMessage.encode(alias.from().toString()));
@@ -120,6 +121,13 @@ public class AliasesResource {
     public Response update(@PathParam("from") AliasPath from, @FormParam("to") AliasDestination to) {
         aliases.put(alias(from, to));
         return redirector.seeOther(method(on(AliasesResource.class).edit("", from, none(AliasDestination.class))));
+    }
+
+    @POST
+    @Path(AliasesResource.ALL_ALIASES + "{alias:.+}/delete")
+    public Response delete(@PathParam("alias") AliasPath aliasToDelete) {
+        aliases.delete(aliasToDelete);
+        return redirector.seeOther(method(on(AliasesResource.class).listAllAliases()));
     }
 
     @GET

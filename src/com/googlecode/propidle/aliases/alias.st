@@ -1,1 +1,1 @@
-<tr><td><a href="$first(it.from).url$?edit=">$first(it.from).name$</a></td><td><a href="$first(it.to).url$">$first(it.to).name$</a></td></tr>
+<tr><td class="alias"><a href="$first(it.from).url$?edit=">$first(it.from).name$</a></td><td><a class="destination" href="$first(it.to).url$">$first(it.to).name$</a></td></tr>
