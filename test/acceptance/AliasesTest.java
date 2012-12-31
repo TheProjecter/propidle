@@ -28,13 +28,6 @@ import static java.util.regex.Pattern.quote;
 import static org.hamcrest.Matchers.not;
 
 public class AliasesTest extends PropertiesApplicationTestCase {
-    @Test
-    public void ifAnAliasDoesNotExistThenTryingToGetItWillRedirectToTheEditPage() throws Exception {
-        when(a(RequestIsMade.class).to(get("/aliases/production/myApplication/v123")));
-
-        then(theStatusOf(), the(LastResponse.class), is(SEE_OTHER));
-        then(theLocationOf(), the(LastResponse.class), is(absoluteUrl("aliases/production/myApplication/v123?edit=")));
-    }
 
     @Test
     public void afterEditingAnAliasUsersAreRedirectedToTheEditPage() throws Exception {
