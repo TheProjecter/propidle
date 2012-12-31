@@ -4,7 +4,6 @@ import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.propidle.aliases.*;
 import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.*;
-import com.googlecode.utterlyidle.annotations.AnnotatedBindings;
 import com.googlecode.utterlyidle.handlers.Auditor;
 import com.googlecode.utterlyidle.handlers.Auditors;
 import com.googlecode.utterlyidle.handlers.ClientHttpHandler;
@@ -28,14 +27,18 @@ import static com.googlecode.totallylazy.UrlEncodedMessage.decode;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
+import static com.googlecode.utterlyidle.RequestBuilder.get;
+import static com.googlecode.utterlyidle.RequestBuilder.post;
+import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.relativeUriOf;
 import static com.googlecode.yatspec.state.givenwhenthen.SyntacticSugar.to;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(SpecRunner.class)
 public class DeleteAliasesTest extends TestState {
 
-    public static final String ALIASES_AFTER_DELETION = "Aliases after deletion";
+    public static final String LAST_RESPONSE = "Last Response";
     private RestServer server;
     private TestPropertiesApplication application;
 
@@ -63,13 +66,46 @@ public class DeleteAliasesTest extends TestState {
         then(aliases(), contains(aliasPath("redirect_2")));
     }
 
+    @Test
+    public void ifAnAliasDoesNotExistThenTryingToGetItWillRedirectToTheEditPage() throws Exception {
+        when(weGetTheAlias("production/myApplication/v123"));
+
+        then(theAliasExists(), is(false));
+    }
+
+    private ActionUnderTest deleteAlias(String alias) {
+        return executeRequest(post(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).delete(aliasPath(alias)))))).build());
+    }
+
+    private StateExtractor<Boolean> theAliasExists() {
+        return new StateExtractor<Boolean>() {
+            @Override
+            public Boolean execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                return new AliasPage(lastResponse(capturedInputAndOutputs)).aliasExists();
+            }
+        };
+    }
+
+    private ActionUnderTest weGetTheAlias(String alias) {
+        return executeRequest(get(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).followRedirectHtml(aliasPath(alias)))))).build());
+    }
+
+    private Uri fullyQualifiedUri(Uri relativeUri) {
+        return server.uri().mergePath(relativeUri.path());
+    }
+
+
     private StateExtractor<Collection<AliasPath>> aliases() {
         return new StateExtractor<Collection<AliasPath>>() {
             @Override
             public Collection<AliasPath> execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                return new AliasesPage(capturedInputAndOutputs.getType(ALIASES_AFTER_DELETION, Response.class)).getAliases();
+                return new AliasesPage(lastResponse(capturedInputAndOutputs)).getAliases();
             }
         };
+    }
+
+    private Response lastResponse(CapturedInputAndOutputs capturedInputAndOutputs) {
+        return capturedInputAndOutputs.getType(LAST_RESPONSE, Response.class);
     }
 
     protected void captureRequestsAndResponsesTo(final Application restApplication) {
@@ -104,14 +140,12 @@ public class DeleteAliasesTest extends TestState {
         return header.contains(MediaType.TEXT_HTML) || header.contains(MediaType.TEXT_PLAIN);
     }
 
-    private ActionUnderTest deleteAlias(final String alias) {
+    private ActionUnderTest executeRequest(final Request request) {
         return new ActionUnderTest() {
             @Override
             public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                Uri uri = AnnotatedBindings.relativeUriOf(method(on(AliasesResource.class).delete(aliasPath(alias))));
-                Request request = RequestBuilder.post(server.uri().mergePath(uri.path())).build();
                 Response aliasesResponse = httpHandler().handle(request);
-                capturedInputAndOutputs.add(ALIASES_AFTER_DELETION, aliasesResponse);
+                capturedInputAndOutputs.add(LAST_RESPONSE, aliasesResponse);
                 return capturedInputAndOutputs;
             }
         };
