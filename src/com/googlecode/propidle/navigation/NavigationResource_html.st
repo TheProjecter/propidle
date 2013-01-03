@@ -1,6 +1,6 @@
 <html>
 <body>
-<ul>
+<ul id="nav-pane">
     $links:{ link |
         <li>
             <a href="$link.url$">$link.name$</a>

@@ -1,10 +1,12 @@
 package acceptance;
 
-import acceptance.steps.thens.LastResponse;
-import acceptance.steps.whens.RequestIsMade;
 import com.googlecode.propidle.TestPropertiesApplication;
-import com.googlecode.propidle.aliases.*;
+import com.googlecode.propidle.aliases.Alias;
+import com.googlecode.propidle.aliases.AliasPath;
+import com.googlecode.propidle.aliases.Aliases;
+import com.googlecode.propidle.aliases.AliasesResource;
 import com.googlecode.totallylazy.*;
+import com.googlecode.totallylazy.proxy.Invocation;
 import com.googlecode.utterlyidle.*;
 import com.googlecode.utterlyidle.handlers.Auditor;
 import com.googlecode.utterlyidle.handlers.Auditors;
@@ -15,7 +17,6 @@ import com.googlecode.utterlyidle.modules.AuditModule;
 import com.googlecode.yadic.Container;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.state.givenwhenthen.*;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,22 +25,19 @@ import org.junit.runner.RunWith;
 import java.util.Collection;
 import java.util.Date;
 
-import static acceptance.steps.thens.LastResponse.theLocationOf;
-import static acceptance.steps.thens.LastResponse.theStatusOf;
-import static com.googlecode.propidle.aliases.AliasDestination.*;
+import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
 import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.totallylazy.UrlEncodedMessage.decode;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
 import static com.googlecode.utterlyidle.HttpHeaders.CONTENT_TYPE;
+import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
-import static com.googlecode.utterlyidle.Status.SEE_OTHER;
 import static com.googlecode.utterlyidle.annotations.AnnotatedBindings.relativeUriOf;
+import static com.googlecode.utterlyidle.html.Html.html;
 import static com.googlecode.yatspec.state.givenwhenthen.SyntacticSugar.to;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SpecRunner.class)
 public class DeleteAliasesTest extends TestState {
@@ -60,15 +58,14 @@ public class DeleteAliasesTest extends TestState {
         Closeables.close(server);
     }
 
-
     @Test
     public void weCanDeleteAnAlias() throws Exception {
         given(anAliasFrom("redirect_1", to("/properties/1")));
-        given(anAliasFrom("redirect_2", to("/properties/2")));
+        and(anAliasFrom("redirect_2", to("/properties/2")));
 
         when(weDeleteTheAlias("redirect_1"));
 
-        then(aliases(), not(Matchers.contains(aliasPath("redirect_1"))));
+        then(aliases(), not(contains(aliasPath("redirect_1"))));
         then(aliases(), contains(aliasPath("redirect_2")));
     }
 
@@ -80,17 +77,110 @@ public class DeleteAliasesTest extends TestState {
     }
 
     @Test
-    public void afterEditingAnAliasUsersAreRedirectedToTheEditPage() throws Exception {
-        when(weCreateTheAlias("production/myApplication/v123"));
-        then(aliases(), contains(aliasPath("production/myApplication/v123")));
+    public void canCreateAnAlias() throws Exception {
+        when(weCreateTheAlias("production/myApplication/v123", to("destination1")));
+        then(theAliasExists(), is(true));
+        then(destinationOfAliasIs(), is("destination1"));
     }
 
-    private ActionUnderTest weCreateTheAlias(final String alias) {
+    @Test
+    public void aliasShouldRedirectToDestination() throws Exception {
+        given(anAliasFrom("redirect_1", to("/properties/1")));
+        when(weGetTheAlias("redirect_1"));
+        then(currentPageTitle(), is("Properties \"/1\""));
+    }
+
+    @Test
+    public void aliasShouldReturnTextContentWhenGettingProperties() throws Exception {
+        given(anAliasFrom("redirect_1", to("/properties/1")));
+        when(weGetTheAlias("redirect_1.properties"));
+        then(responseContentType(), containsString(TEXT_PLAIN));
+    }
+
+    private StateExtractor<String> responseContentType() {
+        return new StateExtractor<String>() {
+            @Override
+            public String execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                return lastResponse(capturedInputAndOutputs).headers().getValue(HttpHeaders.CONTENT_TYPE);
+            }
+        };
+    }
+
+    @Test
+    public void afterEditingAnAliasUsersAreRedirectedToTheEditPage() throws Exception {
+        given(anAliasFrom("redirect_1", to("/properties/1")));
+
+        when(weChangeAlias("redirect_1", to("/properties/2")));
+
+        then(theAliasExists(), is(true));
+        then(destinationOfAliasIs(), is("/properties/2"));
+    }
+
+    @Test
+    public void weCanSeeAListOfAllAvailableAliases() throws Exception {
+        given(anAlias("redirect_1"));
+        and(anAlias("redirect_2"));
+
+        when(weGetAllAliases());
+
+        then(aliases(), hasItems(aliasPath("redirect_1"), aliasPath("redirect_2")));
+    }
+
+    @Test
+    public void weCanFilterTheListOfAvailableAliases() throws Exception {
+        given(anAlias("first_alias"));
+        and(anAlias("second_alias"));
+
+        when(weGetAllAliasesWithFilter("first"));
+
+        then(aliases(), hasItem(aliasPath("first_alias")));
+        then(aliases(), not(hasItem(aliasPath("second_alias"))));
+    }
+
+    private ActionUnderTest weGetAllAliasesWithFilter(String filter) {
+        return executeRequest(get(uriOf(method(on(AliasesResource.class).listAliases("")))).query("filter", filter));
+
+    }
+
+    private Uri uriOf(Invocation<Object, ? extends Object> method) {
+        return fullyQualifiedUri(relativeUriOf(method));
+    }
+
+
+    private StateExtractor<String> destinationOfAliasIs() {
+        return new StateExtractor<String>() {
+            @Override
+            public String execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                return new AliasPage(lastResponse(capturedInputAndOutputs)).destination();
+            }
+        };
+    }
+
+    private ActionUnderTest weChangeAlias(final String alias, final String newDestination) {
         return new ActionUnderTest() {
             @Override
             public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
-                executeRequest(post(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).update(aliasPath(alias), null))))).form("to", aliasDestination("whatever"))).execute(interestingGivens, capturedInputAndOutputs);
-                executeRequest(get(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).listAllAliases()))))).execute(interestingGivens, capturedInputAndOutputs);
+                executeRequest(post(uriOf(method(on(AliasesResource.class).update(aliasPath(alias), null)))).form("to", aliasDestination(newDestination))).execute(interestingGivens, capturedInputAndOutputs);
+                return capturedInputAndOutputs;
+            }
+        };
+    }
+
+    private StateExtractor<String> currentPageTitle() {
+        return new StateExtractor<String>() {
+            @Override
+            public String execute(CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                return html(lastResponse(capturedInputAndOutputs)).selectContent("//title");
+            }
+        };
+    }
+
+
+    private ActionUnderTest weCreateTheAlias(final String alias, final String destination) {
+        return new ActionUnderTest() {
+            @Override
+            public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) throws Exception {
+                executeRequest(post(uriOf(method(on(AliasesResource.class).update(aliasPath(alias), null)))).form("to", destination)).execute(interestingGivens, capturedInputAndOutputs);
                 return capturedInputAndOutputs;
             }
         };
@@ -98,7 +188,11 @@ public class DeleteAliasesTest extends TestState {
 
 
     private ActionUnderTest weDeleteTheAlias(String alias) {
-        return executeRequest(post(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).delete(aliasPath(alias)))))));
+        return executeRequest(post(uriOf(method(on(AliasesResource.class).delete(aliasPath(alias))))));
+    }
+
+    private ActionUnderTest weGetAllAliases() {
+        return executeRequest(get(uriOf(method(on(AliasesResource.class).listAllAliases()))));
     }
 
     private StateExtractor<Boolean> theAliasExists() {
@@ -111,7 +205,7 @@ public class DeleteAliasesTest extends TestState {
     }
 
     private ActionUnderTest weGetTheAlias(String alias) {
-        return executeRequest(get(fullyQualifiedUri(relativeUriOf(method(on(AliasesResource.class).followRedirectHtml(aliasPath(alias)))))));
+        return executeRequest(get(uriOf(method(on(AliasesResource.class).followRedirectHtml(aliasPath(alias))))));
     }
 
     private Uri fullyQualifiedUri(Uri relativeUri) {
@@ -161,7 +255,7 @@ public class DeleteAliasesTest extends TestState {
 
     private boolean responseIsHtmlOrText(Pair<Response, Date> response) {
         String header = Response.methods.header(response.first(), CONTENT_TYPE);
-        return header.contains(MediaType.TEXT_HTML) || header.contains(MediaType.TEXT_PLAIN);
+        return header.contains(MediaType.TEXT_HTML) || header.contains(TEXT_PLAIN);
     }
 
     private ActionUnderTest executeRequest(final RequestBuilder request) {
@@ -174,6 +268,10 @@ public class DeleteAliasesTest extends TestState {
                 return capturedInputAndOutputs;
             }
         };
+    }
+
+    private GivensBuilder anAlias(final String alias) {
+        return anAliasFrom(alias, "not important");
     }
 
     private GivensBuilder anAliasFrom(final String from, final String to) {
