@@ -14,15 +14,23 @@ public class AliasPage {
     }
 
     public boolean aliasExists() {
-        try {
-            return !html(response).contains("//p[contains(@class, 'alias-not-found')]");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return !htmlPage().contains("//p[contains(@class, 'alias-not-found')]");
+    }
+
+    public String destination() {
+        return htmlPage().selectContent("//a[contains(@class, 'alias-destination')]");
     }
 
     @Override
     public String toString() {
         return response.toString();
+    }
+
+    private Html htmlPage() {
+        try {
+            return html(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

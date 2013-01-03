@@ -10,19 +10,12 @@
 </head>
 
 <body>
-<table id="panes" style="width:100%; height:100%;">
-    <tr>
-        <td id="corner-pane" width="160" height="80" style="padding:0px;"><div style="width:160;height:100%;overflow:hidden"><img src="$base$static/title.png"/></div></td>
-        <td id="title-pane" valign="middle"><h1>$title$</h1></td>
-    </tr>
-    <tr>
-        <td id="nav-pane" valign="top">
-            <div id="nav-pane-content">
-                $include.({/nav?decorator=none}).body$
-                </div>
-        </td>
-        <td id="body-pane" valign="top">$body$</td>
-    </tr>
-</table>
+    <div id="nav-pane-content">
+        <h1 id="corner-pane">Property Manager</h1>
+        $include.({/nav?decorator=none}).body$
+    </div>
+    <div id="body-pane">
+    $body$
+    </div>
 </body>
 </html>
