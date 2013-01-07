@@ -19,6 +19,7 @@ import static com.googlecode.utterlyidle.handlers.RenderingResponseHandler.rende
 public class ChangesModule implements RequestScopedModule, ResourcesModule, ResponseHandlersModule {
     public Container addPerRequestObjects(Container container) {
         container.add(AllChanges.class, AllChangesFromRecords.class);
+        container.addActivator(ChildPaths.class, ChildPathsActivator.class);
         container.add(ChangeDetailsFromRecords.class);
         return container.add(ChangeDetails.class);
     }

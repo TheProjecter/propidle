@@ -5,9 +5,7 @@ import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.*;
 import com.googlecode.lazyrecords.Keyword;
 import com.googlecode.lazyrecords.Record;
 import com.googlecode.lazyrecords.Records;
@@ -40,10 +38,12 @@ public class AllChangesFromRecords implements AllChanges {
     public static final Keyword<String> UPDATED_VALUE = keyword("updated_value", String.class);
     public static final Definition CHANGES = definition("changes", PROPERTIES_PATH, REVISION_NUMBER, PROPERTY_NAME, PREVIOUS_VALUE, UPDATED_VALUE);
 
-    public final Records records;
+    private final Records records;
+    private final ChildPaths childPaths;
 
-    public AllChangesFromRecords(Records records) {
+    public AllChangesFromRecords(Records records, ChildPaths childPaths) {
         this.records = records;
+        this.childPaths = childPaths;
     }
 
     public Iterable<Change> get(PropertiesPath propertiesPath) {
@@ -54,13 +54,11 @@ public class AllChangesFromRecords implements AllChanges {
     }
 
     public Iterable<Pair<PropertiesPath, PathType>> childrenOf(PropertiesPath parent) {
-        return records.get(CHANGES).
-                filter(where(PROPERTIES_PATH, startsWith(parent.toString())).
-                        and(where(PROPERTIES_PATH, not(parent.toString())))).map(PROPERTIES_PATH).unique().map(toPropertiesPath()).map(toPairs(parent)).unique();
+        return childPaths.childPaths(parent).map(toPairs(parent)).unique();
     }
 
-    private Callable1<? super PropertiesPath, Pair<PropertiesPath, PathType>> toPairs(final PropertiesPath parent) {
-        return new Callable1<PropertiesPath, Pair<PropertiesPath, PathType>>() {
+    private Function1<PropertiesPath, Pair<PropertiesPath, PathType>> toPairs(final PropertiesPath parent) {
+        return new Function1<PropertiesPath, Pair<PropertiesPath, PathType>>() {
             public Pair<PropertiesPath, PathType> call(PropertiesPath propertiesPath) throws Exception {
                 return pair(childPath(propertiesPath, parent), type(propertiesPath, parent));
             }

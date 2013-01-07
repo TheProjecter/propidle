@@ -1,19 +1,16 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.lazyrecords.IgnoreLogger;
-import com.googlecode.lazyrecords.Logger;
-import com.googlecode.lazyrecords.Records;
-import com.googlecode.lazyrecords.Transaction;
+import com.googlecode.lazyrecords.*;
 import com.googlecode.lazyrecords.sql.SqlRecords;
 import com.googlecode.lazyrecords.sql.SqlTransaction;
 import com.googlecode.lazyrecords.sql.mappings.SqlMappings;
 import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
-import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 
 import javax.sql.DataSource;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.util.Properties;
 
@@ -41,7 +38,8 @@ public class SqlModule implements RequestScopedModule, ApplicationScopedModule {
         container.addActivator(Connection.class, ConnectionActivator.class);
         container.add(Transaction.class, SqlTransaction.class);
         container.add(SqlRecords.class);
-        container.add(Logger.class, IgnoreLogger.class);
+        container.addInstance(PrintStream.class, System.out);
+        container.add(Logger.class, PrintStreamLogger.class);
         container.add(SqlMappings.class);
         container.addActivator(Records.class, container.getActivator(SqlRecords.class));
         return container;
