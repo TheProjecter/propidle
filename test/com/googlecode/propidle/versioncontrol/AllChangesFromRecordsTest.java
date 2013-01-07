@@ -1,9 +1,11 @@
 package com.googlecode.propidle.versioncontrol;
 
+import com.googlecode.lazyrecords.Records;
 import com.googlecode.propidle.PathType;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.changes.ChildPathsFromRecords;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
@@ -25,8 +27,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class AllChangesFromRecordsTest {
-    private final AllChangesFromRecords changes = new AllChangesFromRecords(testRecordsWithAllMigrationsRun());
+    private final Records records = testRecordsWithAllMigrationsRun();
+    private final AllChangesFromRecords changes = new AllChangesFromRecords(records, new ChildPathsFromRecords(records));
     private final RevisionNumber someRevisionNumber = revisionNumber(3242);
+
     @Test
     public void shouldBeAbleToGetChangesByPropertiesPath() {
         PropertiesPath propertiesPath = propertiesPath("/properties/production");

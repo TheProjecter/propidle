@@ -34,8 +34,6 @@ import static org.hamcrest.Matchers.is;
 public class FileAndPropertiesIndexRebuilderTest {
     private static final Version VERSION = Version.LUCENE_30;
 
-    private final Records records = TestRecords.testRecordsWithAllMigrationsRun();
-    private final AllChangesFromRecords changes = new AllChangesFromRecords(records);
     private IndexWriter writer;
     private FileNameSearcher fileNameSearcher;
     private PropertiesSearcher propertiesSearcher;

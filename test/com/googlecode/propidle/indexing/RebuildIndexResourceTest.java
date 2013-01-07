@@ -5,6 +5,7 @@ import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.propidle.server.IndexRebuilder;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.changes.ChildPathsFromRecords;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.lazyrecords.memory.MemoryRecords;
@@ -30,7 +31,7 @@ public class RebuildIndexResourceTest {
 
     private IndexRebuilder indexRebuilder = mock(IndexRebuilder.class);
     private MemoryRecords records = new MemoryRecords();
-    private AllChangesFromRecords changes = new AllChangesFromRecords(records);
+    private AllChangesFromRecords changes = new AllChangesFromRecords(records, new ChildPathsFromRecords(records));
     private PropertiesPath propertiesPath = propertiesPath("/path");
     private PropertyName propertyName = propertyName("name");
     private RebuildIndexResource rebuildIndexResource = new RebuildIndexResource(indexRebuilder, records);

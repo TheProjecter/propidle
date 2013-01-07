@@ -64,7 +64,7 @@ public class ChangesResource {
                         add("propertyName", change.propertyName()).
                         add("previous", change.previous()).
                         add("updated", change.updated()).
-                        add("status", change.status()).
+                        add("status", change.status().name().toLowerCase()).
                         add("details", changeDetails.changesForRevision(change.revisionNumber()).value()));
             }
         };

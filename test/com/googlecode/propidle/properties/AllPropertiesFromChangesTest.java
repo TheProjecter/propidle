@@ -1,10 +1,7 @@
 package com.googlecode.propidle.properties;
 
 import com.googlecode.lazyrecords.Records;
-import com.googlecode.propidle.versioncontrol.changes.AllChanges;
-import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
-import com.googlecode.propidle.versioncontrol.changes.ChangeDetails;
-import com.googlecode.propidle.versioncontrol.changes.ChangeDetailsFromRecords;
+import com.googlecode.propidle.versioncontrol.changes.*;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.totallylazy.Pair;
 import org.junit.Before;
@@ -44,7 +41,7 @@ public class AllPropertiesFromChangesTest {
         highestRevisionNumbers = mock(HighestRevisionNumbers.class);
 
         Records records = testRecordsWithAllMigrationsRun();
-        changes = new AllChangesFromRecords(records);
+        changes = new AllChangesFromRecords(records, new ChildPathsFromRecords(records));
         ChangeDetails changeDetails = new ChangeDetails();
         changeDetails.value().put(testChangeDetail.first(), testChangeDetail.second());
         changesDetails = new ChangeDetailsFromRecords(records, changeDetails);
