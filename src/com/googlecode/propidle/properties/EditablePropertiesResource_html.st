@@ -6,10 +6,15 @@
 </head>
 <body>
 <div class="section">
+    <h2>Edit properties</h2>
+    <p>Previous edits can be seen at <a href="$first(changesUrl).url$">$first(changesUrl).name$</a></p>
+    <form method="post">
+        <input type="submit" value="Delete"/>
+        <input type="hidden" name="baseRevisionNumber" value="$revisionNumber$"/>
+        <input type="hidden" name="properties" value=""/>
+    </form>
     <form method="post" style="height:100%">
-        <h2>Edit properties</h2>
-        <p>Previous edits can be seen at <a href="$first(changesUrl).url$">$first(changesUrl).name$</a></p>
-        <input type="submit" value="save"/>
+        <input type="submit" value="Save"/>
         <input type="hidden" name="baseRevisionNumber" value="$revisionNumber$"/>
         <div height="100%">
             <textarea id="properties" name="properties" placeholder="Enter properties here"
