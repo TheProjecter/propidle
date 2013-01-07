@@ -24,6 +24,7 @@ import com.googlecode.propidle.server.staticcontent.StaticContentModule;
 import com.googlecode.propidle.status.StatusModule;
 import com.googlecode.propidle.versioncontrol.changes.ChangesModule;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionsModule;
+import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.RestApplication;
@@ -120,22 +121,21 @@ public class PropertiesApplication extends RestApplication {
         executor.register(propertyName("properties.refresh.time.in.seconds"), reloadProperties(applicationScope().get(ScheduleTask.class)), propertyValue("60"));
     }
 
-    public Callable1<PropertyValue, Void> reloadProperties(final ScheduleTask scheduleTaskRequest) {
-        return new Callable1<PropertyValue, Void>() {
-            public Void call(PropertyValue propertyValue) throws Exception {
+    public Block<PropertyValue> reloadProperties(final ScheduleTask scheduleTaskRequest) {
+        return new Block<PropertyValue>() {
+            @Override
+            protected void execute(PropertyValue propertyValue) throws Exception {
                 scheduleTaskRequest.schedule(RELOAD_PROPERTIES_TASK_NAME, valueOf(propertyValue.value()), valueOf(propertyValue.value()));
-                return null;
             }
         };
     }
 
-    private Callable1<PropertyValue, Void> scheduleIndexRebuild(final ScheduleTask scheduleTaskRequest) {
-        return new Callable1<PropertyValue, Void>() {
-            public Void call(PropertyValue propertyValue) throws Exception {
+    private Block<PropertyValue> scheduleIndexRebuild(final ScheduleTask scheduleTaskRequest) {
+        return new Block<PropertyValue>() {
+            @Override
+            protected void execute(PropertyValue propertyValue) throws Exception {
                 scheduleTaskRequest.schedule(REBUILD_INDEX_TASK_NAME, valueOf(propertyValue.value()));
-                return null;
             }
         };
     }
-
 }
