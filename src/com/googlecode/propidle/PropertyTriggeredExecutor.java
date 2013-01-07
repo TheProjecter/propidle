@@ -18,14 +18,14 @@ public class PropertyTriggeredExecutor {
         this.dynamicProperties = dynamicProperties;
     }
 
-    public void register(final PropertyName propertyName, final Callable1<PropertyValue, Void> callable, final PropertyValue defaultPropertyValue) {
+    public void register(final PropertyName propertyName, final Callable1<? super PropertyValue, ?> callable, final PropertyValue defaultPropertyValue) {
         final String property = dynamicProperties.snapshot().getProperty(propertyName.value(), defaultPropertyValue.value());
 
         dynamicProperties.listen(new SpecificPropertyChangeListener(propertyName, call(callable, defaultPropertyValue)));
         Callers.call(callable, propertyValue(property));
     }
 
-    private Callable1<PropertyComparison, Void> call(final Callable1<PropertyValue, Void> scheduledStuff, final PropertyValue defaultPropertyValue) {
+    private Callable1<PropertyComparison, Void> call(final Callable1<? super PropertyValue, ?> scheduledStuff, final PropertyValue defaultPropertyValue) {
         return new Callable1<PropertyComparison, Void>() {
             public Void call(PropertyComparison propertyComparison) throws Exception {
                 scheduledStuff.call(propertyComparison.updated().getOrElse(defaultPropertyValue));
