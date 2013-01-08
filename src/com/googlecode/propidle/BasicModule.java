@@ -54,7 +54,8 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
     }
 
     public Container addPerApplicationObjects(Container container) {
-        return container.add(PropertyTriggeredExecutor.class);
+        return container.add(PropertyTriggeredExecutor.class).
+                add(PersistenceMechanism.class);
     }
 
 }

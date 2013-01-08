@@ -22,11 +22,11 @@ public class ChildPathsFromSql implements ChildPaths {
     public Sequence<PropertiesPath> childPaths(PropertiesPath parent) {
         return sqlRecords.query(expression(
                 "WITH  max_revision as (select properties_path, property_name, max(revision_number) as revision_number " +
-                        "                  from   propidle_owner.changes " +
+                        "                  from   changes " +
                         "                  where  properties_path like ? and properties_path <> ?" +
                         "                  group by properties_path, property_name) " +
                         "select DISTINCT c.properties_path " +
-                        "from   propidle_owner.changes c , max_revision " +
+                        "from   changes c, max_revision " +
                         "where  c.properties_path = max_revision.properties_path " +
                         "and    c.revision_number = max_revision.revision_number " +
                         "and    c.property_name   = max_revision.property_name " +
