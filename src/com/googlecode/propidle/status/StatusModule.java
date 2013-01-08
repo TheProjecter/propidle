@@ -30,8 +30,7 @@ public class StatusModule implements RequestScopedModule, ResourcesModule, Respo
         container.add(StatusChecks.class);
         container.get(StatusChecks.class).add(DisplayBuildNumber.class);
         container.get(StatusChecks.class).add(LuceneDirectoryCheck.class);
-        Properties properties = container.get(Properties.class);
-        PersistenceMechanism mechanism = PersistenceMechanism.fromProperties(properties);
+        PersistenceMechanism mechanism = container.get(PersistenceMechanism.class);
         if (mechanism != PersistenceMechanism.IN_MEMORY) {
             container.get(StatusChecks.class).add(ConnectionDetailsCheck.class);
             container.get(StatusChecks.class).add(DatabaseVersionCheck.class);
