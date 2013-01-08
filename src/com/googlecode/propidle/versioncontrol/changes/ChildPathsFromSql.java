@@ -1,7 +1,8 @@
 package com.googlecode.propidle.versioncontrol.changes;
 
 import com.googlecode.lazyrecords.Keyword;
-import com.googlecode.lazyrecords.sql.SqlRecords;
+import com.googlecode.lazyrecords.Queryable;
+import com.googlecode.lazyrecords.sql.expressions.Expression;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
@@ -12,15 +13,15 @@ import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecor
 import static java.lang.String.format;
 
 public class ChildPathsFromSql implements ChildPaths {
-    private final SqlRecords sqlRecords;
+    private final Queryable<Expression> queryable;
 
-    public ChildPathsFromSql(SqlRecords sqlRecords) {
-        this.sqlRecords = sqlRecords;
+    public ChildPathsFromSql(Queryable<Expression> queryable) {
+        this.queryable = queryable;
     }
 
     @Override
     public Sequence<PropertiesPath> childPaths(PropertiesPath parent) {
-        return sqlRecords.query(expression(
+        return queryable.query(expression(
                 "WITH  max_revision as (select properties_path, property_name, max(revision_number) as revision_number " +
                         "                  from   changes " +
                         "                  where  properties_path like ? and properties_path <> ?" +
