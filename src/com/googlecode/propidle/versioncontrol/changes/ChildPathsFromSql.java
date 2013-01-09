@@ -32,7 +32,7 @@ public class ChildPathsFromSql implements ChildPaths {
                         "and    c.revision_number = max_revision.revision_number " +
                         "and    c.property_name   = max_revision.property_name " +
                         "and    c.updated_value   IS NOT NULL " +
-                        "order by 1", format("%s%%", parent), parent), Sequences.<Keyword<?>>sequence(PROPERTIES_PATH)).
+                        "order by 1", format("%s/%%", parent.toString().equals("/") ? "" : parent), parent), Sequences.<Keyword<?>>sequence(PROPERTIES_PATH)).
                 map(PROPERTIES_PATH).
                 map(toPropertiesPath());
     }
