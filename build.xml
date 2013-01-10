@@ -64,7 +64,7 @@
         <compile.and.jar src="${src}" jar="${release.jar.path}" classpathref="all.dependencies"
                          version="${release.version}"/>
         <compile.and.jar src="${src}" jar="${release.client.jar.path}" includes="com/googlecode/propidle/client/**"
-                         classpathref="client.dependencies" version="${release.version}"/>
+                         classpathref="client.dependencies" version="${release.version}" copy.resources="false"/>
         <compile.and.jar src="${test}" jar="${test.jar.path}" classpathref="all.jars" version="${release.version}"/>
     </target>
 

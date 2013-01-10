@@ -5,6 +5,7 @@
         <attribute name="jar"/>
         <attribute name="classpathref"/>
         <attribute name="version"/>
+        <attribute name="copy.resources" default="true"/>
         <attribute name="includes" default="**"/>
         <attribute name="classes" default="@{jar}.classes"/>
         <attribute name="main.class" default=""/>
@@ -15,12 +16,12 @@
                    bootclasspath="${java.home}/lib/rt.jar" target="1.6" source="1.6" debug="true"
                    includeantruntime="false">
             </javac>
-            <copy todir="@{classes}">
-                <fileset dir="@{src}">
-                    <exclude name="**/*.java"/>
-                    <exclude name="**/*.scala"/>
-                </fileset>
-            </copy>
+
+            <antcall target="copy.resources">
+                <param name="copy.resources" value="@{copy.resources}"/>
+                <param name="classes" value="@{classes}"/>
+                <param name="src" value="@{src}"/>
+            </antcall>
 
             <property name="manifest" value="@{jar}.mf"/>
             <manifest file="${manifest}">
@@ -40,6 +41,14 @@
             <delete dir="@{classes}"/>
         </sequential>
     </macrodef>
+
+    <target name="copy.resources" if="${copy.resources}">
+        <copy todir="${classes}">
+            <fileset dir="${src}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
 
     <macrodef name="test">
         <attribute name="jar"/>
