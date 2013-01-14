@@ -38,8 +38,7 @@ public class SqlModule implements RequestScopedModule, ApplicationScopedModule {
         container.addActivator(Connection.class, ConnectionActivator.class);
         container.add(Transaction.class, SqlTransaction.class);
         container.add(SqlRecords.class);
-        container.addInstance(PrintStream.class, System.out);
-        container.add(Logger.class, PrintStreamLogger.class);
+        container.add(Logger.class, IgnoreLogger.class);
         container.add(SqlMappings.class);
         container.addActivator(Records.class, container.getActivator(SqlRecords.class));
         return container;
