@@ -22,7 +22,6 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/lib/build" />
-          <root url="jar://$MODULE_DIR$/lib/build/yatspec-173.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/build" recursive="false" />
       </library>
@@ -36,6 +35,8 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/lib/runtime" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-581-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/lazyrecords-148-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
       </library>
