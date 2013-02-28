@@ -24,9 +24,19 @@ public class ResolveVariablesTest {
         assertThat(environmentVariables.getProperty(NAME), is(ENVIRONMENT_VARIABLE_VALUE));
     }
 
+    @Test
+    public void shouldNotThrowExceptionWhenUndefinedPropertySpecifiedByDefaultAllowingApplicationToStart() throws Exception {
+        try {
+            Properties properties = ResolveVariables.resolveProperties(environmentProperties(), UNDEFINED_ENVIRONMENT_VARIABLE_NAME).call();
+            assertThat(properties.getProperty(ENVIRONMENT_VARIABLE_NAME), is(ENVIRONMENT_VARIABLE_VALUE));
+        } catch (Exception e) {
+            fail("Unexpected exception " + e);
+        }
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionWhenUndefinedPropertySpecified() throws Exception {
-        ResolveVariables.resolveProperties(environmentProperties(), UNDEFINED_ENVIRONMENT_VARIABLE_NAME).call();
+    public void shouldThrowExceptionWhenUndefinedPropertySpecifiedIfDesired() throws Exception {
+            ResolveVariables.resolveProperties(environmentProperties(), PropertyChecker.constructors.manditory(), UNDEFINED_ENVIRONMENT_VARIABLE_NAME).call();
     }
 
     @Test

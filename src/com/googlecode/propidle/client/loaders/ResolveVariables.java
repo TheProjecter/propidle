@@ -11,14 +11,20 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public final class ResolveVariables implements Callable<Properties> {
     private final Callable<Properties> loader;
     private final Sequence<String> propertyNames;
+    private final PropertyChecker propertyChecker;
 
     public static ResolveVariables resolveProperties(Callable<Properties> loader, String propertyName, String... additionalPropertyNames) {
-        return new ResolveVariables(loader, sequence(propertyName).join(sequence(additionalPropertyNames)));
+        return resolveProperties(loader, PropertyChecker.constructors.optional(), propertyName, additionalPropertyNames);
     }
 
-    private ResolveVariables(Callable<Properties> loader, Sequence<String> propertyNames) {
+    public static ResolveVariables resolveProperties(Callable<Properties> loader, PropertyChecker propertyChecker1, String propertyName, String... additionalPropertyNames) {
+        return new ResolveVariables(loader, sequence(propertyName).join(sequence(additionalPropertyNames)), propertyChecker1);
+    }
+
+    private ResolveVariables(Callable<Properties> loader, Sequence<String> propertyNames, PropertyChecker propertyChecker) {
         this.loader = loader;
         this.propertyNames = propertyNames;
+        this.propertyChecker = propertyChecker;
     }
 
     public Properties call() throws Exception {
@@ -26,14 +32,13 @@ public final class ResolveVariables implements Callable<Properties> {
         return propertyNames.fold(properties, resolvePropertyName());
     }
 
-    private static Callable2<? super Properties, ? super String, Properties> resolvePropertyName() {
+    private Callable2<? super Properties, ? super String, Properties> resolvePropertyName() {
         return new Callable2<Properties, String, Properties>() {
             public Properties call(Properties properties, String propertyName) throws Exception {
                 if(propertyIsUsed(properties, resolvablePropertyName(propertyName))) {
-                    checkThatPropertyIsDefined(properties, propertyName);
+                    if (!propertyChecker.exists(properties, propertyName)) return properties;
                     return toPairs(properties).fold(properties, resolve(propertyName));
                 }
-
                 return properties;
             }
         };
@@ -58,17 +63,9 @@ public final class ResolveVariables implements Callable<Properties> {
         return String.format("${%s}", propertyName);
     }
 
-    private static void checkThatPropertyIsDefined(Properties properties, String propertyName) {
-        if (!containsProperty(properties, propertyName)) {
-            throw new IllegalArgumentException(String.format("Property %s not found in %s", propertyName, properties));
-        }
-    }
-
-    private static boolean containsProperty(Properties properties, String property) {
-        return properties.getProperty(property) != null;
-    }
-
     private static String resolveProperty(Properties properties, String resolvablePropertyValue, String propertyName) {
         return resolvablePropertyValue.replace(resolvablePropertyName(propertyName), properties.getProperty(propertyName));
     }
+
+
 }
