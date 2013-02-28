@@ -6,7 +6,7 @@ public interface PropertyChecker {
     boolean exists(Properties properties, String property);
 
     class constructors {
-        public static PropertyChecker manditory() {
+        public static PropertyChecker mandatory() {
             return new PropertyChecker() {
                 @Override
                 public boolean exists(Properties properties, String property) {

@@ -36,7 +36,7 @@ public class ResolveVariablesTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenUndefinedPropertySpecifiedIfDesired() throws Exception {
-            ResolveVariables.resolveProperties(environmentProperties(), PropertyChecker.constructors.manditory(), UNDEFINED_ENVIRONMENT_VARIABLE_NAME).call();
+            ResolveVariables.resolveProperties(environmentProperties(), PropertyChecker.constructors.mandatory(), UNDEFINED_ENVIRONMENT_VARIABLE_NAME).call();
     }
 
     @Test
