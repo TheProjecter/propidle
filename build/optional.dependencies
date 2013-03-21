@@ -1,2 +1,2 @@
-mvn://mesir.googlecode.com/svn/trunk/mavenrepo/com.oracle:ojdbc14:jar:10.2.0.4.0
+mvn://repo.bodar.com/com.oracle:ojdbc6:jar:11.2.0.1.0
 mvn:org.hsqldb:hsqldb:jar:2.0.0
