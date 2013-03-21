@@ -4,7 +4,7 @@ import com.googlecode.lazyrecords.*;
 import com.googlecode.lazyrecords.sql.SqlRecords;
 import com.googlecode.lazyrecords.sql.SqlTransaction;
 import com.googlecode.lazyrecords.sql.mappings.SqlMappings;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
+import com.googlecode.propidle.migrations.persistence.jdbc.ConnectionDetails;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
@@ -15,7 +15,7 @@ import java.sql.Connection;
 import java.util.Properties;
 
 import static com.googlecode.propidle.properties.Properties.getOrFail;
-import static com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
+import static com.googlecode.propidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
 
 public class SqlModule implements RequestScopedModule, ApplicationScopedModule {
 

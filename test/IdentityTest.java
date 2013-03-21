@@ -1,10 +1,9 @@
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Request;
 import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.authentication.api.Identity;
-import com.googlecode.utterlyidle.authentication.application.PrivateResource;
-import com.googlecode.utterlyidle.authentication.application.TestApplication;
-import com.googlecode.utterlyidle.modules.Module;
+import com.googlecode.propidle.authentication.api.Identity;
+import com.googlecode.propidle.authentication.application.PrivateResource;
+import com.googlecode.propidle.authentication.application.TestApplication;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 import org.junit.Test;

@@ -2,7 +2,7 @@ package com.googlecode.propidle.status;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
+import com.googlecode.propidle.migrations.persistence.jdbc.ConnectionDetails;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

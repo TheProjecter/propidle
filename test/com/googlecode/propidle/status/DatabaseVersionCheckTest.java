@@ -1,17 +1,13 @@
 package com.googlecode.propidle.status;
 
+import com.googlecode.propidle.migrations.*;
 import com.googlecode.totallylazy.None;
 import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Uri;
-import com.googlecode.totallylazy.proxy.Invocation;
 import com.googlecode.utterlyidle.BaseUri;
 import com.googlecode.utterlyidle.BaseUriRedirector;
-import com.googlecode.utterlyidle.Binding;
 import com.googlecode.utterlyidle.RegisteredResources;
-import com.googlecode.utterlyidle.Response;
-import com.googlecode.utterlyidle.migrations.*;
-import com.googlecode.utterlyidle.migrations.log.MigrationLog;
-import com.googlecode.utterlyidle.migrations.log.MigrationLogItem;
+import com.googlecode.propidle.migrations.log.MigrationLog;
+import com.googlecode.propidle.migrations.log.MigrationLogItem;
 import com.googlecode.yadic.resolvers.MissingResolver;
 import org.junit.Test;
 

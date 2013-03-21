@@ -28,8 +28,8 @@ import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.utterlyidle.BasePath;
 import com.googlecode.utterlyidle.RestApplication;
-import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
-import com.googlecode.utterlyidle.migrations.modules.MigrationRegistrationModule;
+import com.googlecode.propidle.migrations.modules.MigrationQueriesModule;
+import com.googlecode.propidle.migrations.modules.MigrationRegistrationModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.SimpleContainer;
@@ -43,7 +43,7 @@ import static com.googlecode.propidle.indexing.LuceneModule.REBUILD_INDEX_TASK_N
 import static com.googlecode.propidle.migrations.SchemaVersionModule.schemaVersionModule;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.utterlyidle.migrations.util.Modules.asRequestScopeModule;
+import static com.googlecode.propidle.migrations.util.Modules.asRequestScopeModule;
 import static java.lang.Long.valueOf;
 
 public class PropertiesApplication extends RestApplication {
