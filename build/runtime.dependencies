@@ -5,12 +5,10 @@ mvn:org.objenesis:objenesis:jar:1.2
 mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
 
-s3://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:958
-s3://repo.bodar.com/com.googlecode.lazyrecords:lazyrecords:jar|sources:148
-s3://repo.bodar.com/com.googlecode.funclate:funclate:jar|sources:93
-s3://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:581
-s3://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:153
-s3://repo.bodar.com/com.googlecode.utterlyidle-migrations:utterlyidle-migrations:jar|sources:42
-s3://repo.bodar.com/com.googlecode.utterlyidle-auth:utterlyidle-auth:jar|sources:36
+mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:jar|sources:1055
+mvn://repo.bodar.com/com.googlecode.lazyrecords:lazyrecords:jar|sources:222
+mvn://repo.bodar.com/com.googlecode.funclate:funclate:jar|sources:102
+mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:jar|sources:627
+mvn://repo.bodar.com/com.googlecode.yadic:yadic:jar|sources:157
 
 mvn:org.sitemesh:sitemesh:jar:3.0-alpha-2
