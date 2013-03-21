@@ -2,12 +2,12 @@ package com.googlecode.propidle.migrations;
 
 
 import com.googlecode.lazyrecords.sql.SqlRecords;
-import com.googlecode.utterlyidle.migrations.Migrations;
-import com.googlecode.utterlyidle.migrations.ModuleMigrations;
-import com.googlecode.utterlyidle.migrations.ModuleName;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.SqlDialect;
+import com.googlecode.propidle.migrations.Migrations;
+import com.googlecode.propidle.migrations.ModuleMigrations;
+import com.googlecode.propidle.migrations.ModuleName;
+import com.googlecode.propidle.migrations.persistence.jdbc.SqlDialect;
 
-import static com.googlecode.utterlyidle.migrations.sql.SqlMigrations.sqlMigrationsInSamePackageAs;
+import static com.googlecode.propidle.migrations.sql.SqlMigrations.sqlMigrationsInSamePackageAs;
 
 public class PropIdleMigrations implements ModuleMigrations {
     public static final ModuleName moduleName = ModuleName.moduleName("Propidle Core");

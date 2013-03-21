@@ -1,6 +1,6 @@
 package com.googlecode.propidle.versioncontrol.revisions;
 
-import com.googlecode.utterlyidle.migrations.persistence.RecordLock;
+import com.googlecode.propidle.migrations.persistence.RecordLock;
 
 import static com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbersFromRecords.HIGHEST_REVISION;
 

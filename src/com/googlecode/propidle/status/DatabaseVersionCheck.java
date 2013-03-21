@@ -7,11 +7,11 @@ import com.googlecode.totallylazy.Exceptions;
 import com.googlecode.totallylazy.LazyException;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.utterlyidle.Redirector;
-import com.googlecode.utterlyidle.migrations.Migration;
-import com.googlecode.utterlyidle.migrations.ModuleMigrations;
-import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
-import com.googlecode.utterlyidle.migrations.ModuleName;
-import com.googlecode.utterlyidle.migrations.log.MigrationLog;
+import com.googlecode.propidle.migrations.Migration;
+import com.googlecode.propidle.migrations.ModuleMigrations;
+import com.googlecode.propidle.migrations.ModuleMigrationsCollector;
+import com.googlecode.propidle.migrations.ModuleName;
+import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.yadic.Resolver;
 
 import static com.googlecode.propidle.status.Action.action;
@@ -24,7 +24,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
-import static com.googlecode.utterlyidle.migrations.MigrationNumbers.databaseSchemaVersion;
+import static com.googlecode.propidle.migrations.MigrationNumbers.databaseSchemaVersion;
 import static java.lang.String.format;
 
 public class DatabaseVersionCheck implements StatusCheck {

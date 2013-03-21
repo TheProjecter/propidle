@@ -3,7 +3,7 @@ package com.googlecode.propidle.migrations;
 import com.googlecode.propidle.server.ModelTemplateRenderer;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.handlers.ResponseHandlers;
-import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
+import com.googlecode.propidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.utterlyidle.modules.ResourcesModule;

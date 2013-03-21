@@ -3,13 +3,13 @@ package com.googlecode.propidle.server;
 import com.googlecode.propidle.PersistenceMechanism;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Sequences;
-import com.googlecode.utterlyidle.migrations.bootstrap.hsql.HsqlMigrationsModule;
-import com.googlecode.utterlyidle.migrations.bootstrap.oracle.OracleMigrationsModule;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.SqlPersistenceModule;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.hsql.HsqlModule;
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.oracle.OracleModule;
-import com.googlecode.utterlyidle.migrations.persistence.memory.InMemoryPersistenceModule;
+import com.googlecode.propidle.migrations.bootstrap.hsql.HsqlMigrationsModule;
+import com.googlecode.propidle.migrations.bootstrap.oracle.OracleMigrationsModule;
+import com.googlecode.propidle.migrations.persistence.jdbc.ConnectionDetails;
+import com.googlecode.propidle.migrations.persistence.jdbc.SqlPersistenceModule;
+import com.googlecode.propidle.migrations.persistence.jdbc.hsql.HsqlModule;
+import com.googlecode.propidle.migrations.persistence.jdbc.oracle.OracleModule;
+import com.googlecode.propidle.migrations.persistence.memory.InMemoryPersistenceModule;
 import com.googlecode.utterlyidle.modules.Module;
 
 import java.util.Properties;
@@ -17,7 +17,7 @@ import java.util.Properties;
 import static com.googlecode.propidle.properties.Properties.getOrFail;
 import static com.googlecode.propidle.util.Modules.asRequestScopeModule;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
+import static com.googlecode.propidle.migrations.persistence.jdbc.ConnectionDetails.connectionDetails;
 import static java.lang.String.format;
 
 public class PersistenceModules {

@@ -1,10 +1,12 @@
 package com.googlecode.propidle.migrations;
 
+import com.googlecode.propidle.migrations.util.time.Clock;
+import com.googlecode.propidle.migrations.util.time.SystemClock;
 import com.googlecode.propidle.server.PersistenceModules;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.utterlyidle.migrations.ModuleMigrationsCollector;
-import com.googlecode.utterlyidle.migrations.modules.MigrationActionsModule;
-import com.googlecode.utterlyidle.migrations.modules.MigrationQueriesModule;
+import com.googlecode.propidle.migrations.ModuleMigrationsCollector;
+import com.googlecode.propidle.migrations.modules.MigrationActionsModule;
+import com.googlecode.propidle.migrations.modules.MigrationQueriesModule;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
@@ -30,7 +32,7 @@ public class MigrationsContainer {
         new MigrationQueriesModule().call(container);
 
 
-        container.add(com.googlecode.utterlyidle.migrations.util.time.Clock.class, com.googlecode.utterlyidle.migrations.util.time.SystemClock.class);
+        container.add(Clock.class, SystemClock.class);
         container.get(ModuleMigrationsCollector.class).add(PropIdleMigrations.class);
         return container;
     }

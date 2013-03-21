@@ -1,6 +1,6 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.utterlyidle.migrations.persistence.jdbc.ConnectionDetails;
+import com.googlecode.propidle.migrations.persistence.jdbc.ConnectionDetails;
 import org.hsqldb.jdbc.JDBCDataSource;
 
 import javax.sql.DataSource;
