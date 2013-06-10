@@ -1,24 +1,22 @@
 package com.googlecode.propidle.client;
 
-import com.googlecode.propidle.client.logging.Logger;
-
-import static com.googlecode.propidle.client.logging.Message.message;
-import static com.googlecode.propidle.util.Exceptions.stackTraceToString;
+import com.googlecode.propidle.client.handlers.FailureHandler;
 
 class ReloadPropertiesRunnable implements Runnable {
     private final DynamicProperties dynamicProperties;
-    private final Logger logger;
+    private final FailureHandler failureHandler;
 
-    public ReloadPropertiesRunnable(DynamicProperties dynamicProperties, Logger logger) {
+    public ReloadPropertiesRunnable(DynamicProperties dynamicProperties, FailureHandler failureHandler) {
         this.dynamicProperties = dynamicProperties;
-        this.logger = logger;
+        this.failureHandler = failureHandler;
     }
 
     public void run() {
         try {
             dynamicProperties.reload();
         } catch (Exception e) {
-            logger.log(message(stackTraceToString(e)));
+            failureHandler.handle(e);
         }
     }
+
 }

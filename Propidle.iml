@@ -37,6 +37,7 @@
           <root url="file://$MODULE_DIR$/lib/runtime" />
           <root url="jar://$MODULE_DIR$/lib/runtime/utterlyidle-581-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/runtime/lazyrecords-148-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/runtime/totallylazy-1055-sources.jar!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib/runtime" recursive="false" />
       </library>
