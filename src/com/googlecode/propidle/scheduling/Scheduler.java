@@ -1,5 +1,7 @@
 package com.googlecode.propidle.scheduling;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
@@ -7,10 +9,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class Scheduler {
-
+public class Scheduler implements Closeable {
     private final ScheduledExecutorService executorService;
-
     private final Map<Runnable, ScheduledFuture<?>> scheduledFutures = new HashMap<Runnable, ScheduledFuture<?>>();
 
     public Scheduler(ScheduledExecutorService executorService) {
@@ -26,4 +26,8 @@ public class Scheduler {
         scheduledFutures.put(task, scheduledFuture);
     }
 
+    @Override
+    public void close() throws IOException {
+        executorService.shutdownNow();
+    }
 }

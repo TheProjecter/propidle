@@ -5,6 +5,8 @@ import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.scheduling.Scheduler;
 import com.googlecode.totallylazy.Callable1;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
@@ -13,11 +15,10 @@ import static java.lang.Long.valueOf;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class DynamicPropertiesReloadingScheduler {
-
+public class DynamicPropertiesReloadingScheduler implements Closeable {
     private final PropertyTriggeredExecutor propertyTriggeredExecutor;
-    private Scheduler scheduler;
-    private ReloadPropertiesRunnable reloadPropertiesRunnable;
+    private final Scheduler scheduler;
+    private final ReloadPropertiesRunnable reloadPropertiesRunnable;
 
     public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties) {
         return reloadingDynamicProperties(dynamicProperties, newSingleThreadScheduledExecutor());
@@ -48,4 +49,8 @@ public class DynamicPropertiesReloadingScheduler {
         };
     }
 
+    @Override
+    public void close() throws IOException {
+        scheduler.close();
+    }
 }
