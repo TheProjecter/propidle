@@ -2,9 +2,11 @@ package com.googlecode.propidle.client;
 
 import com.googlecode.propidle.PropertyTriggeredExecutor;
 import com.googlecode.propidle.client.logging.Logger;
-import com.googlecode.propidle.client.logging.PrintStreamLogger;
+import com.googlecode.propidle.client.logging.TimestampLogger;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.scheduling.Scheduler;
+import com.googlecode.propidle.util.time.Clock;
+import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Callable1;
 
 import java.io.Closeable;
@@ -24,7 +26,7 @@ public class DynamicPropertiesReloadingScheduler implements Closeable {
     private final ReloadPropertiesRunnable reloadPropertiesRunnable;
 
     public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties) {
-        return reloadingDynamicProperties(dynamicProperties, newSingleThreadScheduledExecutor());
+        return reloadingDynamicProperties(dynamicProperties, newSingleThreadScheduledExecutor(), new SystemClock());
     }
 
     public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Logger logger) {
@@ -32,8 +34,8 @@ public class DynamicPropertiesReloadingScheduler implements Closeable {
         return dynamicProperties;
     }
 
-    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService) {
-        return reloadingDynamicProperties(dynamicProperties, executorService, printStreamLogger(System.err));
+    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Clock clock) {
+        return reloadingDynamicProperties(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), clock));
     }
 
     public DynamicPropertiesReloadingScheduler(Scheduler scheduler, final PropertyTriggeredExecutor propertyTriggeredExecutor, final ReloadPropertiesRunnable reloadPropertiesRunnable) {
