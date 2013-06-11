@@ -1,33 +1,28 @@
 package com.googlecode.propidle.migrations;
 
 import com.googlecode.lazyrecords.memory.MemoryRecords;
-import com.googlecode.propidle.migrations.Migration;
-import com.googlecode.propidle.migrations.MigrationLogCheckingMigrator;
-import com.googlecode.propidle.migrations.ModuleName;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.propidle.migrations.log.MigrationLogFromRecords;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
-import com.googlecode.propidle.migrations.util.time.StoppedClock;
+import com.googlecode.totallylazy.Sequence;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Option.option;
-import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static com.googlecode.propidle.migrations.Migration.migration;
 import static com.googlecode.propidle.migrations.MigrationId.migrationId;
 import static com.googlecode.propidle.migrations.MigrationName.migrationName;
 import static com.googlecode.propidle.migrations.MigrationNumber.migrationNumber;
 import static com.googlecode.propidle.migrations.ModuleName.moduleName;
-import static com.googlecode.propidle.migrations.util.time.StoppedClock.stoppedClock;
+import static com.googlecode.totallylazy.Option.option;
+import static com.googlecode.totallylazy.Sequences.sequence;
+import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class MigrationLogCheckingMigratorTest {
-    private final StoppedClock clock = stoppedClock();
+    private final com.googlecode.totallylazy.time.StoppedClock clock = com.googlecode.totallylazy.time.StoppedClock.stoppedClock();
     private final MigrationLog migrationLog = new MigrationLogFromRecords(new MemoryRecords());
     private final MigrationLogCheckingMigrator migrator = new MigrationLogCheckingMigrator(migrationLog, clock);
 
@@ -57,7 +52,7 @@ public class MigrationLogCheckingMigratorTest {
 
         assertThat(
                 migrationLog.get(migration.number(), moduleName),
-                is(option(new MigrationLogItem(clock.time(),  migration.number(), migration.name(), moduleName))));
+                is(option(new MigrationLogItem(clock.now(), migration.number(), migration.name(), moduleName))));
     }
 
     @Test
@@ -81,7 +76,7 @@ public class MigrationLogCheckingMigratorTest {
         migrator.migrate(files, moduleName("Module1"));
         migrator.migrate(files, moduleName("Module2"));
 
-        assertThat(migrationsPerformed, hasExactly("migration happened","migration happened"));
+        assertThat(migrationsPerformed, hasExactly("migration happened", "migration happened"));
     }
 
     private Runnable record(final String message, final List<String> list) {

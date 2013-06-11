@@ -1,13 +1,13 @@
 package com.googlecode.propidle.util;
 
-import com.googlecode.propidle.server.Server;
-import com.googlecode.propidle.util.time.Clock;
-import com.googlecode.propidle.util.time.SystemClock;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.lazyrecords.Records;
 import com.googlecode.propidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.propidle.migrations.RunMigrations;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
+import com.googlecode.propidle.server.Server;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.time.Clock;
+import com.googlecode.totallylazy.time.SystemClock;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
@@ -33,13 +33,13 @@ public class TestRecords {
     public static Records testRecordsWithAllMigrationsRun() {
         Properties properties = hsqlConfiguration();
         Container container = container(properties);
-        runMigrations(container,properties);
+        runMigrations(container, properties);
         return container.get(Records.class);
     }
 
     public static void runMigrations(Container container, Properties properties) {
         try {
-            Iterable<MigrationLogItem> logItemIterable = inTransaction(migrationsContainer(container,properties), RunMigrations.class);
+            Iterable<MigrationLogItem> logItemIterable = inTransaction(migrationsContainer(container, properties), RunMigrations.class);
             System.out.println("logItemIterable = " + logItemIterable);
         } catch (Exception e) {
             throw new RuntimeException("Problem running migrations", e);

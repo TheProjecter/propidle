@@ -1,6 +1,6 @@
 package com.googlecode.propidle.client.logging;
 
-import com.googlecode.propidle.util.time.Clock;
+import com.googlecode.totallylazy.time.Clock;
 import com.googlecode.totallylazy.time.Dates;
 
 import static com.googlecode.propidle.client.logging.Message.message;
@@ -26,6 +26,6 @@ public class TimestampLogger implements Logger {
 
     @Override
     public void log(Message message) {
-        delegate.log(message(String.format("%s %s", Dates.format(format).format(clock.time()), message.toString())));
+        delegate.log(message(String.format("%s %s", Dates.format(format).format(clock.now()), message.toString())));
     }
 }
