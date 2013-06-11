@@ -2,14 +2,11 @@ package com.googlecode.propidle.migrations;
 
 import com.googlecode.propidle.migrations.log.MigrationLog;
 import com.googlecode.propidle.migrations.log.MigrationLogItem;
-import com.googlecode.propidle.migrations.util.time.Clock;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Runnables;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.propidle.migrations.log.MigrationLog;
-import com.googlecode.propidle.migrations.log.MigrationLogItem;
-import com.googlecode.propidle.migrations.util.time.Clock;
+import com.googlecode.totallylazy.time.Clock;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
@@ -31,7 +28,7 @@ public class MigrationLogCheckingMigrator implements Migrator {
     private Callable1<? super Migration, MigrationLogItem> toMigrationEvent(final ModuleName moduleName) {
         return new Callable1<Migration, MigrationLogItem>() {
             public MigrationLogItem call(Migration migration) throws Exception {
-                return new MigrationLogItem(clock.time(), migration, moduleName);
+                return new MigrationLogItem(clock.now(), migration, moduleName);
             }
         };
     }

@@ -1,12 +1,11 @@
 package com.googlecode.propidle.migrations;
 
-import com.googlecode.propidle.migrations.util.time.Clock;
-import com.googlecode.propidle.migrations.util.time.SystemClock;
-import com.googlecode.propidle.server.PersistenceModules;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.propidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.propidle.migrations.modules.MigrationActionsModule;
 import com.googlecode.propidle.migrations.modules.MigrationQueriesModule;
+import com.googlecode.propidle.server.PersistenceModules;
+import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.time.Clock;
+import com.googlecode.totallylazy.time.SystemClock;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
 import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
@@ -24,7 +23,7 @@ import static com.googlecode.yadic.closeable.CloseableContainer.closeableContain
 public class MigrationsContainer {
     public static CloseableContainer migrationsContainer(Resolver parentScope, Properties properties) throws Exception {
         Sequence<Module> moduleSequence = PersistenceModules.forMigrations(properties);
-        
+
         CloseableContainer container = closeableContainer(selfRegister(new SimpleContainer(parentScope)));
         moduleSequence.forEach(activate(container, sequence(ApplicationScopedModule.class, RequestScopedModule.class)));
 

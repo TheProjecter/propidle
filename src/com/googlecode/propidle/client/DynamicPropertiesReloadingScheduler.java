@@ -7,9 +7,9 @@ import com.googlecode.propidle.client.logging.Logger;
 import com.googlecode.propidle.client.logging.TimestampLogger;
 import com.googlecode.propidle.properties.PropertyValue;
 import com.googlecode.propidle.scheduling.Scheduler;
-import com.googlecode.propidle.util.time.Clock;
-import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.time.Clock;
+import com.googlecode.totallylazy.time.SystemClock;
 
 import java.io.Closeable;
 import java.io.IOException;

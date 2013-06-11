@@ -9,14 +9,13 @@ import com.googlecode.propidle.server.RequestedRevisionNumberActivator;
 import com.googlecode.propidle.urls.RelativeUriGetter;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
-import com.googlecode.propidle.util.time.Clock;
-import com.googlecode.propidle.util.time.SystemClock;
 import com.googlecode.totallylazy.Option;
+import com.googlecode.totallylazy.time.Clock;
+import com.googlecode.totallylazy.time.SystemClock;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.handlers.ConvertExtensionToAcceptHeader;
 import com.googlecode.utterlyidle.lazyrecords.TransactionHttpHandler;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
-import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 import com.googlecode.yadic.generics.TypeFor;
@@ -37,7 +36,8 @@ public class BasicModule implements RequestScopedModule, ApplicationScopedModule
 
         container.decorate(HttpHandler.class, ConvertRevisionNumberQueryParameterToHeader.class);
         container.addActivator(RequestedRevisionNumber.class, RequestedRevisionNumberActivator.class);
-        container.addType(new TypeFor<Option<RequestedRevisionNumber>>(){{}}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
+        container.addType(new TypeFor<Option<RequestedRevisionNumber>>() {{
+        }}.get(), new OptionResolver(container, instanceOf(RequestedRevisionNumberActivator.class)));
 
         container.decorate(HttpHandler.class, TransactionHttpHandler.class);
 
