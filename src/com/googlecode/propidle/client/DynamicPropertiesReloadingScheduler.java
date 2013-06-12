@@ -31,6 +31,10 @@ public class DynamicPropertiesReloadingScheduler implements Closeable {
         return reloadingDynamicProperties(dynamicProperties, newSingleThreadScheduledExecutor(), new SystemClock());
     }
 
+    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService) {
+        return reloadingDynamicProperties(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), new SystemClock()));
+    }
+
     public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Logger logger) {
         Integer attempts = Integer.valueOf(dynamicProperties.snapshot().getProperty("propidle.connection.attempts", "3"));
         IgnoreAttemptsFailureHandler failureHandler = new IgnoreAttemptsFailureHandler(attempts, new LoggingFailureHandler(logger));
@@ -39,7 +43,7 @@ public class DynamicPropertiesReloadingScheduler implements Closeable {
         return dynamicProperties;
     }
 
-    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Clock clock) {
+    private static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Clock clock) {
         return reloadingDynamicProperties(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), clock));
     }
 
