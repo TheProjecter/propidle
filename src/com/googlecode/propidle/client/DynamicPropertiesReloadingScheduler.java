@@ -27,24 +27,23 @@ public class DynamicPropertiesReloadingScheduler implements Closeable {
     private final Scheduler scheduler;
     private final ReloadPropertiesRunnable reloadPropertiesRunnable;
 
-    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties) {
-        return reloadingDynamicProperties(dynamicProperties, newSingleThreadScheduledExecutor(), new SystemClock());
+    public static DynamicPropertiesReloadingScheduler dynamicPropertiesReloadingScheduler(DynamicProperties dynamicProperties) {
+        return dynamicPropertiesReloadingScheduler(dynamicProperties, newSingleThreadScheduledExecutor(), new SystemClock());
     }
 
-    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService) {
-        return reloadingDynamicProperties(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), new SystemClock()));
+    public static DynamicPropertiesReloadingScheduler dynamicPropertiesReloadingScheduler(DynamicProperties dynamicProperties, ScheduledExecutorService executorService) {
+        return dynamicPropertiesReloadingScheduler(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), new SystemClock()));
     }
 
-    public static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Logger logger) {
+    public static DynamicPropertiesReloadingScheduler dynamicPropertiesReloadingScheduler(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Logger logger) {
         Integer attempts = Integer.valueOf(dynamicProperties.snapshot().getProperty("propidle.connection.attempts", "3"));
         IgnoreAttemptsFailureHandler failureHandler = new IgnoreAttemptsFailureHandler(attempts, new LoggingFailureHandler(logger));
         ReloadPropertiesRunnable reloadPropertiesRunnable = new ReloadPropertiesRunnable(dynamicProperties, failureHandler);
-        new DynamicPropertiesReloadingScheduler(new Scheduler(executorService), new PropertyTriggeredExecutor(dynamicProperties), reloadPropertiesRunnable).registerReload();
-        return dynamicProperties;
+        return new DynamicPropertiesReloadingScheduler(new Scheduler(executorService), new PropertyTriggeredExecutor(dynamicProperties), reloadPropertiesRunnable).registerReload();
     }
 
-    private static DynamicProperties reloadingDynamicProperties(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Clock clock) {
-        return reloadingDynamicProperties(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), clock));
+    private static DynamicPropertiesReloadingScheduler dynamicPropertiesReloadingScheduler(DynamicProperties dynamicProperties, ScheduledExecutorService executorService, Clock clock) {
+        return dynamicPropertiesReloadingScheduler(dynamicProperties, executorService, TimestampLogger.timestampLogger(printStreamLogger(System.err), clock));
     }
 
     public DynamicPropertiesReloadingScheduler(Scheduler scheduler, final PropertyTriggeredExecutor propertyTriggeredExecutor, final ReloadPropertiesRunnable reloadPropertiesRunnable) {
@@ -53,8 +52,9 @@ public class DynamicPropertiesReloadingScheduler implements Closeable {
         this.reloadPropertiesRunnable = reloadPropertiesRunnable;
     }
 
-    public void registerReload() {
+    public DynamicPropertiesReloadingScheduler registerReload() {
         propertyTriggeredExecutor.register(propertyName("property.reload.time.in.seconds"), scheduleReloading(), propertyValue("60"));
+        return this;
     }
 
     private Callable1<PropertyValue, Void> scheduleReloading() {
