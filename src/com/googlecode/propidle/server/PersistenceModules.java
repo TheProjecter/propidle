@@ -39,9 +39,9 @@ public class PersistenceModules {
         PersistenceMechanism persistenceMechanism = PersistenceMechanism.fromProperties(properties);
         switch (persistenceMechanism) {
             case HSQL:
-                return sqlModules(migrationConnectionDetails(properties), new HsqlModule()).add(asRequestScopeModule().call(new HsqlMigrationsModule()));
+                return sqlModules(migrationConnectionDetails(properties), new HsqlModule()).append(asRequestScopeModule().call(new HsqlMigrationsModule()));
             case ORACLE:
-                return sqlModules(migrationConnectionDetails(properties), new OracleModule()).add(asRequestScopeModule().call(new OracleMigrationsModule()));
+                return sqlModules(migrationConnectionDetails(properties), new OracleModule()).append(asRequestScopeModule().call(new OracleMigrationsModule()));
             default:
                 throw new UnsupportedOperationException(format("Migrations for '%s' is not implemented", persistenceMechanism));
         }

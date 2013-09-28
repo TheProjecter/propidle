@@ -13,7 +13,7 @@ import com.googlecode.propidle.migrations.ModuleName;
 
 import java.util.Date;
 
-import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.Keyword.constructors.keyword;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;

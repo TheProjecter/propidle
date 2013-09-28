@@ -6,7 +6,7 @@ import com.googlecode.lazyrecords.Record;
 import com.googlecode.lazyrecords.Records;
 
 import static com.googlecode.lazyrecords.Definition.constructors.definition;
-import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.Keyword.constructors.keyword;
 import static com.googlecode.lazyrecords.Record.constructors.record;
 import static com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber.highestExistingRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;

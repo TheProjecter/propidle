@@ -40,11 +40,11 @@ public class NavigationResource {
 
     private List links() throws Throwable {
         return sequence().
-                add(model().add("name", "Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(PropertiesResource.class).getAll())))).
-                add(model().add("name", "Compose Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(CompositePropertiesResource.class).getHtml(Option.none(String.class), null))))).
-                add(model().add("name", "Aliases").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(AliasesResource.class).listAllAliases())))).
-                add(model().add("name", "Search").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(SearchResource.class).get(Option.none(Query.class)))))).
-                add(model().add("name", "Compare Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(DiffResource.class).get())))).toList();
+                append(model().add("name", "Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(PropertiesResource.class).getAll())))).
+                append(model().add("name", "Compose Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(CompositePropertiesResource.class).getHtml(Option.none(String.class), null))))).
+                append(model().add("name", "Aliases").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(AliasesResource.class).listAllAliases())))).
+                append(model().add("name", "Search").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(SearchResource.class).get(Option.none(Query.class)))))).
+                append(model().add("name", "Compare Properties").add("url", propidlePath.absoluteUriOf(Call.method(Call.on(DiffResource.class).get())))).toList();
 
     }
 }
