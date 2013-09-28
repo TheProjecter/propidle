@@ -28,7 +28,7 @@ import static com.googlecode.totallylazy.Strings.empty;
 import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.totallylazy.proxy.Call.method;
 import static com.googlecode.totallylazy.proxy.Call.on;
-import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.Keyword.constructors.keyword;
 
 public class AllChangesFromRecords implements AllChanges {
     public static final Keyword<String> PROPERTIES_PATH = keyword("properties_path", String.class);

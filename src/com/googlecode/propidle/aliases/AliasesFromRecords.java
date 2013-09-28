@@ -14,7 +14,7 @@ import static com.googlecode.propidle.aliases.AliasDestination.aliasDestination;
 import static com.googlecode.propidle.aliases.AliasPath.aliasPath;
 import static com.googlecode.totallylazy.Predicates.is;
 import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.lazyrecords.Keywords.keyword;
+import static com.googlecode.lazyrecords.Keyword.constructors.keyword;
 
 public class AliasesFromRecords implements Aliases{
     private static final Keyword<String> FROM = keyword("from_resource", String.class);
