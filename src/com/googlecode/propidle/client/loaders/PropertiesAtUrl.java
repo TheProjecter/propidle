@@ -4,7 +4,6 @@ import com.googlecode.propidle.client.PropertyLoadingException;
 import com.googlecode.propidle.urls.SimpleUriGetter;
 import com.googlecode.propidle.urls.UriGetter;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -39,9 +38,8 @@ public class PropertiesAtUrl implements Callable<Properties> {
 
     public Properties call() throws Exception {
         try {
-            InputStream stream = uriGetter.get(url.toURI(), TEXT_PLAIN);
-            return properties(stream);
-        } catch (Throwable e) {
+            return properties(uriGetter.get(url.toURI(), TEXT_PLAIN));
+        } catch (Exception e) {
             throw new PropertyLoadingException(String.format("Could not load properties %s", url), e);
         }
     }
