@@ -3,6 +3,7 @@ package acceptance;
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Before;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
@@ -15,6 +16,12 @@ import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.not;
 
 public class SearchTest extends PropertiesApplicationTestCase {
+
+    @Before
+    public void withHsql() throws Exception {
+        usingHsql();
+    }
+
     @Test
     public void allowsSearchingForAStringAcrossAllFiles() throws Exception {
         given(that(PropertiesExist.class).with(propertiesPath("properties.one")).and(properties("property_one=stifled core dump")));

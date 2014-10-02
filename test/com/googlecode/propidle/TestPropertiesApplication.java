@@ -21,6 +21,14 @@ public class TestPropertiesApplication extends PropertiesApplication {
 
     }
 
+    public TestPropertiesApplication(Properties properties, Module... extraModules) throws Exception {
+        super(
+                returns(properties),
+                new RAMDirectory(),
+                persistenceModules(properties).join(sequence(extraModules)), basePath);
+
+    }
+
     private TestPropertiesApplication(Iterable<Module> extraModules) throws Exception {
         super(
                 returns(testProperties()),

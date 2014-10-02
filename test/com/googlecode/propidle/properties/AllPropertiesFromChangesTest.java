@@ -20,6 +20,7 @@ import static com.googlecode.propidle.versioncontrol.changes.Change.change;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.propertyNameOfChange;
 import static com.googlecode.propidle.versioncontrol.revisions.NewRevisionNumber.newRevisionNumber;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.IterableMatcher.hasExactly;
@@ -67,7 +68,7 @@ public class AllPropertiesFromChangesTest {
 
         repository.put(PATH, properties);
 
-        assertThat(repository.get(PATH, revisionNumber(0)), is(properties));
+        assertThat(repository.get(PATH, some(revisionNumber(0))), is(properties));
     }
 
     @Test
@@ -80,12 +81,12 @@ public class AllPropertiesFromChangesTest {
         Properties updated = properties("new.property=spang");
         repository.put(PATH, updated);
 
-        assertThat(repository.get(PATH, revisionNumber(1)), is(updated));
+        assertThat(repository.get(PATH, some(revisionNumber(1))), is(updated));
     }
 
     @Test
     public void willReturnEmptyPropertiesObjectIfPathDoesNotExist() {
-        assertThat(repository.get(PATH, revisionNumber(0)), is(new Properties()));
+        assertThat(repository.get(PATH, some(revisionNumber(0))), is(new Properties()));
     }
 
     @Test
@@ -94,7 +95,7 @@ public class AllPropertiesFromChangesTest {
 
         repository.put(PATH, properties);
 
-        assertThat(repository.get(PATH, revisionNumber(0)), is(properties));
+        assertThat(repository.get(PATH, some(revisionNumber(0))), is(properties));
     }
 
     @Test
@@ -104,7 +105,7 @@ public class AllPropertiesFromChangesTest {
         givenRevisionIs(1);
         repository.put(PATH, properties("a=2\nc=3"));
 
-        assertThat(repository.get(PATH, revisionNumber(0)), is(properties("a=1\nb=2")));
+        assertThat(repository.get(PATH, some(revisionNumber(0))), is(properties("a=1\nb=2")));
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.googlecode.propidle.filenames;
 import com.googlecode.propidle.properties.AllProperties;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.totallylazy.Option;
 
 import java.util.Properties;
 
@@ -15,7 +16,8 @@ public class FileNameIndexingDecorator implements AllProperties {
         this.indexer = indexer;
     }
 
-    public Properties get(PropertiesPath path, RevisionNumber revision) {
+    @Override
+    public Properties get(PropertiesPath path, Option<? extends RevisionNumber> revision) {
         return decorated.get(path, revision);
     }
 

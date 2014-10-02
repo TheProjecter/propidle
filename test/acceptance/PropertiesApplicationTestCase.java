@@ -2,6 +2,7 @@ package acceptance;
 
 import com.googlecode.propidle.TestPropertiesApplication;
 import com.googlecode.propidle.WrapCallableInTransaction;
+import com.googlecode.propidle.migrations.ModuleMigrationsCollector;
 import com.googlecode.propidle.scheduling.StubScheduledExecutorService;
 import com.googlecode.totallylazy.*;
 import com.googlecode.utterlyidle.MemoryResponse;
@@ -15,9 +16,13 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.hamcrest.Matcher;
 import org.junit.runner.RunWith;
 
-import java.util.Map;
+import java.util.*;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.propidle.util.TestRecords.hsqlConfiguration;
+import static com.googlecode.propidle.util.TestRecords.runMigrations;
+import static com.googlecode.yadic.Container.functions.get;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -31,6 +36,20 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
             application = new TestPropertiesApplication(new TestSupportModule(this, interestingGivens, capturedInputAndOutputs, executorService));
         }
         return application;
+    }
+
+    private TestPropertiesApplication hsqlApplication() throws Exception {
+        if (application == null) {
+            final Properties configuration = hsqlConfiguration();
+            application = new TestPropertiesApplication(configuration, new TestSupportModule(this, interestingGivens, capturedInputAndOutputs, executorService));
+            runMigrations(application.applicationScope().add(ModuleMigrationsCollector.class), configuration);
+        }
+        return application;
+    }
+
+
+    protected void usingHsql() throws Exception {
+        hsqlApplication();
     }
 
     protected <T> T given(Callable<T> step) throws Exception {
@@ -82,11 +101,7 @@ public abstract class PropertiesApplicationTestCase extends TestState implements
     }
 
     private <T> T create(final Class<T> something) throws Exception {
-        return inBusinessTransaction(new Callable1<Container, T>() {
-            public T call(Container container) throws Exception {
-                return container.get(something);
-            }
-        });
+        return inBusinessTransaction(get(something));
     }
 
     public Map<Class, Renderer> getCustomRenderers() {

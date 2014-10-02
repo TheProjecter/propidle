@@ -1,8 +1,5 @@
 package com.googlecode.propidle.server;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Runnables;
-import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.Uri;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.RequestBuilder;
@@ -12,8 +9,6 @@ import com.googlecode.utterlyidle.handlers.RedirectHttpHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.InputStream;
 
 import static com.googlecode.totallylazy.Uri.uri;
 import static com.googlecode.utterlyidle.MediaType.TEXT_PLAIN;
@@ -47,19 +42,7 @@ public class ServerTest {
         response = clientHttpHandler.handle(RequestBuilder.get(propertiesUrl).accepting(TEXT_PLAIN).build());
 
         assertThat(response.status(), is(OK));
-        assertThat(response.entity().toString(), is("# /properties/test?revision=0\ntest=hello\r"));
+        assertThat(response.entity().toString(), is("test=hello\r"));
     }
 
-    public static class ResponseAsString implements Callable1<InputStream, Void> {
-        private String value;
-
-        public Void call(InputStream inputStream) {
-            value = Strings.toString(inputStream);
-            return Runnables.VOID;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 }

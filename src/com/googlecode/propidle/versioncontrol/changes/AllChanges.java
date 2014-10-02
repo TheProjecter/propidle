@@ -6,6 +6,7 @@ import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
 
 public interface AllChanges {
     Iterable<Change> get(PropertiesPath propertiesPath);
+    Iterable<Change> getLatestChanges(PropertiesPath propertiesPath);
     Iterable<com.googlecode.totallylazy.Pair<PropertiesPath,PathType>> childrenOf(PropertiesPath propertiesPath);
     Iterable<Change> get(PropertiesPath propertiesPath, RevisionNumber revisionNumber);
     AllChangesFromRecords put(Iterable<Change> changes);

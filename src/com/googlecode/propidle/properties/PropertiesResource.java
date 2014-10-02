@@ -65,12 +65,16 @@ public class PropertiesResource {
     @Path(PropertiesResource.NAME+"{path:.+$}")
     @Priority(Priority.High)
     public Model getHtml(@PathParam("path") PropertiesPath path) {
-        Model model = modelOf(path).add("changesUrl", changeUrlAsModel(path));
+        Model model = modelOf(path).
+                add("changesUrl", changeUrlAsModel(path)).
+                add("revisionNumber", requestedRevisionNumber.getOrElse(highestExistingRevision()));
         return name(model, modelName());
     }
 
     private Model changeUrlAsModel(PropertiesPath path) {
-        return model().add("name", propidlePath.path(changeResourceInvocation(path))).add("url", propidlePath.absoluteUriOf(changeResourceInvocation(path)));
+        return model().
+                add("name", propidlePath.path(changeResourceInvocation(path))).
+                add("url", propidlePath.absoluteUriOf(changeResourceInvocation(path)));
     }
 
     private Invocation<Object, Model> changeResourceInvocation(PropertiesPath path) {
@@ -93,16 +97,11 @@ public class PropertiesResource {
     }
 
     private Model modelOf(PropertiesPath path) {
-        final Model model = basicModelOf(path);
-        model.
-                add("latestRevisionUrl", propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getProperties(path))));
-        return model;
+        return basicModelOf(path).add("latestRevisionUrl", propidlePath.absoluteUriOf(method(on(PropertiesResource.class).getProperties(path))));
     }
 
     private Model basicModelOf(PropertiesPath path) {
-        RevisionNumber revisionNumber = requestedRevisionNumber.getOrElse(highestExistingRevision());
-        return modelOfProperties(path, repository.get(path, revisionNumber)).
-                add("revisionNumber", revisionNumber);
+        return modelOfProperties(path, repository.get(path, requestedRevisionNumber));
     }
 
     private Callable<RequestedRevisionNumber> highestExistingRevision() {
@@ -112,7 +111,6 @@ public class PropertiesResource {
             }
         };
     }
-
 
     private String modelName() {
         return requestedRevisionNumber.isEmpty() ? HTML_EDITABLE : HTML_READ_ONLY;

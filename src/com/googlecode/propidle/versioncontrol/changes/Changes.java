@@ -25,6 +25,10 @@ public class Changes {
     }
 
     public static Properties properties(Sequence<Change> changes) {
+        return changes.fold(new Properties(), Change.applyChange());
+    }
+
+    public static Properties sortedProperties(Sequence<Change> changes) {
         return changes.sortBy(revisionNumberOfChange()).fold(new Properties(), Change.applyChange());
     }
 

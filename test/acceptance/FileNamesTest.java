@@ -18,9 +18,9 @@ import static org.hamcrest.core.Is.is;
 
 public class FileNamesTest extends PropertiesApplicationTestCase {
 
-
     @Before
     public void setup() throws Exception {
+        usingHsql();
         given(that(PropertiesExist.class).with(propertiesPath("pilot/ONE")).and(properties("a=1")));
         given(that(PropertiesExist.class).with(propertiesPath("pilot/TWO")).and(properties("a=1")));
 
@@ -28,6 +28,7 @@ public class FileNamesTest extends PropertiesApplicationTestCase {
         given(that(PropertiesExist.class).with(propertiesPath("ooo/ali")).and(properties("a=1")));
         given(that(PropertiesExist.class).with(propertiesPath("ooo/sahin")).and(properties("a=1")));
     }
+
     @Test
     public void listsPropertiesFilesFilteredByName() throws Exception {
 
