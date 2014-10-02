@@ -3,6 +3,7 @@ package acceptance;
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Before;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
@@ -17,6 +18,12 @@ import static com.googlecode.utterlyidle.RequestBuilder.post;
 import static org.hamcrest.Matchers.is;
 
 public class BasicFunctionalityTest extends PropertiesApplicationTestCase {
+
+    @Before
+    public void withHsql() throws Exception {
+        usingHsql();
+    }
+
     @Test
     public void allowsChangesToPropertyFilesByPostingFileContents() throws Exception {
         when(a(RequestIsMade.class).to(post("/properties/pilot/myapp/v1.5").form("properties", "a=1")));

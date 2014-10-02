@@ -1,11 +1,11 @@
 package com.googlecode.propidle.properties;
 
-import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.propidle.versioncontrol.changes.ChangeDetailsFromRecords;
 import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Sequence;
 
@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.properties.PropertyDiffTool.propertyValueChanged;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.*;
+import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Predicates.lessThanOrEqualTo;
 import static com.googlecode.totallylazy.Predicates.where;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -30,15 +31,17 @@ public class AllPropertiesFromChanges implements AllProperties {
         this.changeDetailsFromRecords = changeDetailsFromRecords;
     }
 
-    public Properties get(PropertiesPath path, RevisionNumber revision) {
-        if(revision==null)throw new NullArgumentException("revision");
-        Properties properties = properties(getChanges(path, where(revisionNumberOfChange(), lessThanOrEqualTo(revision))));
-        return properties;
+    @Override
+    public Properties get(PropertiesPath path, Option<? extends RevisionNumber> revision) {
+        if (revision.isEmpty()) {
+            return properties(getLatestChanges(path));
+        }
+        return sortedProperties(getChanges(path, where(revisionNumberOfChange(), lessThanOrEqualTo(revision.get()))));
     }
 
     public RevisionNumber put(PropertiesPath path, Properties updated) {
         RevisionNumber revisionNumber = highestRevisionNumbers.newRevisionNumber();
-        Properties previous = get(path, revisionNumber.minus(1));
+        Properties previous = get(path, some(revisionNumber.minus(1)));
         changes.put(changes(path, revisionNumber, diff(previous, updated)));
         changeDetailsFromRecords.createDetails(revisionNumber);
         return revisionNumber;
@@ -51,6 +54,10 @@ public class AllPropertiesFromChanges implements AllProperties {
 
     private Sequence<Change> getChanges(PropertiesPath path, Predicate<? super Change> predicate) {
         return sequence(changes.get(path)).filter(predicate);
+    }
+
+    private Sequence<Change> getLatestChanges(PropertiesPath path) {
+        return sequence(changes.getLatestChanges(path));
     }
 
 }

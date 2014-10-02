@@ -2,7 +2,6 @@ package com.googlecode.propidle.versioncontrol.changes;
 
 import com.googlecode.lazyrecords.Queryable;
 import com.googlecode.lazyrecords.Records;
-import com.googlecode.lazyrecords.sql.SqlRecords;
 import com.googlecode.lazyrecords.sql.expressions.Expression;
 import com.googlecode.propidle.PersistenceMechanism;
 

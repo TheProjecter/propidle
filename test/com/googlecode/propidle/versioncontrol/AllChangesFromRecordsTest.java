@@ -106,6 +106,37 @@ public class AllChangesFromRecordsTest {
     }
 
     @Test
+    public void shouldBeAbleToGetLatestChangesByPropertiesPath() {
+        PropertiesPath propertiesPath = propertiesPath("/properties/production");
+
+        Sequence<Change> revision0 = sequence(
+                change(
+                        revisionNumber(0),
+                        propertiesPath,
+                        createdProperty(
+                                propertyName("number.of.pigs"),
+                                propertyValue("42")
+                        )));
+
+        // Expect an update to version ids after the second set of changes for the same property id
+        Sequence<Change> revision1 = sequence(
+                change(
+                        revisionNumber(1),
+                        propertiesPath,
+                        changedProperty(
+                                propertyName("number.of.pigs"),
+                                propertyValue("42"),
+                                propertyValue("999")
+                        )));
+
+        changes.put(revision0);
+        changes.put(revision1);
+
+        assertThat(changes.getLatestChanges(propertiesPath), hasInAnyOrder(revision1));
+    }
+
+
+    @Test
     public void shouldBeAbleToGetChildrenOfPath() {
 
         changes.put(createChangesWith(propertiesPath("/myapp/production")));

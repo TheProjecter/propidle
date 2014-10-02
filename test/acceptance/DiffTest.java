@@ -10,9 +10,17 @@ import static com.googlecode.propidle.util.matchers.HtmlRegexes.td;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.tr;
 import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class DiffTest extends PropertiesApplicationTestCase {
+
+    @Before
+    public void withHsql() throws Exception {
+        usingHsql();
+    }
+
     @Test
     public void canProvideADiffOfTwoPropertiesFiles() throws Exception {
         given(that(PropertiesExist.class).with(propertiesPath("base")).and(properties("changed=changed value 1\nunchanged=unchanged value\nremoved=removed value")));

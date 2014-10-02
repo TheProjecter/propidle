@@ -5,10 +5,10 @@ mvn:org.objenesis:objenesis:jar:1.2
 mvn:org.simpleframework:simple:jar:4.1.21
 mvn:org.antlr:stringtemplate:jar:3.2.1
 
-mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:pack|sources:1130
-mvn://repo.bodar.com/com.googlecode.lazyrecords:lazyrecords:pack|sources:270
-mvn://repo.bodar.com/com.googlecode.funclate:funclate:pack|sources:110
-mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:pack|sources:707
-mvn://repo.bodar.com/com.googlecode.yadic:yadic:pack|sources:167
+mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:pack|sources:1.21
+mvn://repo.bodar.com/com.googlecode.lazyrecords:lazyrecords:pack|sources:293
+mvn://repo.bodar.com/com.googlecode.funclate:funclate:pack|sources:133
+mvn://repo.bodar.com/com.googlecode.utterlyidle:utterlyidle:pack|sources:772
+mvn://repo.bodar.com/com.googlecode.yadic:yadic:pack|sources:1.5
 
 mvn:org.sitemesh:sitemesh:jar:3.0-alpha-2

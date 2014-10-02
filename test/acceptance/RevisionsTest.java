@@ -4,6 +4,7 @@ import acceptance.steps.givens.CurrentRevision;
 import acceptance.steps.givens.PropertiesExist;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Before;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.*;
@@ -16,6 +17,12 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 public class RevisionsTest extends PropertiesApplicationTestCase {
+
+    @Before
+    public void withHsql() throws Exception {
+        usingHsql();
+    }
+
     @Test
     public void itIsPossibleToSeeAPropertiesFileAsItWasAtAParticularRevision() throws Exception {
         given(that(CurrentRevision.class).startsAt(revisionNumber(0)));
@@ -24,7 +31,7 @@ public class RevisionsTest extends PropertiesApplicationTestCase {
 
         when(a(RequestIsMade.class).to(get("/properties/properties.one.properties").query("revision", "0")));
 
-        then(theContentOf(), the(LastResponse.class), is("# "+absoluteUrl("properties/properties.one?revision=0\nrevision=0\r")));
+        then(theContentOf(), the(LastResponse.class), is("revision=0\r"));
     }
 
     @Test
