@@ -22,6 +22,7 @@ import java.util.Properties;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
+import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.LATEST_CHANGES_VIEW;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
 import static com.googlecode.propidle.versioncontrol.changes.Change.applyChange;
 import static com.googlecode.propidle.versioncontrol.changes.Changes.revisionNumberOfChange;
@@ -44,7 +45,7 @@ public class RebuildIndexResource {
     @POST
     public String rebuildIndex() {
         final StringWriter stringWriter = new StringWriter();
-        Sequence<Sequence<Record>> changesByProperties = changesByProperties(records.get(CHANGES).sortBy(PROPERTIES_PATH).realise());
+        Sequence<Sequence<Record>> changesByProperties = changesByProperties(records.get(LATEST_CHANGES_VIEW).sortBy(PROPERTIES_PATH).realise());
 
         Sequence<Pair<PropertiesPath, Properties>> properties = changesByProperties.map(deserialise()).map(toProperties());
 

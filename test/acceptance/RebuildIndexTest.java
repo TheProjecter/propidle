@@ -3,6 +3,7 @@ package acceptance;
 import acceptance.steps.givens.PropertiesExistInDatabase;
 import acceptance.steps.thens.LastResponse;
 import acceptance.steps.whens.RequestIsMade;
+import org.junit.Before;
 import org.junit.Test;
 
 import static acceptance.steps.thens.LastResponse.theHtmlOf;
@@ -18,6 +19,11 @@ import static com.googlecode.utterlyidle.Status.*;
 import static org.hamcrest.Matchers.is;
 
 public class RebuildIndexTest extends PropertiesApplicationTestCase {
+
+    @Before
+    public void withHsql() throws Exception {
+        usingHsql();
+    }
 
     @Test
     public void shouldRebuildIndexes() throws Exception {
