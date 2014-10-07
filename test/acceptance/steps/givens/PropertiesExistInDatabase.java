@@ -1,27 +1,31 @@
 package acceptance.steps.givens;
 
-import com.googlecode.propidle.properties.*;
+import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.versioncontrol.changes.AllChanges;
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.propidle.versioncontrol.revisions.RevisionNumber;
+import com.googlecode.totallylazy.Block;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.utterlyidle.Application;
+import com.googlecode.yadic.Container;
 
+import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import static com.googlecode.propidle.properties.Properties.toPairs;
 import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
-import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class PropertiesExistInDatabase implements Callable<Void> {
-    private final AllChanges allProperties;
+    private final Application application;
     private PropertiesPath path;
     private Properties properties;
 
-    public PropertiesExistInDatabase(AllChanges allProperties) {
-        this.allProperties = allProperties;
+    public PropertiesExistInDatabase(Application application) {
+        this.application = application;
     }
 
     public PropertiesExistInDatabase with(PropertiesPath path) {
@@ -35,7 +39,14 @@ public class PropertiesExistInDatabase implements Callable<Void> {
     }
 
     public Void call() throws Exception {
-        allProperties.put(com.googlecode.propidle.properties.Properties.toPairs(properties).map(toChange()));
+        application.usingRequestScope(new Block<Container>() {
+            @Override
+            protected void execute(Container container) throws Exception {
+                final AllChanges allChanges = container.get(AllChanges.class);
+                allChanges.put(toPairs(properties).map(toChange()));
+                container.get(Connection.class).commit();
+            }
+        });
         return null;
     }
 

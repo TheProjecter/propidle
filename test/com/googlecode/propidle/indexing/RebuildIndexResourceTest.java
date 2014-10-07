@@ -1,8 +1,10 @@
 package com.googlecode.propidle.indexing;
 
+import com.googlecode.lazyrecords.Records;
 import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.properties.PropertyName;
 import com.googlecode.propidle.server.IndexRebuilder;
+import com.googlecode.propidle.util.TestRecords;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.Change;
 import com.googlecode.propidle.versioncontrol.changes.ChildPathsFromRecords;
@@ -18,6 +20,7 @@ import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.properties.PropertyComparison.createdProperty;
 import static com.googlecode.propidle.properties.PropertyName.propertyName;
 import static com.googlecode.propidle.properties.PropertyValue.propertyValue;
+import static com.googlecode.propidle.util.TestRecords.testRecordsWithAllMigrationsRun;
 import static com.googlecode.propidle.versioncontrol.revisions.RevisionNumber.revisionNumber;
 import static com.googlecode.totallylazy.Pair.pair;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -30,7 +33,7 @@ import static org.mockito.Mockito.verify;
 public class RebuildIndexResourceTest {
 
     private IndexRebuilder indexRebuilder = mock(IndexRebuilder.class);
-    private MemoryRecords records = new MemoryRecords();
+    private Records records = testRecordsWithAllMigrationsRun();
     private AllChangesFromRecords changes = new AllChangesFromRecords(records, new ChildPathsFromRecords(records));
     private PropertiesPath propertiesPath = propertiesPath("/path");
     private PropertyName propertyName = propertyName("name");
