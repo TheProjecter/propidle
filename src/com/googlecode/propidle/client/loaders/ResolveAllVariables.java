@@ -20,7 +20,7 @@ import static java.util.regex.Pattern.compile;
 public class ResolveAllVariables implements Callable<Properties> {
 
     private final Callable<Properties> loader;
-    private final Pattern TOKEN_EXTRACTION_PATTERN = compile("\\$\\{[\\w]+}");
+    private final Pattern TOKEN_EXTRACTION_PATTERN = compile("\\$\\{.*?\\}");
     private Properties properties;
 
     public static ResolveAllVariables resolveAllProperties(Callable<Properties> properties) {
@@ -47,7 +47,6 @@ public class ResolveAllVariables implements Callable<Properties> {
         };
     }
 
-
     private String resolveValue(String value, Set<String> alreadyResolvedTokens) {
         return alreadyResolvedTokens.contains(value) ? value :
                 extractTokensFrom(value).map(resolveToken(alreadyResolvedTokens)).fold(value, replaceTokens());
@@ -72,7 +71,6 @@ public class ResolveAllVariables implements Callable<Properties> {
         };
     }
 
-
     private Sequence<String> extractTokensFrom(String token) {
         Matcher matcher = TOKEN_EXTRACTION_PATTERN.matcher(token);
         Set<String> tokenSet = new HashSet<String>();
@@ -89,6 +87,5 @@ public class ResolveAllVariables implements Callable<Properties> {
     private static String wrapToken(String token) {
         return "${" + token + "}";
     }
-
 }
 

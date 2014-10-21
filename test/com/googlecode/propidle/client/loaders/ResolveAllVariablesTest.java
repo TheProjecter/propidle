@@ -56,6 +56,13 @@ public class ResolveAllVariablesTest {
         assertThat(resolveAllProperties(propertiesOf(properties)).call(), is(expectedProperties));
     }
 
+    @Test
+    public void shouldExceptAllTypesOfCharacters() throws Exception{
+        Properties properties = properties(pair("foo.url", "${boo_url}"), pair("boo_url", "${cheese-dash\\au/boo}"), pair("cheese-dash\\au/boo", "bob"));
+        Properties expectedProperties = properties(pair("foo.url", "bob"), pair("boo_url", "bob"), pair("cheese-dash\\au/boo", "bob"));
+        assertThat(resolveAllProperties(propertiesOf(properties)).call(), is(expectedProperties));
+    }
+
     private static Callable<Properties> propertiesOf(final Properties properties) {
         return new Callable<Properties>() {
             public Properties call() throws Exception {
