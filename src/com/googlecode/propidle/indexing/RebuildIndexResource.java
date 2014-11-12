@@ -6,7 +6,11 @@ import com.googlecode.propidle.properties.PropertiesPath;
 import com.googlecode.propidle.server.IndexRebuilder;
 import com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords;
 import com.googlecode.propidle.versioncontrol.changes.Change;
+import com.googlecode.propidle.versioncontrol.revisions.HighestExistingRevisionNumber;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionIndex;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionNumbers;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Option;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.utterlyidle.annotations.POST;
@@ -21,7 +25,6 @@ import java.util.Properties;
 
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
-import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.CHANGES;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.LATEST_CHANGES_VIEW;
 import static com.googlecode.propidle.versioncontrol.changes.AllChangesFromRecords.PROPERTIES_PATH;
 import static com.googlecode.propidle.versioncontrol.changes.Change.applyChange;
@@ -36,21 +39,33 @@ public class RebuildIndexResource {
     public static final String NAME = "/rebuildIndex";
     private final IndexRebuilder rebuildIndex;
     private final Records records;
+    private final HighestRevisionNumbers highestRevisionNumbers;
+    private final HighestRevisionIndex highestRevisionIndex;
 
-    public RebuildIndexResource(IndexRebuilder rebuildIndex, Records records) {
+    public RebuildIndexResource(IndexRebuilder rebuildIndex, Records records, HighestRevisionNumbers highestRevisionNumbers, HighestRevisionIndex highestRevisionIndex) {
         this.rebuildIndex = rebuildIndex;
         this.records = records;
+        this.highestRevisionNumbers = highestRevisionNumbers;
+        this.highestRevisionIndex = highestRevisionIndex;
     }
 
     @POST
     public String rebuildIndex() {
+        final HighestExistingRevisionNumber highestRevisionFromRecords = highestRevisionNumbers.highestExistingRevision();
+        if (indexUpToDate(highestRevisionFromRecords)) {
+            return "Index up to date";
+        }
         final StringWriter stringWriter = new StringWriter();
         Sequence<Sequence<Record>> changesByProperties = changesByProperties(records.get(LATEST_CHANGES_VIEW).sortBy(PROPERTIES_PATH).realise());
-
         Sequence<Pair<PropertiesPath, Properties>> properties = changesByProperties.map(deserialise()).map(toProperties());
-
         rebuildIndex.index(properties, new PrintWriter(stringWriter));
+        highestRevisionIndex.set(highestRevisionFromRecords);
         return stringWriter.toString();
+    }
+
+    private boolean indexUpToDate(HighestExistingRevisionNumber highestRevisionFromRecords) {
+        final Option<HighestExistingRevisionNumber> highestRevisionFromIndex = highestRevisionIndex.get();
+        return highestRevisionFromRecords.equals(highestRevisionFromIndex.getOrNull());
     }
 
 
