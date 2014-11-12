@@ -11,12 +11,12 @@ import static acceptance.steps.thens.LastResponse.theStatusOf;
 import static com.googlecode.propidle.properties.Properties.properties;
 import static com.googlecode.propidle.properties.PropertiesPath.propertiesPath;
 import static com.googlecode.propidle.util.matchers.HtmlRegexes.*;
-import static com.googlecode.propidle.util.matchers.HtmlRegexes.td;
 import static com.googlecode.propidle.util.matchers.RegexMatcher.matches;
 import static com.googlecode.utterlyidle.RequestBuilder.get;
 import static com.googlecode.utterlyidle.RequestBuilder.post;
-import static com.googlecode.utterlyidle.Status.*;
+import static com.googlecode.utterlyidle.Status.OK;
 import static org.hamcrest.Matchers.is;
+
 
 public class RebuildIndexTest extends PropertiesApplicationTestCase {
 

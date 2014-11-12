@@ -7,10 +7,11 @@ import com.googlecode.propidle.server.FileAndPropertiesIndexRebuilder;
 import com.googlecode.propidle.server.IndexRebuilder;
 import com.googlecode.propidle.util.NullArgumentException;
 import com.googlecode.propidle.util.ParallelExecutionGuard;
+import com.googlecode.propidle.versioncontrol.revisions.HighestRevisionIndex;
+import com.googlecode.propidle.versioncontrol.revisions.LuceneHighestRevisionIndex;
 import com.googlecode.utterlyidle.HttpHandler;
 import com.googlecode.utterlyidle.Resources;
 import com.googlecode.utterlyidle.modules.ApplicationScopedModule;
-import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.utterlyidle.modules.ResourcesModule;
 import com.googlecode.yadic.Container;
@@ -44,6 +45,7 @@ public class LuceneModule implements ApplicationScopedModule, RequestScopedModul
     public Container addPerRequestObjects(Container container) {
         container.add(IndexRebuilder.class, FileAndPropertiesIndexRebuilder.class);
         container.decorate(IndexRebuilder.class, NoParallelExecutionIndexBuilder.class);
+        container.add(HighestRevisionIndex.class, LuceneHighestRevisionIndex.class);
         return container.decorate(HttpHandler.class, LuceneIndexWriterTransaction.class);
     }
 

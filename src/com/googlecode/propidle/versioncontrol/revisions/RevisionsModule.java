@@ -1,6 +1,5 @@
 package com.googlecode.propidle.versioncontrol.revisions;
 
-import com.googlecode.utterlyidle.modules.Module;
 import com.googlecode.utterlyidle.modules.RequestScopedModule;
 import com.googlecode.yadic.Container;
 
